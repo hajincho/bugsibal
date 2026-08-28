@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class PlayerAttack : MonoBehaviour
+{
+    Player player;
+    bool has_attacked = false;
+
+    void OnEnable()
+    {
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Enemy" || other.tag == "drumtong")
+        {
+            //무기가 적에게 닿으면 공격력만큼 적의 체력 감소
+            if(player.on_attack)//플레이어가 공격중일때+데미지를 주지 않았을 때
+            {
+        
+                //검은 데미지 2배
+                //활과 데미지가 같으면 원거리공격인 활만씀
+                EnemyData enemy_data = other.GetComponent<EnemyData>();
+                IsSkillDamaged skilldamaged = other.GetComponent<IsSkillDamaged>();
+
+                if (enemy_data == null)
+                {
+                    enemy_data = other.GetComponentInParent<EnemyData>();
+                }
+                if (skilldamaged == null)
+                {
+                    skilldamaged = other.GetComponentInParent<IsSkillDamaged>();
+                }
+
+
+
+                if (player.weapon_mode == 1 &&!skilldamaged.damaged_normal)
+                {
+                    enemy_data.enemy_current_HP -= GameManager.player_power;
+                    Debug.Log("검 공격");
+                    if (player.sword_num == 6)
+                    {
+
+                        GameManager.player_current_HP += GameManager.player_power * 0.05f;
+                    }
+                }
+                else if(player.weapon_mode == 0)
+                {
+
+                    enemy_data.enemy_current_HP -= GameManager.player_power / 2;
+                }
+
+                skilldamaged.damaged_normal = true;
+                player.SkillDamageEnable(skilldamaged);
+                enemy_data.Hitted();
+            }
+        }
+        
+    }
+
+    void ToHasntAttacked()
+    {
+        has_attacked = false;
+    }
+}

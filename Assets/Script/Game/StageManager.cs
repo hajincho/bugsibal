@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,6 +60,7 @@ public class StageManager : MonoBehaviour
                     Invoke("phase3", 3f);
                     return;
                 case 3:
+                    if (StageRewardController.Ensure() != null) StageRewardController.Instance.MarkCleared();
                     Instantiate(next_scene, portal_position.position, transform.rotation);
                     phase++;
                     return;

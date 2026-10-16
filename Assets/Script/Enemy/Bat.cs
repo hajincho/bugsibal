@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -69,17 +69,17 @@ public class Bat : MonoBehaviour
             animator.SetTrigger("Attack");
             if( PlayerMove.moveable == false)// �����̻�� �߰� ������
             {
-                GameManager.player_current_HP -= enemyData.enemy_power + 2;
+                GameManager.DamagePlayer(enemyData.enemy_power + 2);
                 other.gameObject.GetComponent<Player>().Hited();
                 //Debug.Log("attack+");
                 if (enemyData.enemy_current_HP <= enemyData.enemy_HP - 3)
                 {
-                    enemyData.enemy_current_HP += 3; // ���Ͻ� ü�� ȸ��
+                    enemyData.Heal(3); // ���Ͻ� ü�� ȸ��
                 }
             }
             else
             {
-                GameManager.player_current_HP -= enemyData.enemy_power;
+                GameManager.DamagePlayer(enemyData.enemy_power);
                 other.gameObject.GetComponent<Player>().Hited();
                 //Debug.Log("attack");
                 //Debug.Log(GameManager.player_current_HP);

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ public class Heal : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            GameManager.player_current_HP += 20;
+            GameManager.HealPlayer(20);
             if (GameManager.player_current_HP > GameManager.player_HP)
             {
                 GameManager.player_current_HP = GameManager.player_HP;

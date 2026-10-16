@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -42,7 +42,7 @@ public class FireBallDev : MonoBehaviour
             Instantiate(explosion, other.transform.position, Quaternion.identity);
             if (damageable)
             {
-                GameManager.player_current_HP -= 15;
+                GameManager.DamagePlayer(15);
             }
             damageable = false;
         }

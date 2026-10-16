@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +36,7 @@ public class pokpal : MonoBehaviour
 
                 if (!skilldamaged.damaged_skill2)
                 {
-                    enemy_data.enemy_current_HP -= GameManager.player_skill_power * 4 + 10;
+                    enemy_data.TakeDamage(RunUpgradeState.SkillPower * 4 + 10, CombatDamageKind.Skill);
                     enemy_data.Hitted();
                     skilldamaged.damaged_skill2 = true;
                     skill2.SkillDamageEnable(skilldamaged);

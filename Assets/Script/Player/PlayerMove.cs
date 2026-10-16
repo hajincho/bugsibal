@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         // WASD 이동 입력
         moveX = Input.GetAxisRaw("Horizontal");
         moveY = Input.GetAxisRaw("Vertical");
@@ -61,8 +62,8 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveable)
-            rigid.velocity = new Vector2(moveX, moveY).normalized * GameManager.player_speed;
+        if (moveable && !StageRewardController.InputBlocked)
+            rigid.velocity = new Vector2(moveX, moveY).normalized * RunUpgradeState.MoveSpeed;
         else
             rigid.velocity = Vector2.zero;
     }

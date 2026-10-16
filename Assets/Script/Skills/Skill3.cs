@@ -35,6 +35,7 @@ public class Skill3 : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         if (skillOnCooldown)
         {
             cooldownTimer -= Time.deltaTime;
@@ -88,7 +89,7 @@ public class Skill3 : MonoBehaviour
             float beforeHP = enemy.enemy_current_HP;
 
             // 데미지 입히기
-            enemy.enemy_current_HP = Mathf.Max(0, enemy.enemy_current_HP - skillDamage);
+            enemy.TakeDamage(skillDamage * (1f + RunUpgradeState.PowerBonus), CombatDamageKind.Skill);
 
             float afterHP = enemy.enemy_current_HP;
             float applied = Mathf.Max(0, beforeHP - afterHP);

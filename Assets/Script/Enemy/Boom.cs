@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ public class Boom : MonoBehaviour
         //�÷��̾�� ���˽� ����
         if (other.gameObject.tag == "Player")
         {
-            GameManager.player_current_HP -= boom_damage;
+            GameManager.DamagePlayer(boom_damage);
             other.gameObject.GetComponent<Player>().Hited();
         }
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,6 +26,7 @@ public class PokpalSkill : MonoBehaviour
     
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         if (Input.GetKeyDown(KeyCode.R) && skill_ready == true)
         {
             cooldown3.UseSkill();

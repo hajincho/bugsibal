@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +21,7 @@ public class Bow : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         // 애니메이터가 켜지면 is_animator_active를 참으로 함
         // -> is_animator_active는 참, was_animator_active는 거짓인 상태에서 화살 발사
         // -> was_animator_active를 참으로 바꿔 화살을 더 발사하지 않게 함
@@ -31,7 +32,8 @@ public class Bow : MonoBehaviour
             if (is_animator_active && !was_animator_active)
             {
                 mouse_position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
-                Invoke("Shoot", 0.5f);
+                animator.speed = RunUpgradeState.AttackRate;
+                Invoke("Shoot", 0.5f / RunUpgradeState.AttackRate);
             }
             was_animator_active = is_animator_active;
         }

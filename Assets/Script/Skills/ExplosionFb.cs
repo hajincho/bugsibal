@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,7 +31,7 @@ public class ExplosionFb : MonoBehaviour
 
             if (!skilldamaged.damaged_skill1)
             {
-                enemy_data.enemy_current_HP -= GameManager.player_skill_power + 20;
+                enemy_data.TakeDamage(RunUpgradeState.SkillPower + 20, CombatDamageKind.Skill);
                 enemy_data.Hitted();
                 skilldamaged.damaged_skill1 = true;
                 skill1.SkillDamageEnable(skilldamaged);

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
@@ -32,6 +32,7 @@ public class Skill5 : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         if (Input.GetKeyDown(KeyCode.E) && skill5_able == true)
         {
             cooldown2.UseSkill();

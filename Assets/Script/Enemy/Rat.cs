@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -103,7 +103,7 @@ public class Rat : MonoBehaviour
     {
         if(other.gameObject.tag == "Player" && normal_able)//플레이어와 충돌하는동안
         {
-            GameManager.player_current_HP -= enemyData.enemy_power;//공격
+            GameManager.DamagePlayer(enemyData.enemy_power);//공격
             other.gameObject.GetComponent<Player>().Hited();
             normal_able = false;
             Invoke("ToNormalAble", normal_cooltime);//쿨타임

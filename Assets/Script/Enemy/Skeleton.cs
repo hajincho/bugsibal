@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -50,7 +50,7 @@ public class Skeleton : MonoBehaviour
         if (distance < 4 && attack_able && other.gameObject.tag == "Player") 
         {
             animator.SetInteger("Attack", 1);
-            GameManager.player_current_HP -= enemyData.enemy_power;
+            GameManager.DamagePlayer(enemyData.enemy_power);
             other.gameObject.GetComponent<Player>().Hited();
             attack_able = false;
 

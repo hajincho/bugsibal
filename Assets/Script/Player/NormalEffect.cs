@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,7 +19,7 @@ public class NormalEffect : MonoBehaviour
         transform = GetComponent<Transform>();
         animator = GetComponent<Animator>();
 
-        animator.speed = 1.6f;
+        animator.speed = 1.6f * RunUpgradeState.AttackRate;
         if (playermove.player_direction == 0)
         {
             transform.localScale = new Vector3(3, 3, 1);
@@ -30,7 +30,7 @@ public class NormalEffect : MonoBehaviour
             transform.localScale = new Vector3(-3, 3, 1);
             dir = -1;
         }
-        Destroy(gameObject, 0.33f);
+        Destroy(gameObject, 0.33f / RunUpgradeState.AttackRate);
     }
 
     void Update()

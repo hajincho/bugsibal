@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +119,7 @@ public class SwordMan : MonoBehaviour
                 float damage = lastHP - currentHP;
                 float heal = damage * 0.5f;
 
-                enemy_data.enemy_current_HP += heal;
+                enemy_data.Heal(heal);
 
                 enemy_data.enemy_current_HP = Mathf.Min(enemy_data.enemy_current_HP, enemy_data.enemy_HP);
             }
@@ -343,7 +343,7 @@ public class SwordMan : MonoBehaviour
         rigid.velocity = Vector2.zero;
 
         yield return new WaitForSeconds(0.2f);
-        GameManager.player_current_HP -= GameManager.player_current_HP * 0.5f;
+        GameManager.DamagePlayer(GameManager.player_current_HP * 0.5f);
         player_script.Hited();
         yield return new WaitForSeconds(0.8f);
 

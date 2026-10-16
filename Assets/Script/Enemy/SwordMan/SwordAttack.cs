@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,25 +32,25 @@ public class SwordAttack : MonoBehaviour
             {
                 case SwordMan.AttackMode.Normal:
                     CameraShake();
-                    GameManager.player_current_HP -= enemy_data.enemy_power;
+                    GameManager.DamagePlayer(enemy_data.enemy_power);
                     playerComponent.Hited();
                     break;
 
                 case SwordMan.AttackMode.Down:
                     CameraShake();
-                    GameManager.player_current_HP -= enemy_data.enemy_power;
+                    GameManager.DamagePlayer(enemy_data.enemy_power);
                     playerComponent.Hited();
                     playerComponent.Attacked(1);
                     break;
 
                 case SwordMan.AttackMode.Sting:
-                    GameManager.player_current_HP -= (int)(enemy_data.enemy_power / 2f);
+                    GameManager.DamagePlayer((int)(enemy_data.enemy_power / 2f));
                     playerComponent.Hited();
                     playerComponent.Attacked(0);
                     break;
 
                 case SwordMan.AttackMode.ParryWindow:
-                    GameManager.player_current_HP -= enemy_data.enemy_power * 2;
+                    GameManager.DamagePlayer(enemy_data.enemy_power * 2);
                     playerComponent.Hited();
                     playerComponent.Attacked(1);
                     break;

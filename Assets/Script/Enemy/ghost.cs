@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Ghost : MonoBehaviour
@@ -161,7 +161,7 @@ public class Ghost : MonoBehaviour
     {
         if (playerScript != null)
         {
-            GameManager.player_current_HP -= damage;
+            GameManager.DamagePlayer(damage);
             playerScript.Hited();
         }
     }

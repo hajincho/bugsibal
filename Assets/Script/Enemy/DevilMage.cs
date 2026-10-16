@@ -119,7 +119,7 @@ public class DevilMage : MonoBehaviour
                             EnemyData enemyData = enemy.GetComponent<EnemyData>();
                             if (enemyData != null)
                             {
-                                enemyData.enemy_current_HP = enemyData.enemy_HP;
+                                enemyData.Heal(enemyData.enemy_HP);
                             }
                         }
                     }

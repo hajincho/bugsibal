@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class ThrownSword : MonoBehaviour
@@ -58,7 +58,7 @@ public class ThrownSword : MonoBehaviour
         {
             if (damageable)
             {
-                GameManager.player_current_HP -= 15;
+                GameManager.DamagePlayer(15);
             }
             damageable = false;
         }

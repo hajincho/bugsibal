@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,7 +124,7 @@ public class Golem : MonoBehaviour
         //������ �÷��̾�� ���˽� ����
         if(other.gameObject.tag == "Player" && dash)
         {
-            GameManager.player_current_HP -= dash_power;
+            GameManager.DamagePlayer(dash_power);
             other.gameObject.GetComponent<Player>().Hited();
         }
     }
@@ -139,7 +139,7 @@ public class Golem : MonoBehaviour
     void attack()
     {
         player.gameObject.GetComponent<Player>().Hited();
-        GameManager.player_current_HP -= enemyData.enemy_power;
+        GameManager.DamagePlayer(enemyData.enemy_power);
         attack_able = false;
         Invoke("ToAttackAble", attack_abletime);
     }

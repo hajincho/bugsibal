@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
@@ -39,6 +39,7 @@ public class Skill1 : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
 
         if (Input.GetKey(KeyCode.Q) && playertransform != null && fb != null && skill1_able == true)
         {

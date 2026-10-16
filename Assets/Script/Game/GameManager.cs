@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -100,15 +99,45 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+        if (itemheld == null) return;
         float minus_HP = (player_HP - player_current_HP);
-        player_HP = itemheld.health + 100;
+        player_HP = itemheld.health + 100 + RunUpgradeState.HealthBonus + (player.midboss_cleared ? 50 : 0);
         player_current_HP = player_HP - minus_HP;
         if (player_current_HP > player_HP)
         {
             player_current_HP = player_HP;
         }
-        player_power = itemheld.power + 10;
+        player_power = itemheld.power + 10 + (player.midboss_cleared ? 7 : 0);
         player_skill_power = itemheld.skillpower + 10;
 
+    }
+    public static float DamagePlayer(float amount)
+    {
+        if (amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount) || player_current_HP <= 0) return 0;
+        float before = player_current_HP;
+        player_current_HP = Mathf.Clamp(player_current_HP - amount, 0, player_HP);
+        float applied = before - player_current_HP;
+        var character = GameObject.FindGameObjectWithTag("Player");
+        if (character != null) CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(character.transform), applied, CombatDamageKind.PlayerHit);
+        return applied;
+    }
+
+    public static float HealPlayer(float amount)
+    {
+        if (amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount) || player_current_HP <= 0) return 0;
+        float before = player_current_HP;
+        player_current_HP = Mathf.Min(player_HP, player_current_HP + amount);
+        float healed = player_current_HP - before;
+        var character = GameObject.FindGameObjectWithTag("Player");
+        if (character != null) CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(character.transform), healed, CombatDamageKind.Heal);
+        return healed;
+    }
+
+    public static void ResetRun()
+    {
+        RunUpgradeState.Reset();
+        player_level = 0; player_speed = 8; player_power = 10; player_skill_power = 10;
+        player_HP = player_current_HP = 100;
+        current_stage = -1;
     }
 }

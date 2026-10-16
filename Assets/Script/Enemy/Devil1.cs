@@ -96,7 +96,7 @@ public class Devil1 : MonoBehaviour
             if (reinforced_attack)//텔레포트 후 강화공격
             {
                 animator.SetInteger("Attack", 3);
-                GameManager.player_current_HP -= enemyData.enemy_power * 3;
+                GameManager.DamagePlayer(enemyData.enemy_power * 3);
                 other.gameObject.GetComponent<Player>().Hited();
                 attack_able = false;
                 reinforced_attack=false;
@@ -106,7 +106,7 @@ public class Devil1 : MonoBehaviour
             else
             {
                 animator.SetInteger("Attack", 0);
-                GameManager.player_current_HP -= enemyData.enemy_power;
+                GameManager.DamagePlayer(enemyData.enemy_power);
                 other.gameObject.GetComponent<Player>().Hited();
                 attack_able = false;
 

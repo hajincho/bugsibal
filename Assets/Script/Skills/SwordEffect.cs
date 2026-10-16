@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,8 +50,8 @@ public class SwordEffect : MonoBehaviour
 
             if (!skilldamaged.damaged_skill5)
             {
-                enemy_data.enemy_current_HP -= GameManager.player_skill_power * 2;
-                GameManager.player_current_HP += 15;
+                enemy_data.TakeDamage(RunUpgradeState.SkillPower * 2, CombatDamageKind.Skill);
+                GameManager.HealPlayer(15);
                 enemy_data.Hitted();
                 skilldamaged.damaged_skill5 = true;
                 skill5.SkillDamageEnable(skilldamaged);

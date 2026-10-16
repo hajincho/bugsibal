@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -89,9 +89,9 @@ public class RockProjectile : MonoBehaviour
         EnemyData enemyData = other.GetComponent<EnemyData>();
         if (enemyData != null)
         {
-            // 기존 damage + GameManager.player_skill_power 합산
-            int totalDamage = damage + GameManager.player_skill_power;
-            enemyData.enemy_current_HP -= totalDamage;
+            // 기존 damage + RunUpgradeState.SkillPower 합산
+            float totalDamage = damage + RunUpgradeState.SkillPower;
+            enemyData.TakeDamage(totalDamage, CombatDamageKind.Skill);
             enemyData.Hitted();
         }
     }

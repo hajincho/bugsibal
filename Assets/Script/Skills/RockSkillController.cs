@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +29,7 @@ public class RockSkillController : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
         if (Input.GetKeyDown(KeyCode.C) && canUse)
         {
             cooldown5.UseSkill();

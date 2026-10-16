@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +33,7 @@ public class drumpokpal : MonoBehaviour
 
             if (!skilldamaged.damaged_skill2)
             {
-                enemy_data.enemy_current_HP -= damage;
+                enemy_data.TakeDamage(damage, CombatDamageKind.Normal);
                 enemy_data.Hitted();
                 skilldamaged.damaged_skill1 = true;
                 
@@ -41,7 +41,7 @@ public class drumpokpal : MonoBehaviour
         }
         else if(other.tag == "Player")
         {
-            GameManager.player_current_HP -= player_damage;
+            GameManager.DamagePlayer(player_damage);
             other.gameObject.GetComponent<Player>().Hited();
         }
     }

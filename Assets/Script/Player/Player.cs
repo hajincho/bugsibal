@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +67,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (StageRewardController.InputBlocked) return;
+        animator.speed = on_attack && !on_dash && !skill_using && animator.GetInteger("Attacked") == -1 ? RunUpgradeState.AttackRate : 1f;
         // 무기 전환
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -135,14 +137,17 @@ public class Player : MonoBehaviour
                         StartCoroutine(InstEffect(-1, 0.2f));
                     }
                     FlipTowardMoveInput();
-                    Invoke(nameof(ToIdle), 0.68f);
+                    animator.speed = RunUpgradeState.AttackRate;
+                    Invoke(nameof(ToIdle), 0.68f / RunUpgradeState.AttackRate);
                     break;
 
                 case 0:
                     animator.SetInteger("Attack", 1);
                     bow_animator.enabled = true;
                     FlipTowardMoveInput();
-                    Invoke(nameof(ToIdle), 0.833f);
+                    animator.speed = RunUpgradeState.AttackRate;
+                    bow_animator.speed = RunUpgradeState.AttackRate;
+                    Invoke(nameof(ToIdle), 0.833f / RunUpgradeState.AttackRate);
                     break;
             }
         }
@@ -231,6 +236,8 @@ public class Player : MonoBehaviour
 
     void ToIdle()
     {
+        animator.speed = 1f;
+        if (bow_animator != null) bow_animator.speed = 1f;
         animator.SetInteger("Attack", -1);
         on_attack = false;
         PlayerMove.moveable = true;
@@ -296,7 +303,7 @@ public class Player : MonoBehaviour
         midboss_cleared = true;
         GameManager.player_power += 7;
         GameManager.player_HP += 50;
-        GameManager.player_current_HP += 50;
+        GameManager.HealPlayer(50);
         weapons[0].SetActive(false);
 
         switch (weapon_mode)
@@ -315,7 +322,7 @@ public class Player : MonoBehaviour
     }
     public void Heal(int amount)
     {
-        GameManager.player_current_HP = Mathf.Min(GameManager.player_current_HP + amount, GameManager.player_HP);
+        GameManager.HealPlayer(amount);
     }
 
     
@@ -324,7 +331,7 @@ public class Player : MonoBehaviour
 
     IEnumerator InstEffect(int dir, float time)
     {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(time / RunUpgradeState.AttackRate);
         if (sword_num == 10)
         {
             Instantiate(sword_effects[sword_num - 1], playertransform.position + new Vector3(-2.8f * dir, 1.5f, 1), Quaternion.identity);
@@ -338,7 +345,7 @@ public class Player : MonoBehaviour
 
     public void SkillDamageEnable(IsSkillDamaged skilldamaged)//적이 공격당했는지 여부 초기화
     {
-        StartCoroutine(Skill(skilldamaged,0.4f, 0));
+        StartCoroutine(Skill(skilldamaged,0.4f / RunUpgradeState.AttackRate, 0));
     }
     IEnumerator Skill(IsSkillDamaged skilldamaged, float delay, int skillnum)
     {

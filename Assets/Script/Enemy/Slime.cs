@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,7 +67,7 @@ public class Slime : MonoBehaviour
         if (distance < 4 && skill_able && other.gameObject.tag == "Player" && player_script.weakeningable) // ��ų
         {
             animator.SetTrigger("Ability");
-            GameManager.player_current_HP -= 2* enemyData.enemy_power;
+            GameManager.DamagePlayer(2* enemyData.enemy_power);
             other.gameObject.GetComponent<Player>().Hited();
             player_script.Attacked(1); //����
             GameManager.player_power /= 2; // ���ݷ� ����
@@ -85,7 +85,7 @@ public class Slime : MonoBehaviour
         else if (distance < 4 && attack_able && other.gameObject.tag == "Player") //����
         {
             animator.SetTrigger("Attack");
-            GameManager.player_current_HP -= enemyData.enemy_power;
+            GameManager.DamagePlayer(enemyData.enemy_power);
             other.gameObject.GetComponent<Player>().Hited();
             Debug.Log("attack");
             Debug.Log(GameManager.player_current_HP);

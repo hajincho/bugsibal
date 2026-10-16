@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RockHitReceiver : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class RockHitReceiver : MonoBehaviour
         if (rock != null && enemyData != null)
         {
             // 데미지 적용
-            enemyData.enemy_current_HP -= rock.damage;
+            enemyData.TakeDamage(rock.damage, CombatDamageKind.Skill);
 
             // Destroy 제거 → 바위가 사라지지 않음
             // Destroy(rock.gameObject);

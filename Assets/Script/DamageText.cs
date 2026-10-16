@@ -11,11 +11,17 @@ public class DamageText : MonoBehaviour
     float age;
     Vector3 origin;
     CombatPresentation pool;
+    public Vector3 SourcePosition { get; private set; }
+    public float Age => age;
     void Awake(){label=GetComponent<TMP_Text>();textMesh=GetComponent<TextMeshPro>();}
     public void Setup(int damage,int dmgmode)
     {pool=null;age=0;origin=transform.position;Configure(damage,dmgmode==2?CombatDamageKind.Heal:dmgmode==1?CombatDamageKind.Skill:CombatDamageKind.Normal);}
-    public void SetupPooled(float damage,CombatDamageKind kind,Vector3 position,CombatPresentation owner)
-    {pool=owner;age=0;origin=position;Configure(damage,kind);}
+    public void SetupPooled(float damage,CombatDamageKind kind,Vector3 position,CombatPresentation owner,int lane=0)
+    {
+        pool=owner;age=0;SourcePosition=position;
+        origin=position+Vector3.up*(.75f+(lane%6)*.45f)+Vector3.right*((lane%3-1)*.32f);
+        Configure(damage,kind);
+    }
     void Configure(float damage,CombatDamageKind kind)
     {
         if(label==null)label=GetComponent<TMP_Text>();

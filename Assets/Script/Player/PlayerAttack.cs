@@ -13,13 +13,21 @@ public class PlayerAttack : MonoBehaviour
 
     void OnEnable()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        var owner = GameObject.FindWithTag("Player");
+        player = owner != null ? owner.GetComponent<Player>() : null;
         projectile = GetComponent<Arrow>() != null;
         projectileDamage = RunUpgradeState.NormalPower * 0.5f;
         struck.Clear();
     }
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (StageRewardController.InputBlocked) return;
+        if (player == null)
+        {
+            var owner = GameObject.FindWithTag("Player");
+            player = owner != null ? owner.GetComponent<Player>() : null;
+        }
+        if (player == null) return;
         if (other.tag == "Enemy" || other.tag == "drumtong")
         {
             //무기가 적에게 닿으면 공격력만큼 적의 체력 감소

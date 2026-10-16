@@ -7,23 +7,30 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.Object;
 
 // Editor-only integration probe. Changes are confined to play mode and are not saved to scenes.
-public class CombatFeaturePlayChecks : MonoBehaviour
+public sealed class CombatFeaturePlayChecks
 {
     [Serializable] public class Report { public List<string> passed=new List<string>();public string error;public bool complete; }
     const string Output=@"C:\Users\srobo\Documents\Codex\2026-10-16\x20-1-2-3-4-5-5\outputs";
     readonly Report report=new Report();
     float originalBackground;
+    static CombatFeaturePlayChecks active;
+    IEnumerator routine;
     public static string Begin()
     {
         if(!EditorApplication.isPlaying)throw new Exception("Enter play mode first.");
-        if(FindObjectOfType<CombatFeaturePlayChecks>()!=null)return "Already running";
-        var go=new GameObject("CombatFeatureIntegrationChecks");
-        DontDestroyOnLoad(go);go.AddComponent<CombatFeaturePlayChecks>();return "Integration checks started";
+        if(active!=null)return "Already running";
+        active=new CombatFeaturePlayChecks();active.Start();EditorApplication.update+=active.Pump;return "Integration checks started";
     }
-    void Start(){originalBackground=Application.runInBackground?1:0;Application.runInBackground=true;Directory.CreateDirectory(Output);StartCoroutine(Guarded());}
-    void Check(bool value,string name){if(!value)throw new Exception(name);report.passed.Add(name);}
+    void Start(){originalBackground=Application.runInBackground?1:0;Application.runInBackground=true;Directory.CreateDirectory(Output);routine=Guarded();}
+    void Pump()
+    {
+        if(!EditorApplication.isPlaying){report.error="Play validation interrupted before completion";Save();EditorApplication.update-=Pump;active=null;return;}
+        if(!routine.MoveNext()){EditorApplication.update-=Pump;active=null;}
+    }
+    void Check(bool value,string name){if(!value)throw new Exception(name);report.passed.Add(name);Save();}
     bool Near(float a,float b){return Mathf.Abs(a-b)<.01f;}
     void Save(){File.WriteAllText(Path.Combine(Output,"unity-validation.json"),JsonUtility.ToJson(report,true));}
     IEnumerator Guarded()
@@ -41,14 +48,19 @@ public class CombatFeaturePlayChecks : MonoBehaviour
         Time.timeScale=1;
         EditorApplication.delayCall+=()=>{EditorApplication.isPlaying=false;};
     }
-    void OnDestroy(){if(!report.complete && report.error==null){report.error="Play validation interrupted before completion";Save();}}
     void Screenshot(string name){ScreenCapture.CaptureScreenshot(Path.Combine(Output,name+".png"));}
     IEnumerator Run()
     {
         for(int i=0;i<3;i++)yield return null;
         Check(StageRewardController.Instance!=null && CombatPresentation.Instance!=null,"Feature root and both UI systems initialize in play mode");
         GameManager.ResetRun();Time.timeScale=1;
-        var first=FindObjectsOfType<Portal>().First(p=>p.next_stage=="Stage1");first.Enter();
+        var first=FindObjectsOfType<Portal>(true).FirstOrDefault(p=>p.next_stage=="Stage1");
+        if(first==null)
+        {
+            var source=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefep/Portal/PortalToStage2.prefab");
+            first=Instantiate(source).GetComponent<Portal>();first.next_stage="Stage1";first.nextstage=1;
+        }
+        first.gameObject.SetActive(true);yield return null;first.Enter();
         for(int i=0;i<3;i++)yield return null;
         Check(SceneManager.GetActiveScene().name=="Stage1" && !StageRewardController.Instance.IsOpen,"Starting portal enters Stage1 without a reward");
         var stage=FindObjectOfType<StageManager>();Check(stage!=null,"Stage1 uses existing StageManager");

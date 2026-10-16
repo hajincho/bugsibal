@@ -59,7 +59,8 @@ public class CombatPresentation : MonoBehaviour
             bar=new EnemyBar();bar.root=FeatureUI.Rect("EnemyHealth",canvas,new Vector2(148,40),Vector2.zero);
             var bg=FeatureUI.Image("Track",bar.root,new Vector2(136,13),new Vector2(0,7),new Color(.03f,.035f,.05f,.95f));
             bar.fill=FeatureUI.Image("Fill",bg.transform,new Vector2(130,7),Vector2.zero,new Color(.6f,.88f,.4f));ConfigureFill(bar.fill);
-            bar.text=FeatureUI.Text("HP",bar.root,new Vector2(148,25),new Vector2(0,-12),"",19,config.font,Color.white);
+            bar.text=FeatureUI.Text("HP",bar.root,new Vector2(148,25),new Vector2(0,-12),"",21,config.font,Color.white);
+            bar.text.outlineWidth=.12f;bar.text.outlineColor=new Color32(10,12,19,255);
         }
         bar.lastHP=bar.lastMax=-1;bar.root.gameObject.SetActive(true);bars.Add(enemy,bar);
     }
@@ -91,6 +92,9 @@ public class CombatPresentation : MonoBehaviour
     {if(Instance!=null && amount>0)Instance.SpawnNumber(position,amount,kind);}
     void SpawnNumber(Vector3 position,float amount,CombatDamageKind kind)
     {
+        int lane=0;
+        foreach(var active in activeNumbers)
+            if(active.Age<.4f && (active.SourcePosition-position).sqrMagnitude<1f)lane++;
         DamageText number;
         if(spareNumbers.Count>0)number=spareNumbers.Pop();
         else if(activeNumbers.Count<MaxNumbers)
@@ -101,7 +105,7 @@ public class CombatPresentation : MonoBehaviour
         }
         else{number=activeNumbers[0];number.Recycle();spareNumbers.Pop();}
         activeNumbers.Add(number);number.gameObject.SetActive(true);
-        number.SetupPooled(amount,kind,position+new Vector3(UnityEngine.Random.Range(-.25f,.25f),0,0),this);
+        number.SetupPooled(amount,kind,position+new Vector3(UnityEngine.Random.Range(-.15f,.15f),0,0),this,lane);
     }
     public void ReturnNumber(DamageText number)
     {activeNumbers.Remove(number);number.gameObject.SetActive(false);spareNumbers.Push(number);}

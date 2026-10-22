@@ -159,6 +159,6 @@ MonoBehaviour:
   player: {fileID: 0}
   real_player: {fileID: 0}
   nextstage: 5
-  x: -17
+  x: -2
   y: 17
   z: 0

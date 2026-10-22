@@ -1078,7 +1078,7 @@ MonoBehaviour:
     value: 12
     power: 290
     skillpower: -999
-    health: 50
+    health: -40
     attackSpeed: 100
     duration: 0
     weight: 25

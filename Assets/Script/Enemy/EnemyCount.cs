@@ -20,8 +20,13 @@ public class EnemyCounter : MonoBehaviour
     // 적의 수를 업데이트하는 메서드
     void UpdateEnemyCount()
     {
-        // 'enemy' 태그를 가진 모든 게임 오브젝트를 찾습니다.
-        int enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        // 'enemy' 태그 중 체력이 남은 적만 셉니다. 죽는 연출 중인 적과 EnemyData 없는 투사체(ThrowSword)는 제외
+        int enemyCount = 0;
+        foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            EnemyData data = enemy.GetComponent<EnemyData>();
+            if (data != null && data.enemy_current_HP > 0) enemyCount++;
+        }
 
         // 적의 수를 UI 텍스트에 표시합니다.
         enemyCountText.text = "남은 적의 수: " + enemyCount;

@@ -17777,8 +17777,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48883b2912ec8c49bcb8c50ffebc6bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy_HP: 3500
-  enemy_current_HP: 3500
+  enemy_HP: 4750
+  enemy_current_HP: 4750
   enemy_power: 20
 --- !u!114 &1316668631
 MonoBehaviour:

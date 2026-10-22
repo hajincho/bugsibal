@@ -19,6 +19,20 @@ public static class CodexConnectionSetup
     static bool started;
     static CodexConnectionSetup() { EditorApplication.delayCall += Begin; }
 
+    [MenuItem("Tools/Codex/Connect Unity MCP")]
+    public static void ConnectFromMenu()
+    {
+        if (started)
+        {
+            Write("Connection setup is already running.");
+            return;
+        }
+        Directory.CreateDirectory("Library");
+        File.WriteAllText(Marker, string.Empty);
+        SessionState.SetBool("CodexConnectionSetup.InstallRequested", false);
+        Begin();
+    }
+
     static void Write(string message)
     {
         File.AppendAllText(Report, DateTime.Now.ToString("s") + " " + message + Environment.NewLine);
@@ -40,6 +54,7 @@ public static class CodexConnectionSetup
         if (locator != null) { Connect(locator); return; }
         if (SessionState.GetBool("CodexConnectionSetup.InstallRequested", false))
         {
+            started = false;
             Write("Waiting for package compilation; installation already requested this session.");
             return;
         }
@@ -59,7 +74,11 @@ public static class CodexConnectionSetup
             started = false;
             EditorApplication.delayCall += Begin;
         }
-        else Write("Package installation failed: " + request.Error.message);
+        else
+        {
+            started = false;
+            Write("Package installation failed: " + request.Error.message);
+        }
     }
 
     static async void Connect(Type locator)
@@ -71,13 +90,44 @@ public static class CodexConnectionSetup
             cacheType.GetMethod("SetUseHttpTransport").Invoke(cache, new object[] { true });
             cacheType.GetMethod("SetHttpTransportScope").Invoke(cache, new object[] { "local" });
             cacheType.GetMethod("SetHttpBaseUrl").Invoke(cache, new object[] { "http://127.0.0.1:8080" });
-            cacheType.GetMethod("SetUvxPathOverride").Invoke(cache, new object[] { @"C:\Users\srobo\Documents\Codex\2026-10-16\x20-1-2-3-4-5-5\work\uv-runtime\bin\uvx.exe" });
+
+            // Let the package discover uv/uvx on this PC and respect its path override.
+            var server = locator.GetProperty("Server").GetValue(null);
+            var serverType = server.GetType();
+            var reachable = serverType.GetMethod("IsLocalHttpServerReachable");
+            if (!(bool)reachable.Invoke(server, null))
+            {
+                Write("Starting the local Unity MCP server.");
+                bool launched = (bool)serverType.GetMethod("StartLocalHttpServer")
+                    .Invoke(server, new object[] { true });
+                if (!launched)
+                    throw new InvalidOperationException("MCP server could not start. Check that uv/uvx is installed and inspect the Unity Console.");
+
+                var deadline = DateTime.UtcNow.AddMinutes(5);
+                while (!(bool)reachable.Invoke(server, null))
+                {
+                    if (DateTime.UtcNow >= deadline)
+                        throw new TimeoutException("Unity MCP server did not become ready within five minutes.");
+                    await Task.Delay(500);
+                }
+            }
+
             var bridge = locator.GetProperty("Bridge").GetValue(null);
             var task = (Task<bool>)bridge.GetType().GetMethod("StartAsync").Invoke(bridge, null);
             bool connected = await task;
-            Write("Bridge connection result: " + connected);
-            if (connected) File.Delete(Marker);
+            if (!connected)
+                throw new InvalidOperationException("The Unity Editor could not connect to the local MCP server.");
+
+            var verification = (Task)bridge.GetType().GetMethod("VerifyAsync").Invoke(bridge, null);
+            await verification;
+            var result = verification.GetType().GetProperty("Result").GetValue(verification);
+            if (!(bool)result.GetType().GetProperty("Success").GetValue(result))
+                throw new InvalidOperationException("Unity MCP bridge verification failed.");
+
+            File.Delete(Marker);
+            Write("Unity MCP bridge verified. On this PC run: codex mcp add unityMCP --url http://127.0.0.1:8080/mcp. Then restart Codex and open this project.");
         }
         catch (Exception e) { Write("Connection setup failed: " + e); }
+        finally { started = false; }
     }
 }

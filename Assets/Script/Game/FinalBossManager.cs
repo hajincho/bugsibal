@@ -31,6 +31,7 @@ public class FinalBossManager : MonoBehaviour
     }
     IEnumerator End()
     {
+        Timer.Stop();
         script.SetActive(true);
 
         text.text = "나는 힘든 여정끝에 납치된 동생을 찾았다.";

@@ -26,7 +26,8 @@ public class DevilMage : MonoBehaviour
     float skill2_cooltime = 10.0f;
     float skill3_cooltime = 15.0f;
     public int dropchance = 90;
-    
+    public float healRange = 6f;
+
     bool skill_able = true;
     
     float distance;
@@ -114,7 +115,7 @@ public class DevilMage : MonoBehaviour
                     GameObject[] enemyall = GameObject.FindGameObjectsWithTag("Enemy");
                     foreach (GameObject enemy in enemyall)
                     {
-                        if (enemyall != null)
+                        if (enemyall != null && Vector2.Distance(transform.position, enemy.transform.position) <= healRange)
                         {
                             EnemyData enemyData = enemy.GetComponent<EnemyData>();
                             if (enemyData != null)

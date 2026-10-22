@@ -50,7 +50,7 @@ public class DevilMage : MonoBehaviour
         
         distance = Vector2.Distance(transform.position, player_transform.position);
 
-        if (enemyData.enemy_current_HP <= 0) // »ç¸Á
+        if (enemyData.enemy_current_HP <= 0) // ì‚¬ë§
         {
             animator.SetTrigger("Death");
             if (!isdead)
@@ -72,11 +72,11 @@ public class DevilMage : MonoBehaviour
             
         }
 
-        if (distance <= enemyMove.enemy_attack_range) // ½ºÅ³ »ç¿ë
+        if (distance <= enemyMove.enemy_attack_range) // ìŠ¤í‚¬ ì‚¬ìš©
         {
             if (skill_able)
             {
-                if (skill1_able && rand ==0)//½ºÅ³ 1(ÆÄÀÌ¾îº¼)
+                if (skill1_able && rand ==0)//ìŠ¤í‚¬ 1(íŒŒì´ì–´ë³¼)
                 {
                     skill_able = false;
                     skill1_able = false;
@@ -89,7 +89,7 @@ public class DevilMage : MonoBehaviour
                     Invoke("ToIdle", 0.68f);
                     StartCoroutine(SkillEnable(1, skill1_cooltime));
                 }
-                else if (skill2_able && rand == 1)//½ºÅ³ 2(¹ÚÁã ¼ÒÈ¯)
+                else if (skill2_able && rand == 1)//ìŠ¤í‚¬ 2(ë°•ì¥ ì†Œí™˜)
                 {
                     skill_able = false;
                     skill2_able = false;
@@ -106,7 +106,7 @@ public class DevilMage : MonoBehaviour
                     Invoke("ToIdle", 0.68f);
                     StartCoroutine(SkillEnable(2, skill2_cooltime));
                 }
-                else if (skill3_able && rand == 2)//½ºÅ³ 3(Àû ÀüÃ¼ È¸º¹)
+                else if (skill3_able && rand == 2)//ìŠ¤í‚¬ 3(ì  ì „ì²´ íšŒë³µ)
                 {
                     skill_able = false;
                     skill3_able = false;
@@ -148,7 +148,7 @@ public class DevilMage : MonoBehaviour
         }
     }
 
-    void SkillEnable(int num) // ½ºÅ³ ÄðÅ¸ÀÓ ÃÊ±âÈ­
+    void SkillEnable(int num) // ìŠ¤í‚¬ ì¿¨íƒ€ìž„ ì´ˆê¸°í™”
     {
         switch (num)
         {
@@ -165,17 +165,17 @@ public class DevilMage : MonoBehaviour
         }
     }
 
-    void SkillAble() // ½ºÅ³ »çÀÌ ÅÒ
+    void SkillAble() // ìŠ¤í‚¬ ì‚¬ì´ í…€
     {
         skill_able = true;
     }
 
-    void SpawnFireball()//ÆÄÀÌ¾îº¼ ¼ÒÈ¯
+    void SpawnFireball()//íŒŒì´ì–´ë³¼ ì†Œí™˜
     {
         GameObject fireball = Instantiate(firepref, transform.position, Quaternion.identity);
     }
 
-    void ToIdle()//¸ð¼Ç ÃÊ±âÈ­
+    void ToIdle()//ëª¨ì…˜ ì´ˆê¸°í™”
     {
         animator.SetInteger("Attack", -1);
     }

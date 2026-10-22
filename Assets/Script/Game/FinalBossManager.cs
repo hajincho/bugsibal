@@ -33,13 +33,13 @@ public class FinalBossManager : MonoBehaviour
     {
         script.SetActive(true);
 
-        text.text = "³ª´Â Èûµç ¿©Á¤³¡¿¡ ³³Ä¡µÈ µ¿»ıÀ» Ã£¾Ò´Ù.";
+        text.text = "ë‚˜ëŠ” í˜ë“  ì—¬ì •ëì— ë‚©ì¹˜ëœ ë™ìƒì„ ì°¾ì•˜ë‹¤.";
         yield return new WaitForSeconds(3f);
 
-        text.text = "µ¿»ıÀº ¹«»çÇß°í ¿ì¸®´Â ¹«»çÈ÷ ºüÁ®³ª¿Ã ¼ö ÀÖ¾ú´Ù.";
+        text.text = "ë™ìƒì€ ë¬´ì‚¬í–ˆê³  ìš°ë¦¬ëŠ” ë¬´ì‚¬íˆ ë¹ ì ¸ë‚˜ì˜¬ ìˆ˜ ìˆì—ˆë‹¤.";
         yield return new WaitForSeconds(3f);
 
-        text.text = "ÇÃ·¹ÀÌ ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù!!";
+        text.text = "í”Œë ˆì´ í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤!!";
         yield return new WaitForSeconds(3f);
 
         image.SetActive(true);

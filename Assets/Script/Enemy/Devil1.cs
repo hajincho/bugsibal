@@ -46,7 +46,7 @@ public class Devil1 : MonoBehaviour
     {
         distance = Vector2.Distance(transform.position, player_transform.position);
 
-        if (enemyData.enemy_current_HP <= 0) // »ç¸Á
+        if (enemyData.enemy_current_HP <= 0) // ì‚¬ë§
         {
             animator.SetTrigger("Death");
             if (!isdead)
@@ -67,12 +67,12 @@ public class Devil1 : MonoBehaviour
             Destroy(gameObject, 1f);
         }
 
-        if (teleport_able) // ÇÃ·¹ÀÌ¾î µÚ·Î ÅÚ·¹Æ÷Æ®
+        if (teleport_able) // í”Œë ˆì´ì–´ ë’¤ë¡œ í…”ë ˆí¬íŠ¸
         {
             
             teleport_able = false;
             reinforced_attack = true;
-            if (playerMove.player_direction == 0) // ÅÚ·¹Æ÷Æ® ¹æÇâ ¼³Á¤
+            if (playerMove.player_direction == 0) // í…”ë ˆí¬íŠ¸ ë°©í–¥ ì„¤ì •
             {
                 targetPosition = player_transform.position - (Vector3)Vector2.right * 1.5f;
             }
@@ -82,18 +82,18 @@ public class Devil1 : MonoBehaviour
             }
            
             transform.position = targetPosition;
-            Instantiate(dust, transform.position, Quaternion.identity);//ÅÚ·¹Æ÷Æ® ÀÌÆåÆ®
+            Instantiate(dust, transform.position, Quaternion.identity);//í…”ë ˆí¬íŠ¸ ì´íŽ™íŠ¸
 
 
             Invoke("TeleportAble", 10f);
         }
     }
 
-    void OnCollisionStay2D(Collision2D other) //Ãæµ¹½Ã °ø°Ý
+    void OnCollisionStay2D(Collision2D other) //ì¶©ëŒì‹œ ê³µê²©
     {
         if (distance < 4 && attack_able && other.gameObject.tag == "Player") 
         {
-            if (reinforced_attack)//ÅÚ·¹Æ÷Æ® ÈÄ °­È­°ø°Ý
+            if (reinforced_attack)//í…”ë ˆí¬íŠ¸ í›„ ê°•í™”ê³µê²©
             {
                 animator.SetInteger("Attack", 3);
                 GameManager.DamagePlayer(enemyData.enemy_power * 3);
@@ -115,13 +115,13 @@ public class Devil1 : MonoBehaviour
         }
     }
 
-    void ToAttackAble()//°ø°Ý ÃÊ±âÈ­
+    void ToAttackAble()//ê³µê²© ì´ˆê¸°í™”
     {
         attack_able = true;
         animator.SetInteger("Attack", -1);
     }
 
-    void TeleportAble()//ÅÚ·¹Æ÷Æ® ÃÊ±âÈ­
+    void TeleportAble()//í…”ë ˆí¬íŠ¸ ì´ˆê¸°í™”
     {
         teleport_able = true;
     }

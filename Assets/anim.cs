@@ -6,21 +6,21 @@ using UnityEngine;
 public class Skill2 : MonoBehaviour
 {
     [Header("Skill Settings")]
-    public float skillRange = 6f;       // ¹İ°æ 6
-    public int skillDamage = 35;        // °íÁ¤ µ¥¹ÌÁö 35
-    public float healRatio = 0.6f;      // ÀÔÈù ÇÇÇØÀÇ 60% È¸º¹
-    public float cooldown = 8f;         // ÄğÅ¸ÀÓ 8ÃÊ
-    public KeyCode useKey = KeyCode.Alpha2;  // ¼ıÀÚ 2Å°·Î ¹ßµ¿
+    public float skillRange = 6f;       // ë°˜ê²½ 6
+    public int skillDamage = 35;        // ê³ ì • ë°ë¯¸ì§€ 35
+    public float healRatio = 0.6f;      // ì…íŒ í”¼í•´ì˜ 60% íšŒë³µ
+    public float cooldown = 8f;         // ì¿¨íƒ€ì„ 8ì´ˆ
+    public KeyCode useKey = KeyCode.Alpha2;  // ìˆ«ì 2í‚¤ë¡œ ë°œë™
 
     [Header("VFX / SFX (Optional)")]
-    public GameObject vfxPrefab;        // ½ºÅ³ VFX(¿É¼Ç)
-    public AudioClip sfxClip;           // ½ºÅ³ SFX(¿É¼Ç)
+    public GameObject vfxPrefab;        // ìŠ¤í‚¬ VFX(ì˜µì…˜)
+    public AudioClip sfxClip;           // ìŠ¤í‚¬ SFX(ì˜µì…˜)
 
     [Header("Debug")]
     public bool drawGizmos = true;
     public Color gizmoColor = Color.red;
 
-    // ³»ºÎ »óÅÂ
+    // ë‚´ë¶€ ìƒíƒœ
     Player player;
     private bool skillOnCooldown = false;
     private float cooldownTimer = 0f;
@@ -35,7 +35,7 @@ public class Skill2 : MonoBehaviour
 
     void Update()
     {
-        // ÄğÅ¸ÀÓ ÁøÇà (UI ¾øÀ½)
+        // ì¿¨íƒ€ì„ ì§„í–‰ (UI ì—†ìŒ)
         if (skillOnCooldown)
         {
             cooldownTimer -= Time.deltaTime;
@@ -46,10 +46,10 @@ public class Skill2 : MonoBehaviour
             }
         }
 
-        // ÀÔ·Â Ã³¸® (¼ıÀÚ 2Å°)
+        // ì…ë ¥ ì²˜ë¦¬ (ìˆ«ì 2í‚¤)
         if (Input.GetKeyDown(useKey) && !skillOnCooldown)
         {
-            // Player Ãø ÀçÁøÀÔ ÇÃ·¡±× È®ÀÎ (ÀÖÀ¸¸é true·Î ¼³Á¤)
+            // Player ì¸¡ ì¬ì§„ì… í”Œë˜ê·¸ í™•ì¸ (ìˆìœ¼ë©´ trueë¡œ ì„¤ì •)
             if (player != null && player.skill_using) return;
 
             StartCoroutine(UseSkill());
@@ -58,20 +58,20 @@ public class Skill2 : MonoBehaviour
 
     IEnumerator UseSkill()
     {
-        // ÀçÁøÀÔ Â÷´Ü ¹× Äğ´Ù¿î ½ÃÀÛ
+        // ì¬ì§„ì… ì°¨ë‹¨ ë° ì¿¨ë‹¤ìš´ ì‹œì‘
         skillOnCooldown = true;
         cooldownTimer = cooldown;
 
         if (player != null) player.skill_using = true;
 
-        // VFX / SFX (¼±ÅÃ)
+        // VFX / SFX (ì„ íƒ)
         if (vfxPrefab != null)
             Instantiate(vfxPrefab, transform.position, Quaternion.identity);
 
         if (sfxClip != null)
             AudioSource.PlayClipAtPoint(sfxClip, transform.position);
 
-        // ´ë»ó °Ë»ö (·¹ÀÌ¾î ´ë½Å ÅÂ±× "Enemy"¸¸ »ç¿ë)
+        // ëŒ€ìƒ ê²€ìƒ‰ (ë ˆì´ì–´ ëŒ€ì‹  íƒœê·¸ "Enemy"ë§Œ ì‚¬ìš©)
         processedEnemies.Clear();
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, skillRange);
 
@@ -80,18 +80,18 @@ public class Skill2 : MonoBehaviour
         foreach (Collider2D hit in hits)
         {
             if (hit == null) continue;
-            if (hit.tag != "Enemy") continue; // ÅÂ±×·Î ÇÊÅÍ
+            if (hit.tag != "Enemy") continue; // íƒœê·¸ë¡œ í•„í„°
 
             EnemyData enemy = hit.GetComponent<EnemyData>() ?? hit.GetComponentInParent<EnemyData>();
             if (enemy == null) continue;
-            if (processedEnemies.Contains(enemy)) continue; // Áßº¹ Äİ¶óÀÌ´õ ¹æÁö
+            if (processedEnemies.Contains(enemy)) continue; // ì¤‘ë³µ ì½œë¼ì´ë” ë°©ì§€
             processedEnemies.Add(enemy);
 
-            if (enemy.enemy_current_HP <= 0) continue; // ÀÌ¹Ì Á×À½
+            if (enemy.enemy_current_HP <= 0) continue; // ì´ë¯¸ ì£½ìŒ
 
             float beforeHP = enemy.enemy_current_HP;
 
-            // EnemyData¿¡ TakeDamage°¡ ÀÖÀ¸¸é È£Ãâ, ¾øÀ¸¸é Á÷Á¢ °¨¼Ò
+            // EnemyDataì— TakeDamageê°€ ìˆìœ¼ë©´ í˜¸ì¶œ, ì—†ìœ¼ë©´ ì§ì ‘ ê°ì†Œ
             MethodInfo takeDamageMethod = enemy.GetType().GetMethod("TakeDamage", new System.Type[] { typeof(int) });
             if (takeDamageMethod != null)
             {
@@ -106,23 +106,23 @@ public class Skill2 : MonoBehaviour
             float applied = Mathf.Max(0, beforeHP - afterHP);
             totalDamageDealt += applied;
 
-            // ÇÇ°İ ¹İÀÀ È£Ãâ(Hitted°¡ ÀÖ´Ù¸é)
+            // í”¼ê²© ë°˜ì‘ í˜¸ì¶œ(Hittedê°€ ìˆë‹¤ë©´)
             MethodInfo hittedMethod = enemy.GetType().GetMethod("Hitted", System.Type.EmptyTypes);
             if (hittedMethod != null)
                 hittedMethod.Invoke(enemy, null);
         }
 
-        // È¸º¹ Àû¿ë(ÃÑ ÀÔÈù ÇÇÇØÀÇ healRatio)
+        // íšŒë³µ ì ìš©(ì´ ì…íŒ í”¼í•´ì˜ healRatio)
         int healAmount = Mathf.RoundToInt(totalDamageDealt * healRatio);
         if (healAmount > 0)
         {
             if (player != null)
-                player.Heal(healAmount); // Player ÂÊ Heal »ç¿ë
+                player.Heal(healAmount); // Player ìª½ Heal ì‚¬ìš©
             else
                 GameManager.player_current_HP = Mathf.Min(GameManager.player_current_HP + healAmount, GameManager.player_HP);
         }
 
-        // ÇÑ ÇÁ·¹ÀÓ ´ë±â ÈÄ ÇÃ·¡±× ÇØÁ¦
+        // í•œ í”„ë ˆì„ ëŒ€ê¸° í›„ í”Œë˜ê·¸ í•´ì œ
         yield return null;
 
         if (player != null) player.skill_using = false;

@@ -5,14 +5,14 @@ using UnityEngine;
 public class Skill3 : MonoBehaviour
 {
     [Header("Skill Settings")]
-    public float skillRange = 6f;       // ½ºÅ³ ¹İ°æ 6m
-    public int skillDamage = 35;        // °íÁ¤ µ¥¹ÌÁö 35
-    public float healRatio = 0.6f;      // ÀÔÈù ÇÇÇØÀÇ 60% È¸º¹
-    public float cooldown = 8f;         // ÄğÅ¸ÀÓ 8ÃÊ
-    public KeyCode useKey = KeyCode.Alpha2;  // ¹ßµ¿Å° ¼ıÀÚ 2
+    public float skillRange = 6f;       // ìŠ¤í‚¬ ë°˜ê²½ 6m
+    public int skillDamage = 35;        // ê³ ì • ë°ë¯¸ì§€ 35
+    public float healRatio = 0.6f;      // ì…íŒ í”¼í•´ì˜ 60% íšŒë³µ
+    public float cooldown = 8f;         // ì¿¨íƒ€ì„ 8ì´ˆ
+    public KeyCode useKey = KeyCode.Alpha2;  // ë°œë™í‚¤ ìˆ«ì 2
 
     [Header("VFX Settings")]
-    public GameObject effectPrefab;     // ½ºÅ³ ÀÌÆåÆ® ÇÁ¸®ÆÕ
+    public GameObject effectPrefab;     // ìŠ¤í‚¬ ì´í™íŠ¸ í”„ë¦¬íŒ¹
 
     [Header("Debug")]
     public bool drawGizmos = true;
@@ -29,7 +29,7 @@ public class Skill3 : MonoBehaviour
         player = GetComponentInParent<Player>();
         if (player == null)
         {
-            Debug.LogWarning("[Skill3] Player ÄÄÆ÷³ÍÆ®¸¦ ºÎ¸ğ¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("[Skill3] Player ì»´í¬ë„ŒíŠ¸ë¥¼ ë¶€ëª¨ì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
@@ -62,7 +62,7 @@ public class Skill3 : MonoBehaviour
         if (player != null)
             player.skill_using = true;
 
-        // ½ºÅ³ ÀÌÆåÆ® »ı¼º
+        // ìŠ¤í‚¬ ì´í™íŠ¸ ìƒì„±
         GameObject currentEffect = null;
         if (effectPrefab != null)
         {
@@ -88,7 +88,7 @@ public class Skill3 : MonoBehaviour
 
             float beforeHP = enemy.enemy_current_HP;
 
-            // µ¥¹ÌÁö ÀÔÈ÷±â
+            // ë°ë¯¸ì§€ ì…íˆê¸°
             enemy.TakeDamage(skillDamage * (1f + RunUpgradeState.PowerBonus), CombatDamageKind.Skill);
 
             float afterHP = enemy.enemy_current_HP;
@@ -98,14 +98,14 @@ public class Skill3 : MonoBehaviour
             enemy.Hitted();
         }
 
-        // È¸º¹·® °è»ê ¹× Àû¿ë
+        // íšŒë³µëŸ‰ ê³„ì‚° ë° ì ìš©
         int healAmount = Mathf.RoundToInt(totalDamageDealt * healRatio);
         if (healAmount > 0 && player != null)
         {
             player.Heal(healAmount);
         }
 
-        // ÀÌÆåÆ®°¡ ³» ÁÖÀ§¸¦ 5¹ÙÄû ºü¸£°Ô µ¹°Ô ÇÏ±â (Áö¼Ó½Ã°£ 0.6ÃÊ À¯Áö)
+        // ì´í™íŠ¸ê°€ ë‚´ ì£¼ìœ„ë¥¼ 5ë°”í€´ ë¹ ë¥´ê²Œ ëŒê²Œ í•˜ê¸° (ì§€ì†ì‹œê°„ 0.6ì´ˆ ìœ ì§€)
         float duration = 0.6f;
         float elapsed = 0f;
         float rotations = 5f;
@@ -121,7 +121,7 @@ public class Skill3 : MonoBehaviour
                 Vector3 offset = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0) * skillRange;
                 currentEffect.transform.position = transform.position + offset;
 
-                // ÀÌÆåÆ® ÀÚÃ¼ È¸Àü (¼±ÅÃ»çÇ×)
+                // ì´í™íŠ¸ ìì²´ íšŒì „ (ì„ íƒì‚¬í•­)
                 currentEffect.transform.Rotate(Vector3.forward, 540f * Time.deltaTime);
             }
             yield return null;

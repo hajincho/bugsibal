@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FB : MonoBehaviour
 {
-    //½ºÅ³ º¯¼ö
+    //ìŠ¤í‚¬ ë³€ìˆ˜
     Skill1 skill;
     Rigidbody2D rigid;
     Vector3 direction;
@@ -13,7 +13,7 @@ public class FB : MonoBehaviour
     public bool damageable = true;
     public int fbnum;
 
-    //ÆÄÀÌ¾îº¼ ±ËÀû º¯¼ö
+    //íŒŒì´ì–´ë³¼ ê¶¤ì  ë³€ìˆ˜
     private Vector3 startPos;
     private Vector3 endPos;
     private float height = 3f;
@@ -29,7 +29,7 @@ public class FB : MonoBehaviour
         skill = GameObject.FindWithTag("Player").GetComponent<Skill1>();
     }
 
-    public void FireBall(Vector3 targetDir)//¹ß»ç ¸ñÇ¥ À§Ä¡ ¼³Á¤
+    public void FireBall(Vector3 targetDir)//ë°œì‚¬ ëª©í‘œ ìœ„ì¹˜ ì„¤ì •
     {
         startPos = transform.position;
         endPos = startPos + targetDir * 15f;
@@ -41,7 +41,7 @@ public class FB : MonoBehaviour
 
     void Update()
     {
-        //ÆÄÀÌ¾îº¼ ÀÌµ¿
+        //íŒŒì´ì–´ë³¼ ì´ë™
         if (!isFlying) return;
 
         elapsed += Time.deltaTime;
@@ -78,7 +78,7 @@ public class FB : MonoBehaviour
         prevpos = linear; 
     }
 
-    void OnTriggerEnter2D(Collider2D other)//Ãæµ¹½Ã ÇÇÇØ
+    void OnTriggerEnter2D(Collider2D other)//ì¶©ëŒì‹œ í”¼í•´
     {
         if (other.tag == "Enemy" || other.tag == "drumtong")
         {

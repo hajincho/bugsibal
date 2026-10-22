@@ -45,7 +45,7 @@ public class SwordDrop : MonoBehaviour
 
                 txt.text =
                     $"<align=\"center\">{sword.itemName}</align>\n" +
-                    $"<align=\"center\">[æ∆¿Ã≈€ ¡›±‚ : Q]</align>";
+                    $"<align=\"center\">[ÏïÑÏù¥ÌÖú Ï§çÍ∏∞ : Tab]</align>";
 
             }
             else

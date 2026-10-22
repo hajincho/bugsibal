@@ -18,7 +18,7 @@ public class Chest : MonoBehaviour
         {
             inventory.Inven.Add(itemdrop.Uniquedrop());
             Debug.Log("Drop!");
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }

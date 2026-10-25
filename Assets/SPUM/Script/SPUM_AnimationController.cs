@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro; // 1. TextMesh Pro를 사용하기 위해 추가
 
 public class SPUM_AnimationController : MonoBehaviour
 {
     [Header("Character Animator")]
     [SerializeField] SPUM_Prefabs unit;
-    [SerializeField] Animator animator => unit._anim;
+    Animator animator => unit != null ? unit._anim : null;
 
     [Header("Animation Button Prefab")]
     [SerializeField] Button animationButtonPrefab;

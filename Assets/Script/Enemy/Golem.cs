@@ -51,7 +51,7 @@ public class Golem : MonoBehaviour
 
     void Update()
     {
-        rigidbody.velocity = Vector3.zero;
+        rigidbody.linearVelocity = Vector3.zero;
         distance = Vector2.Distance(transform.position, player_transform.position);
         //���� ��Ÿ�� ����
         dash_cooltime += Time.deltaTime;

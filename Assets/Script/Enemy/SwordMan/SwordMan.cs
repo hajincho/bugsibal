@@ -104,7 +104,7 @@ public class SwordMan : MonoBehaviour
         {
             dead = true;
             animator.SetTrigger("Neutralize");
-            rigid.velocity = Vector3.zero;
+            rigid.linearVelocity = Vector3.zero;
             attack_able = false;
             enemy_move.moveable = false;
             Destroy(gameObject, 2f);
@@ -148,7 +148,7 @@ public class SwordMan : MonoBehaviour
 
     IEnumerator Attack()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         able0 = false;
         attack_able = false;
@@ -170,7 +170,7 @@ public class SwordMan : MonoBehaviour
 
     IEnumerator AttackDown()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         able1 = false;
         attack_able = false;
@@ -194,7 +194,7 @@ public class SwordMan : MonoBehaviour
 
     IEnumerator StingAndParrying()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         able2 = false;
         attack_able = false;
@@ -221,7 +221,7 @@ public class SwordMan : MonoBehaviour
 
     public void Parrying()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         attack_able = false;
         animator.SetTrigger("Neutralize");
@@ -230,7 +230,7 @@ public class SwordMan : MonoBehaviour
 
     IEnumerator Charge()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         able3 = false;
         attack_able = false;
@@ -262,7 +262,7 @@ public class SwordMan : MonoBehaviour
 
     IEnumerator SwordThrow()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         able4 = false;
         attack_able = false;
@@ -302,7 +302,7 @@ public class SwordMan : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = true;
         attack_able = true;
 
@@ -315,7 +315,7 @@ public class SwordMan : MonoBehaviour
         Debug.Log("반격");
         on_red = false;
         red_effect.SetActive(false);
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = false;
         attack_able = false;
         animator.SetTrigger("Dash");
@@ -340,7 +340,7 @@ public class SwordMan : MonoBehaviour
         yield return new WaitForSeconds(0.167f);
 
         yield return StartCoroutine(MoveToPosition(startPos, 0.5f));
-        rigid.velocity = Vector2.zero;
+        rigid.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(0.2f);
         GameManager.DamagePlayer(GameManager.player_current_HP * 0.5f);
@@ -390,7 +390,7 @@ public class SwordMan : MonoBehaviour
 
     void ToIdle()
     {
-        rigid.velocity = Vector3.zero;
+        rigid.linearVelocity = Vector3.zero;
         enemy_move.moveable = true;
         attack_able = true;
     }

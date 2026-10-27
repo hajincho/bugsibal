@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,20 +8,17 @@ public class PlayerAttack : MonoBehaviour
     Player player;
     bool has_attacked = false;
     bool projectile;
-    float projectileDamage;
-    readonly HashSet<EnemyData> struck = new HashSet<EnemyData>();
 
     void OnEnable()
     {
         var owner = GameObject.FindWithTag("Player");
         player = owner != null ? owner.GetComponent<Player>() : null;
         projectile = GetComponent<Arrow>() != null;
-        projectileDamage = RunUpgradeState.NormalPower * 0.5f;
-        struck.Clear();
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (StageRewardController.InputBlocked) return;
+        // Arrow owns its launch damage and consumes the entire projectile on its first hit.
+        if (projectile || StageRewardController.InputBlocked) return;
         if (player == null)
         {
             var owner = GameObject.FindWithTag("Player");
@@ -31,7 +28,7 @@ public class PlayerAttack : MonoBehaviour
         if (other.tag == "Enemy" || other.tag == "drumtong")
         {
             //무기가 적에게 닿으면 공격력만큼 적의 체력 감소
-            if(player.on_attack || projectile)//Projectiles retain their launch damage after the attack animation ends.
+            if(player.on_attack)
             {
         
                 //검은 데미지 2배
@@ -51,13 +48,6 @@ public class PlayerAttack : MonoBehaviour
 
 
                 if (enemy_data == null) return;
-                if (projectile)
-                {
-                    if (!struck.Add(enemy_data)) return;
-                    enemy_data.TakeDamage(projectileDamage, CombatDamageKind.Normal);
-                    enemy_data.Hitted();
-                    return;
-                }
                 if (player.weapon_mode == 1 && skilldamaged != null && skilldamaged.damaged_normal) return;
 
                 if (player.weapon_mode == 1)

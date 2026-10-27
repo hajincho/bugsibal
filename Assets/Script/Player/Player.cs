@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,9 +30,13 @@ public class Player : MonoBehaviour
 
     // 기타 상태
     public bool on_attack = false;
-    public int weapon_mode; // 0:검 1:활 2:강화검
+    public int weapon_mode; // 0: bow, 1: sword (legacy upgraded sword: 2)
     public int sword_num; // 칼 아이템 번호
     public int bow_num; // 활 아이템 번호
+    public Bow chargeBow;
+    public BowChargeSettings ownedBow;
+    Item equippedBowItem;
+    public Item EquippedBowItem => equippedBowItem;
     public GameObject sword_effect;
     public bool weakeningable = true;
     public bool midboss_cleared = false;
@@ -44,6 +48,7 @@ public class Player : MonoBehaviour
     void Awake()
     {
         animator = GetComponent<Animator>();
+        if (chargeBow == null && bow_animator != null) chargeBow = bow_animator.GetComponent<Bow>();
         playertransform = GetComponent<Transform>();
         itemdrop = GetComponent<ItemDrop>();
         gamemanager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
@@ -69,28 +74,9 @@ public class Player : MonoBehaviour
     {
         if (StageRewardController.InputBlocked) return;
         animator.speed = on_attack && !on_dash && !skill_using && animator.GetInteger("Attacked") == -1 ? RunUpgradeState.AttackRate : 1f;
-        // 무기 전환
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            switch (weapon_mode)
-            {
-                case 0:
-                    weapon_mode = 1;
-                    weapons[0].SetActive(false);
-                    weapons[sword_num].SetActive(true);
-                    gamemanager.AddItemValue();
-
-                    break;
-                case 1:
-                    weapon_mode = 0;
-                    for (int i = 0; i < weapons.Count; i++)
-                    {
-                        weapons[i].SetActive(false);
-                    }
-                    weapons[0].SetActive(true);
-                    break;
-            }
-        }
+        // Shift changes weapon category; Tab exchanges a nearby weapon in that category.
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+            ToggleWeaponMode();
         if (Input.GetKeyDown(KeyCode.L))
         {
             sword_num += 1;
@@ -119,7 +105,7 @@ public class Player : MonoBehaviour
 
 
         // 공격 처리
-        if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.LeftShift) & !on_attack && !on_dash && !skill_using)
+        if (Input.GetMouseButtonDown(0) && !on_attack && !on_dash && !skill_using)
         {
             on_attack = true;
 
@@ -142,12 +128,7 @@ public class Player : MonoBehaviour
                     break;
 
                 case 0:
-                    animator.SetInteger("Attack", 1);
-                    bow_animator.enabled = true;
-                    FlipTowardMoveInput();
-                    animator.speed = RunUpgradeState.AttackRate;
-                    bow_animator.speed = RunUpgradeState.AttackRate;
-                    Invoke(nameof(ToIdle), 0.833f / RunUpgradeState.AttackRate);
+                    if (chargeBow == null || !chargeBow.BeginCharge()) on_attack = false;
                     break;
             }
         }
@@ -158,6 +139,7 @@ public class Player : MonoBehaviour
             Vector2 inputDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
             if (inputDir == Vector2.zero) return; // 입력이 없으면 대시 안 함
 
+            if (chargeBow != null) chargeBow.CancelCharge();
             dash_direction = inputDir;
 
             dash_able = false;
@@ -174,39 +156,108 @@ public class Player : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab)) //Q키로 아이템 줍기
-        {
-            SwordDrop nearest = FindNearestSwordDrop();
-            if (nearest != null)
-            {
-                nearest.AddItem(nearest.sword);
-                nearest.Pickup();
-                GameObject swordtrash = Instantiate(trashsword ,playertransform.position,  Quaternion.identity);
-                SwordDrop sworddrop = swordtrash.GetComponent<SwordDrop>();
-                sworddrop.swordnum = sword_num - 1;
-                foreach (Item item in itemmanager.itemList)
-                {
-                    if (item.value == sword_num)
-                    {
-                        sworddrop.sword = item;
-                        break;
-                    }
-                }
-                sworddrop.SwordChange(sword_num - 1);
-                sword_num = nearest.swordnum + 1;
-                gamemanager.AddItemValue();
-                if (weapon_mode == 1)
-                {
-                    for (int i = 0; i < weapons.Count; i++)
-                    {
-                        weapons[i].SetActive(false);
-                    }
-                    weapons[sword_num].SetActive(true);
-                }
+        if (Input.GetKeyDown(KeyCode.Tab)) TryPickupNearestWeapon();
+    }
 
-            }
+    public bool ToggleWeaponMode()
+    {
+        if (StageRewardController.InputBlocked || on_dash || skill_using || GameManager.player_current_HP <= 0f) return false;
+        if (on_attack && (chargeBow == null || !chargeBow.IsCharging)) return false;
+        if (weapon_mode != 0 && ownedBow == null) return false;
+        if (chargeBow != null) chargeBow.CancelCharge();
+        CancelInvoke(nameof(ToIdle));
+        on_attack = false;
+        animator.SetInteger("Attack", -1);
+        animator.speed = 1f;
+        weapon_mode = weapon_mode == 0 ? 1 : 0;
+        ApplyWeaponVisibility();
+        if (weapon_mode == 1) gamemanager.AddItemValue();
+        return true;
+    }
+
+    void ApplyWeaponVisibility()
+    {
+        int selected = weapon_mode == 0 ? 0 : sword_num;
+        for (int i = 0; i < weapons.Count; i++)
+            if (weapons[i] != null) weapons[i].SetActive(i == selected);
+        if (chargeBow != null && chargeBow.chargeBar != null)
+        {
+            if (weapon_mode == 0) chargeBow.chargeBar.Show(0f, chargeBow.settings);
+            else chargeBow.chargeBar.Hide();
         }
     }
+
+    public bool CanPickupWeapon(Item item)
+    {
+        if (item == null || item.itemType != ItemType.Weapon) return false;
+        if (item.IsBow)
+            return item.bowSettings != null && (weapon_mode == 0 || ownedBow == null);
+        return weapon_mode != 0 && item.value > 0 && item.value < weapons.Count;
+    }
+
+    public bool TryPickupNearestWeapon()
+    {
+        return TryPickupWeapon(FindNearestSwordDrop());
+    }
+
+    public bool TryPickupWeapon(SwordDrop drop)
+    {
+        if (drop == null || StageRewardController.InputBlocked || on_attack || on_dash || skill_using ||
+            GameManager.player_current_HP <= 0f || !CanPickupWeapon(drop.sword) ||
+            Vector3.Distance(transform.position, drop.transform.position) >= drop.distance) return false;
+        Item next = drop.sword;
+        Item previous = null;
+        if (next.IsBow)
+        {
+            previous = equippedBowItem;
+            if (previous == null && ownedBow != null)
+                previous = itemmanager.itemList.Find(i => i.IsBow && i.value == bow_num && i.bowSettings == ownedBow);
+            if (!EquipBow(next)) return false;
+        }
+        else
+        {
+            previous = itemmanager.itemList.Find(i => !i.IsBow && i.itemType == ItemType.Weapon && i.value == sword_num);
+            sword_num = next.value;
+            weapon_mode = 1;
+            gamemanager.AddItemValue();
+            ApplyWeaponVisibility();
+        }
+        if (previous != null) itemdrop.ItemPrefInst(transform.position, previous.value, previous);
+        Inventory inventory = GetComponent<Inventory>();
+        if (inventory != null)
+        {
+            if (previous != null) inventory.Inven.Remove(previous);
+            if (!inventory.Inven.Contains(next)) inventory.Inven.Add(next);
+        }
+        drop.Pickup();
+        return true;
+    }
+
+    public bool EquipBow(Item item)
+    {
+        if (item == null || !item.IsBow || item.bowSettings == null || chargeBow == null) return false;
+        chargeBow.CancelCharge();
+        CancelInvoke(nameof(ToIdle));
+        equippedBowItem = item;
+        ownedBow = item.bowSettings;
+        bow_num = item.value;
+        chargeBow.ApplySettings(ownedBow, item.icon);
+        weapon_mode = 0;
+        on_attack = false;
+        animator.SetInteger("Attack", -1);
+        ApplyWeaponVisibility();
+        return true;
+    }
+
+    public void EndBowCharge(bool fired)
+    {
+        CancelInvoke(nameof(ToIdle));
+        on_attack = fired;
+        animator.speed = 1f;
+        animator.SetInteger("Attack", fired ? 1 : -1);
+        if (fired) Invoke(nameof(ToIdle), 0.2f);
+    }
+
     SwordDrop FindNearestSwordDrop() //가장 가까운 드롭 아이템 찾기
     {
         SwordDrop[] drops = FindObjectsOfType<SwordDrop>();
@@ -215,6 +266,7 @@ public class Player : MonoBehaviour
 
         foreach (SwordDrop drop in drops)
         {
+            if (!CanPickupWeapon(drop.sword)) continue;
             float dist = Vector3.Distance(transform.position, drop.transform.position);
             if (dist < drop.distance && dist < minDist)
             {
@@ -247,6 +299,7 @@ public class Player : MonoBehaviour
 
     public void Attacked(int Attacked)
     {
+        if (chargeBow != null) chargeBow.CancelCharge();
         if (!on_dash)
         {
             animator.SetInteger("Attacked", Attacked);

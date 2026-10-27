@@ -86,6 +86,7 @@ public class ItemDrop : MonoBehaviour
     public void AddItemInventory(Vector3 positionnow)
     {
         Item newitem = GetItemRandom();
+        if (newitem == null) return;
         if (newitem.itemName == "Heal")
         {
             PotionInstantiate(positionnow);
@@ -107,10 +108,16 @@ public class ItemDrop : MonoBehaviour
 
     public void ItemPrefInst(Vector3 pos, int value, Item itemsword)
     {
-        GameObject droppedsword = Instantiate(sword, pos, Quaternion.identity);
+        if (itemsword == null) return;
+        GameObject template = sword;
+        if (template == null)
+        {
+            Player owner = GetComponent<Player>();
+            if (owner != null) template = owner.trashsword;
+        }
+        if (template == null) return;
+        GameObject droppedsword = Instantiate(template, pos, Quaternion.identity);
         SwordDrop sworddrop = droppedsword.GetComponent<SwordDrop>();
-        sworddrop.swordnum = value - 1;
-        sworddrop.sword = itemsword;
-        sworddrop.SwordChange(sworddrop.swordnum);
+        sworddrop.Configure(itemsword);
     }
 }

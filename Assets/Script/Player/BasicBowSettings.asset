@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
+  m_Name: BasicBowSettings
+  m_EditorClassIdentifier: 
+  idleSprite: {fileID: 21300000, guid: 83f8ad5308636fa4b89f27231031974e, type: 3}
+  drawSprites:
+  - {fileID: -1146458614, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
+  - {fileID: -1454613296, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
+  - {fileID: 1449711289, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
+  - {fileID: 1016157192, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
+  - {fileID: 940348508, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
+  arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
+  maxChargeSeconds: 1.5
+  minimumDamage: 5
+  damageStepSeconds: 0.1
+  powerPerStep: 2
+  bowDamageMultiplier: 0.5
+  arrowSpeed: 30
+  arrowLifetime: 3

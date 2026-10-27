@@ -63,8 +63,8 @@ public class PlayerMove : MonoBehaviour
     void FixedUpdate()
     {
         if (moveable && !StageRewardController.InputBlocked)
-            rigid.linearVelocity = new Vector2(moveX, moveY).normalized * RunUpgradeState.MoveSpeed;
+            rigid.velocity = new Vector2(moveX, moveY).normalized * RunUpgradeState.MoveSpeed;
         else
-            rigid.linearVelocity = Vector2.zero;
+            rigid.velocity = Vector2.zero;
     }
 }

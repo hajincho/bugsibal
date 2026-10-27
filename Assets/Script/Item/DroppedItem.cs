@@ -29,7 +29,7 @@ public class DroppedItem : MonoBehaviour
 
     void RemoveGravity()
     {
-        rigidbody.linearVelocity = Vector2.zero;
+        rigidbody.velocity = Vector2.zero;
         rigidbody.gravityScale = 0;
         rigidbody.isKinematic = true;
     }

@@ -35,6 +35,9 @@ public class Player : MonoBehaviour
     public int bow_num; // 활 아이템 번호
     public Bow chargeBow;
     public BowChargeSettings ownedBow;
+    [Min(0f)] public float weaponSwitchCooldown = 1f;
+    float weaponSwitchReadyAt;
+    public float WeaponSwitchRemaining => Mathf.Max(0f, weaponSwitchReadyAt - Time.time);
     Item equippedBowItem;
     public Item EquippedBowItem => equippedBowItem;
     public GameObject sword_effect;
@@ -192,6 +195,7 @@ public class Player : MonoBehaviour
 
     public bool ToggleWeaponMode()
     {
+        if (WeaponSwitchRemaining > 0f) return false;
         if (StageRewardController.InputBlocked || on_dash || skill_using || GameManager.player_current_HP <= 0f) return false;
         if (on_attack && (chargeBow == null || !chargeBow.IsCharging)) return false;
         if (weapon_mode != 0 && ownedBow == null) return false;
@@ -201,6 +205,7 @@ public class Player : MonoBehaviour
         animator.SetInteger("Attack", -1);
         animator.speed = 1f;
         weapon_mode = weapon_mode == 0 ? 1 : 0;
+        weaponSwitchReadyAt = Time.time + weaponSwitchCooldown;
         ApplyWeaponVisibility();
         if (weapon_mode == 1) gamemanager.AddItemValue();
         return true;

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +38,7 @@ public class Rat : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         distance = Vector2.Distance(transform.position, player_transform.position);
         if(distance < 4 && attack_able)
         {
@@ -101,6 +102,7 @@ public class Rat : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other)
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         if(other.gameObject.tag == "Player" && normal_able)//플레이어와 충돌하는동안
         {
             GameManager.DamagePlayer(enemyData.enemy_power);//공격

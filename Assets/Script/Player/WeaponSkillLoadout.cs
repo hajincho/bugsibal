@@ -11,9 +11,10 @@ public sealed class WeaponSkillSlot
 // Skills keep ticking while hidden, so swapping weapons never resets their cooldowns.
 public sealed class WeaponSkillLoadout : MonoBehaviour
 {
-    public WeaponSkillSlot[] swordSkills = new WeaponSkillSlot[6];
+    public WeaponSkillSlot[] swordSkills = new WeaponSkillSlot[3];
     [Tooltip("Assign future bow skill components and their HUD objects here. Their input should call CanUse(this).")]
-    public WeaponSkillSlot[] bowSkills = new WeaponSkillSlot[6];
+    public WeaponSkillSlot[] bowSkills = new WeaponSkillSlot[3];
+    public UnityEngine.UI.Image sharedSwitchCooldown;
     Player owner;
     int displayedMode = -1;
 
@@ -22,6 +23,7 @@ public sealed class WeaponSkillLoadout : MonoBehaviour
     void LateUpdate()
     {
         if (owner != null && displayedMode != owner.weapon_mode) Refresh();
+        UpdateSwitchCooldown();
     }
 
     public void Refresh()
@@ -31,6 +33,14 @@ public sealed class WeaponSkillLoadout : MonoBehaviour
         displayedMode = owner.weapon_mode;
         SetHUD(swordSkills, displayedMode != 0);
         SetHUD(bowSkills, displayedMode == 0);
+        UpdateSwitchCooldown();
+    }
+
+    void UpdateSwitchCooldown()
+    {
+        if (owner == null || sharedSwitchCooldown == null) return;
+        sharedSwitchCooldown.fillAmount = owner.weaponSwitchCooldown > 0f
+            ? Mathf.Clamp01(owner.WeaponSwitchRemaining / owner.weaponSwitchCooldown) : 0f;
     }
 
     static void SetHUD(WeaponSkillSlot[] slots, bool visible)
@@ -41,7 +51,7 @@ public sealed class WeaponSkillLoadout : MonoBehaviour
             if (slot == null || slot.hud == null) continue;
             var group = slot.hud.GetComponent<CanvasGroup>();
             if (group == null) group = slot.hud.AddComponent<CanvasGroup>();
-            group.alpha = visible && slot.skill != null ? 1f : 0f;
+            group.alpha = visible ? 1f : 0f;
             group.interactable = visible && slot.skill != null;
             group.blocksRaycasts = group.interactable;
         }

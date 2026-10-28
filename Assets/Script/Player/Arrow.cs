@@ -84,6 +84,8 @@ public class Arrow : MonoBehaviour
         if (other.transform.IsChildOf(transform) || (owner != null && other.transform.IsChildOf(owner)) ||
             other.GetComponentInParent<Player>() != null || other.GetComponentInParent<Arrow>() != null) return false;
         EnemyData enemy = other.GetComponentInParent<EnemyData>();
+        // Ignore queued contacts with an enemy that died earlier in this physics step.
+        if (enemy != null && enemy.enemy_current_HP <= 0f) return false;
         if (enemy == null && (other.isTrigger || other.attachedRigidbody != null)) return false;
 
         if (enemy != null && !hitEnemies.Add(enemy)) return false;

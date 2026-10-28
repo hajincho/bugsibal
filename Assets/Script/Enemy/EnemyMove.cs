@@ -40,6 +40,7 @@ public class EnemyMove : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         float distance = Vector2.Distance(transform.position, target.position + offset);
         if(moveable && enemy_recognition_range > distance && (enemy_attack_range-1) < distance)
         {
@@ -69,7 +70,8 @@ public class EnemyMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         if(move)
-            rigid.MovePosition(Vector2.MoveTowards(transform.position, target.position + offset, enemy_speed*Time.deltaTime));
+            rigid.MovePosition(Vector2.MoveTowards(transform.position, target.position + offset, enemy_speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.deltaTime));
     }
 }

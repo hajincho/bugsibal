@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class Ghost : MonoBehaviour
@@ -98,6 +98,7 @@ public class Ghost : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         HandleDeath();
     }
 
@@ -128,6 +129,7 @@ public class Ghost : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         if (ShouldAttackPlayer(other))
         {
             PerformNormalAttack();

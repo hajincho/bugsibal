@@ -44,6 +44,7 @@ public class Devil1 : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         distance = Vector2.Distance(transform.position, player_transform.position);
 
         if (enemyData.enemy_current_HP <= 0) // 사망
@@ -91,6 +92,7 @@ public class Devil1 : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other) //충돌시 공격
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         if (distance < 4 && attack_able && other.gameObject.tag == "Player") 
         {
             if (reinforced_attack)//텔레포트 후 강화공격

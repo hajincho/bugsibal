@@ -27,7 +27,7 @@ public class PokpalSkill : MonoBehaviour
     void Update()
     {
         if (!WeaponSkillLoadout.CanUse(this)) return;
-        if (Input.GetKeyDown(KeyCode.R) && skill_ready == true)
+        if (Input.GetKeyDown(KeyCode.E) && skill_ready == true)
         {
             cooldown3.UseSkill();
             skill_ready = false;

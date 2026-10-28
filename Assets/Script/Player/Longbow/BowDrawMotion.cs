@@ -81,7 +81,8 @@ public sealed class BowDrawMotion : MonoBehaviour
             var point = restVertices[i];
             float t = Mathf.Clamp((point.x + point.y) * .7071068f / halfLength, -1f, 1f);
             float bend = (1f - t * t) * amount * bendDistance;
-            vertices[i] = point + new Vector3(-.7071068f, .7071068f, 0f) * bend;
+            // Pull the string toward the archer, opposite the bow's outer curve.
+            vertices[i] = point + new Vector3(.7071068f, -.7071068f, 0f) * bend;
         }
         mesh.vertices = vertices;
         mesh.RecalculateBounds();

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,6 +51,7 @@ public class Golem : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         rigidbody.velocity = Vector3.zero;
         distance = Vector2.Distance(transform.position, player_transform.position);
         //���� ��Ÿ�� ����
@@ -121,6 +122,7 @@ public class Golem : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         //������ �÷��̾�� ���˽� ����
         if(other.gameObject.tag == "Player" && dash)
         {
@@ -130,6 +132,7 @@ public class Golem : MonoBehaviour
     }
     void OnCollisionStay2D(Collision2D other)
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         //�÷��̾�� �������϶� ����
         if (other.gameObject.tag == "Player"  && distance < 4 && dash == false && attack_able)
         {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +38,7 @@ public class Slime : MonoBehaviour
 
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         distance = Vector2.Distance(transform.position, player_transform.position);
 
         if (enemyData.enemy_current_HP <= 0)
@@ -64,6 +65,7 @@ public class Slime : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other)//�����ϴ� ���� ����
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         if (distance < 4 && skill_able && other.gameObject.tag == "Player" && player_script.weakeningable) // ��ų
         {
             animator.SetTrigger("Ability");

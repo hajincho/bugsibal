@@ -33,7 +33,7 @@ public class Skill5 : MonoBehaviour
     void Update()
     {
         if (!WeaponSkillLoadout.CanUse(this)) return;
-        if (Input.GetKeyDown(KeyCode.E) && skill5_able == true)
+        if (Input.GetKeyDown(KeyCode.Q) && skill5_able == true)
         {
             cooldown2.UseSkill();
             skill5_able = false;

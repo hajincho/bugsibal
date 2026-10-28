@@ -47,6 +47,7 @@ public class DevilMage : MonoBehaviour
     }
     void Update()
     {
+        if (EnemyFrostStatus.IsFrozenOn(this)) return;
         int rand = Random.Range(0, 3);
         
         distance = Vector2.Distance(transform.position, player_transform.position);

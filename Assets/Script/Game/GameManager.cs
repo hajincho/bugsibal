@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         Item itemheld = null;
         foreach (Item item in itemmanager.itemList)
         {
-            if (item.value == player.sword_num)
+            if (item.itemType == ItemType.Weapon && !item.IsBow && item.value == player.sword_num)
             {
                 itemheld = item;
                 break;

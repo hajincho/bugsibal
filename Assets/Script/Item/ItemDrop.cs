@@ -21,14 +21,14 @@ public class ItemDrop : MonoBehaviour
         itemManager = GameObject.FindGameObjectWithTag("ItemManager").GetComponent<ItemManager>();
         foreach (Item item in itemManager.itemList)
         {
-            if (!Itemweights.ContainsKey(item))
+            if (item.weight > 0 && !Itemweights.ContainsKey(item))
             {
                 Itemweights.Add(item, item.weight);
             }
         }
         foreach (Item item in itemManager.itemList)
         {
-            if (!UniqueItemweights.ContainsKey(item) && item.weight <= 50)
+            if (!UniqueItemweights.ContainsKey(item) && item.weight > 0 && item.weight <= 50)
             {
                 UniqueItemweights.Add(item, item.weight);
             }

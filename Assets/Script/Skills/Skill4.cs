@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +26,7 @@ public class FreezeSkill : MonoBehaviour
     }
     void Update()
     {
-        if (StageRewardController.InputBlocked) return;
+        if (!WeaponSkillLoadout.CanUse(this)) return;
         if (Input.GetKeyDown(useKey) && !skillOnCooldown)
         {
             cooldown4.UseSkill();

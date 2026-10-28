@@ -70,6 +70,23 @@ public class Player : MonoBehaviour
         animator.SetInteger("Attacked", -1);
     }
 
+    void Start()
+    {
+        Item sword = itemmanager.GetItem("강철검");
+        Item bow = itemmanager.GetItem("나무 활");
+        if (sword != null) sword_num = sword.value;
+        if (bow != null) EquipBow(bow);
+        weapon_mode = 1;
+        ApplyWeaponVisibility();
+        gamemanager.AddItemValue();
+        var inventory = GetComponent<Inventory>();
+        if (inventory != null)
+        {
+            if (sword != null && !inventory.Inven.Contains(sword)) inventory.Inven.Add(sword);
+            if (bow != null && !inventory.Inven.Contains(bow)) inventory.Inven.Add(bow);
+        }
+    }
+
     void Update()
     {
         if (StageRewardController.InputBlocked) return;
@@ -177,6 +194,8 @@ public class Player : MonoBehaviour
 
     void ApplyWeaponVisibility()
     {
+        var loadout = GetComponent<WeaponSkillLoadout>();
+        if (loadout != null) loadout.Refresh();
         int selected = weapon_mode == 0 ? 0 : sword_num;
         for (int i = 0; i < weapons.Count; i++)
             if (weapons[i] != null) weapons[i].SetActive(i == selected);
@@ -191,7 +210,7 @@ public class Player : MonoBehaviour
     {
         if (item == null || item.itemType != ItemType.Weapon) return false;
         if (item.IsBow)
-            return item.bowSettings != null && (weapon_mode == 0 || ownedBow == null);
+            return item.bowSettings != null && weapon_mode == 0;
         return weapon_mode != 0 && item.value > 0 && item.value < weapons.Count;
     }
 

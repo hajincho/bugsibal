@@ -7,7 +7,7 @@ public sealed class BowChargeSettings : ScriptableObject
     public Sprite[] drawSprites;
     public GameObject arrowPrefab;
 
-    [Min(0.01f)] public float maxChargeSeconds = 1.5f;
+    [Min(0.01f)] public float maxChargeSeconds = 1f;
     [Min(0f)] public float minimumDamage = 5f;
     [Min(0.01f)] public float damageStepSeconds = 0.1f;
     [Tooltip("Raw bow power per step; this game's bow multiplier converts 2 power to 1 damage.")]

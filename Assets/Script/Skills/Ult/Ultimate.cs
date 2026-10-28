@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -32,7 +32,7 @@ public class Ultimate : MonoBehaviour
 
     void Update()
     {
-        if (StageRewardController.InputBlocked) return;
+        if (!WeaponSkillLoadout.CanUse(this)) return;
         if (Input.GetKey(KeyCode.X) && ult_able == true)
         {
             cooldownult.UseSkill();

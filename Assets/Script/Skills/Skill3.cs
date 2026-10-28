@@ -46,6 +46,7 @@ public class Skill3 : MonoBehaviour
             }
         }
 
+        if (!WeaponSkillLoadout.CanUse(this)) return;
         if (Input.GetKeyDown(useKey) && !skillOnCooldown)
         {
             if (player != null && player.skill_using) return;

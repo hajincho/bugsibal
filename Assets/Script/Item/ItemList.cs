@@ -15,7 +15,7 @@ public class Item
     public int duration;
     public int weight;
     public BowChargeSettings bowSettings;
-    public bool IsBow => bowSettings != null || (value == 0 && itemName == "bow");
+    public bool IsBow => bowSettings != null || (value == 0 && (itemName == "bow" || itemName == "나무 활"));
     public ItemType itemType; // 추가된 필드
 
     public Item(string name, Sprite icon, int value, int power, int skillpower, int health, int attackSpeed, int duration, int weight, ItemType itemType)

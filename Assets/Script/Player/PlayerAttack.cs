@@ -56,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
                     Debug.Log("검 공격");
                     // Fixed raw HP per valid enemy hit; never scale this with attack power.
                     if (player.sword_num == 12 && other.CompareTag("Enemy"))
-                        GameManager.HealPlayer(20f);
+                        GameManager.HealPlayer(5f);
                     if (player.sword_num == 6)
                     {
 

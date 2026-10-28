@@ -176,6 +176,20 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab)) TryPickupNearestWeapon();
     }
 
+    public void ResetWeaponModeAfterRevive()
+    {
+        if (chargeBow != null) chargeBow.CancelCharge();
+        CancelInvoke(nameof(ToIdle));
+        weapon_mode = 1;
+        on_attack = false;
+        animator.SetInteger("Attack", -1);
+        animator.speed = 1f;
+        var bowSkill = GetComponent<BowExplosiveArrowSkill>();
+        if (bowSkill != null) bowSkill.CancelArmed();
+        ApplyWeaponVisibility();
+        gamemanager.AddItemValue();
+    }
+
     public bool ToggleWeaponMode()
     {
         if (StageRewardController.InputBlocked || on_dash || skill_using || GameManager.player_current_HP <= 0f) return false;
@@ -311,14 +325,15 @@ public class Player : MonoBehaviour
         if (bow_animator != null) bow_animator.speed = 1f;
         animator.SetInteger("Attack", -1);
         on_attack = false;
-        PlayerMove.moveable = true;
+        PlayerMove.moveable = animator.GetInteger("Attacked") == -1;
         //sword_effects[sword_num - 1].SetActive(false );
 
     }
 
     public void Attacked(int Attacked)
     {
-        if (chargeBow != null) chargeBow.CancelCharge();
+        // Rat fear stun still stops movement, but it does not interrupt drawing/firing a bow.
+        if (chargeBow != null && !(Attacked == 1 && weapon_mode == 0)) chargeBow.CancelCharge();
         if (!on_dash)
         {
             animator.SetInteger("Attacked", Attacked);

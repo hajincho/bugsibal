@@ -10,6 +10,8 @@ public class CoolDown : MonoBehaviour
     float currentcooltime;
 
     bool iscoolingdown = false;
+    public bool IsCoolingDown => iscoolingdown;
+    public float RemainingSeconds => currentcooltime;
 
 
 

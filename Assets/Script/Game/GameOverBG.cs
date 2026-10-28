@@ -13,6 +13,15 @@ public class GameOverBG : MonoBehaviour
 
     private bool gameOverTriggered = false;
 
+    void OnEnable() { SceneManager.sceneLoaded += EnsureSceneInput; }
+    void OnDisable() { SceneManager.sceneLoaded -= EnsureSceneInput; }
+    void EnsureSceneInput(Scene scene, LoadSceneMode mode) { EnsureInputSystem(); }
+    void EnsureInputSystem()
+    {
+        // Stage6 has no EventSystem. Create one only when the new scene has none.
+        if (UnityEngine.EventSystems.EventSystem.current == null)
+            new GameObject("EventSystem", typeof(UnityEngine.EventSystems.EventSystem), typeof(UnityEngine.EventSystems.StandaloneInputModule));
+    }
     void Start()
     {
         gameoverUI.SetActive(false);
@@ -38,6 +47,7 @@ public class GameOverBG : MonoBehaviour
     void TriggerGameOver()
     {
         gameOverTriggered = true;
+        EnsureInputSystem();
         gameoverUI.SetActive(true);
         button.SetActive(true);
         Time.timeScale = 0f;
@@ -64,6 +74,7 @@ public class GameOverBG : MonoBehaviour
         if (player != null && spawn != null)
             player.transform.position = spawn.transform.position;
 
+        if (player != null) player.GetComponent<Player>().ResetWeaponModeAfterRevive();
         GameManager.player_current_HP = GameManager.player_HP;
 
         gameOverTriggered = false;

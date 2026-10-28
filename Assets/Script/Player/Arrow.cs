@@ -78,8 +78,13 @@ public class Arrow : MonoBehaviour
         rigid.simulated = false;
         if (enemy != null)
         {
-            enemy.TakeDamage(Damage, CombatDamageKind.Normal);
-            enemy.Hitted();
+            var explosive = GetComponent<BowExplosiveArrowImpact>();
+            if (explosive != null) explosive.Explode(enemy, transform.position, Damage);
+            else
+            {
+                enemy.TakeDamage(Damage, CombatDamageKind.Normal);
+                enemy.Hitted();
+            }
         }
         Destroy(gameObject);
         return true;

@@ -1,0 +1,46 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public sealed class BowExplosiveArrowImpact : MonoBehaviour
+{
+    public GameObject explosionPrefab;
+    public float visualScale = 2.25f;
+    public float radius = 3.25f;
+    bool exploded;
+
+    public void Explode(EnemyData primary, Vector3 position, float arrowDamage)
+    {
+        if (exploded || primary == null) return;
+        exploded = true;
+        // Reuse only the sword R visual; its collider/script must not apply sword damage.
+        if (explosionPrefab != null)
+        {
+            var effect = Instantiate(explosionPrefab, position, Quaternion.identity);
+            effect.name = "BowQExplosion";
+            effect.transform.localScale = explosionPrefab.transform.localScale * visualScale;
+            foreach (var renderer in effect.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                var color = renderer.color;
+                color.a *= 0.7f;
+                renderer.color = color;
+            }
+            foreach (var collider in effect.GetComponentsInChildren<Collider2D>(true)) collider.enabled = false;
+            foreach (var body in effect.GetComponentsInChildren<Rigidbody2D>(true)) body.simulated = false;
+            foreach (var script in effect.GetComponentsInChildren<MonoBehaviour>(true)) script.enabled = false;
+            Destroy(effect, 0.4f);
+        }
+        var targets = new HashSet<EnemyData> { primary };
+        foreach (var collider in Physics2D.OverlapCircleAll(position, radius))
+        {
+            var enemy = collider.GetComponentInParent<EnemyData>();
+            if (enemy != null && enemy.CompareTag("Enemy")) targets.Add(enemy);
+        }
+        // The empowered shot deals 2x its launch damage in total, including the primary target.
+        foreach (var enemy in targets)
+        {
+            if (enemy == null || enemy.enemy_current_HP <= 0f) continue;
+            enemy.TakeDamage(arrowDamage * 2f, CombatDamageKind.Skill);
+            enemy.Hitted();
+        }
+    }
+}

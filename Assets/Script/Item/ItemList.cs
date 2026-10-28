@@ -14,6 +14,8 @@ public class Item
     public int attackSpeed;
     public int duration;
     public int weight;
+    [InspectorName("활 종류별 설정")]
+    [Tooltip("활 종류마다 별도 설정 에셋을 연결하세요. 해당 에셋의 최대 차징 시간 (초) 입력칸으로 차징 속도를 조절할 수 있습니다.")]
     public BowChargeSettings bowSettings;
     public bool IsBow => bowSettings != null || (value == 0 && (itemName == "bow" || itemName == "나무 활"));
     public ItemType itemType; // 추가된 필드

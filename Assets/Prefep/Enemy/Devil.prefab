@@ -3094,7 +3094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy_HP: 40
   enemy_current_HP: 40
-  enemy_power: 10
+  enemy_power: 5
 --- !u!114 &1930648066397991506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3108,7 +3108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy_speed: 7
-  enemy_recognition_range: 20
+  enemy_recognition_range: 15
   enemy_attack_range: 1.3
   enemy_attack_range_enabled: 0
   moveable: 1

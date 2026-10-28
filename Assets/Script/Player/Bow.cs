@@ -89,11 +89,17 @@ public class Bow : MonoBehaviour
         if (camera == null || arrow == null || arrow_location == null) { CancelCharge(); return; }
         Vector3 target = camera.ScreenToWorldPoint(Input.mousePosition);
         target.z = arrow_location.position.z;
+        Vector2 direction = chargingSettings.ShotDirection(target - arrow_location.position, ChargeSeconds);
+        target = arrow_location.position + new Vector3(direction.x, direction.y, 0f);
         GameObject shot = Instantiate(arrow, arrow_location.position, Quaternion.identity);
         Arrow projectile = shot.GetComponent<Arrow>();
         if (projectile != null)
+        {
             projectile.Fire(target, chargingSettings.DamageAt(ChargeSeconds), chargingSettings.arrowSpeed,
                 chargingSettings.arrowLifetime, owner.transform);
+            var explosiveSkill = owner.GetComponent<BowExplosiveArrowSkill>();
+            if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
+        }
         else Destroy(shot);
         ResetCharge();
         owner.EndBowCharge(true);

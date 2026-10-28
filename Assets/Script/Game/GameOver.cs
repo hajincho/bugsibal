@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,6 +42,8 @@ public class GameOver : MonoBehaviour
 
     public void RestartScene()
     {
+        var owner = FindObjectOfType<Player>();
+        if (owner != null) owner.ResetWeaponModeAfterRevive();
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

@@ -21,9 +21,8 @@ MonoBehaviour:
   - {fileID: 940348508, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
   maxChargeSeconds: 1
-  minimumDamage: 5
-  damageStepSeconds: 0.1
-  powerPerStep: 2
-  bowDamageMultiplier: 0.5
+  baseDamage: 5
+  maxChargeBonusPercent: 150
+  maxSpreadDegrees: 10
   arrowSpeed: 30
   arrowLifetime: 3

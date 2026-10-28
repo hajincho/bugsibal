@@ -1239,7 +1239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooltime: {fileID: 196062604}
-  skillcooltime: 12
+  skillcooltime: 16
 --- !u!114 &196062604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9234,17 +9234,18 @@ MonoBehaviour:
   icicleSprite: {fileID: 21300000, guid: 5182681791948fd49a10b2ad2518bc5c, type: 3}
   trailMaterial: {fileID: 2100000, guid: a97fdbe3780a3714794d8cedf486759c, type: 2}
   cooldown: {fileID: 196062603}
-  cooldownSeconds: 12
+  cooldownSeconds: 16
   icicleCount: 20
   minLifetime: 5
   maxLifetime: 5.5
   minRadius: 1
-  maxRadius: 5.2
+  maxRadius: 5.72
   angularSpeed: 351
   innerSpeedBonus: 0.25
   icicleHeight: 0.91800004
   hitRadius: 0.2244
-  damage: 6
+  damage: 2
+  maxHealthDamageFraction: 0.005
   hitsToFreeze: 10
   slowMultiplier: 0.6
   slowSeconds: 2

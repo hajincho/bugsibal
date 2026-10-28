@@ -142,7 +142,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     public bool RegisterHit(EnemyData enemy)
     {
         if (enemy == null || enemy.enemy_current_HP <= 0f || StageRewardController.InputBlocked) return false;
-        enemy.TakeDamage(skill.damage, CombatDamageKind.Skill);
+        enemy.TakeDamage(skill.DamageForMaxHealth(enemy.enemy_HP), CombatDamageKind.Skill);
         if (enemy.enemy_current_HP <= 0f || EnemyFrostStatus.IsImmune(enemy)) return true;
         int count = StackCount(enemy) + 1;
         var frost = enemy.GetComponent<EnemyFrostStatus>();

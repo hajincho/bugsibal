@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Arrow : MonoBehaviour
 {
     public bool HasHit { get; private set; }
     public float Damage { get; private set; }
+    public bool PiercesEnemies { get; private set; }
+    readonly HashSet<EnemyData> hitEnemies = new HashSet<EnemyData>();
     Rigidbody2D rigid;
     Transform owner;
     bool launched;
@@ -22,6 +25,7 @@ public class Arrow : MonoBehaviour
     {
         HasHit = false;
         launched = false;
+        hitEnemies.Clear();
         Destroy(gameObject, 10f); // Also clean up an unlaunched instance.
     }
 
@@ -30,9 +34,13 @@ public class Arrow : MonoBehaviour
         Fire(target, 5f, 30f, 3f, null);
     }
 
-    public void Fire(Vector3 target, float damage, float speed, float lifetime, Transform source)
+    public void Fire(Vector3 target, float damage, float speed, float lifetime, Transform source, bool pierceEnemies = false)
     {
         owner = source;
+        PiercesEnemies = pierceEnemies;
+        hitEnemies.Clear();
+        if (PiercesEnemies)
+            foreach (var collider in GetComponentsInChildren<Collider2D>()) collider.isTrigger = true;
         Damage = Mathf.Max(0f, damage);
         Vector2 direction = target - transform.position;
         if (direction.sqrMagnitude < 0.0001f) direction = Vector2.right;
@@ -53,9 +61,17 @@ public class Arrow : MonoBehaviour
         filter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
         filter.useTriggers = true;
         int count = rigid.Cast(travel.normalized, filter, hits, travel.magnitude);
+        // Always resolve closer contacts first, so a wall stops hits behind it.
+        for (int i = 1; i < count; i++)
+        {
+            var hit = hits[i];
+            int j = i - 1;
+            while (j >= 0 && hits[j].distance > hit.distance) { hits[j + 1] = hits[j]; j--; }
+            hits[j + 1] = hit;
+        }
         for (int i = 0; i < count; i++)
         {
-            if (TryHit(hits[i].collider)) break;
+            if (TryHit(hits[i].collider) && !launched) break;
         }
     }
 
@@ -70,23 +86,32 @@ public class Arrow : MonoBehaviour
         EnemyData enemy = other.GetComponentInParent<EnemyData>();
         if (enemy == null && (other.isTrigger || other.attachedRigidbody != null)) return false;
 
-        // Consume BEFORE damage callbacks. All subsequent hitboxes are ignored, even this physics step.
-        HasHit = true;
-        launched = false;
-        rigid.velocity = Vector2.zero;
-        foreach (Collider2D hitbox in GetComponentsInChildren<Collider2D>()) hitbox.enabled = false;
-        rigid.simulated = false;
+        if (enemy != null && !hitEnemies.Add(enemy)) return false;
+        bool continues = enemy != null && PiercesEnemies;
+        // Mark terminal hits before callbacks; piercing shots retain their velocity and colliders.
+        if (!continues)
+        {
+            HasHit = true;
+            launched = false;
+            rigid.velocity = Vector2.zero;
+            foreach (Collider2D hitbox in GetComponentsInChildren<Collider2D>()) hitbox.enabled = false;
+            rigid.simulated = false;
+        }
         if (enemy != null)
         {
             var explosive = GetComponent<BowExplosiveArrowImpact>();
-            if (explosive != null) explosive.Explode(enemy, transform.position, Damage);
+            if (explosive != null && !explosive.HasExploded)
+            {
+                explosive.Explode(enemy, transform.position, Damage);
+                foreach (var damaged in explosive.DamagedEnemies) hitEnemies.Add(damaged);
+            }
             else
             {
                 enemy.TakeDamage(Damage, CombatDamageKind.Normal);
                 enemy.Hitted();
             }
         }
-        Destroy(gameObject);
+        if (!continues) Destroy(gameObject);
         return true;
     }
 }

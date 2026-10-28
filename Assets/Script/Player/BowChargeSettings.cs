@@ -26,6 +26,17 @@ public sealed class BowChargeSettings : ScriptableObject
     [Tooltip("10이면 조준 방향의 -10도~+10도 사이로 무작위 발사합니다. 차징 비율에 따라 선형으로 줄어들며 최대 차징에서는 오차가 0도입니다.")]
     [Min(0f)] public float maxSpreadDegrees = 7.5f;
 
+    [Header("활 고유 특성")]
+    [InspectorName("최대 차징 시 적 관통")]
+    public bool pierceEnemiesAtFullCharge;
+    [InspectorName("절차적 활 당기기 모션")]
+    public bool proceduralDrawMotion;
+
+    public bool ShouldPierce(float seconds)
+    {
+        return pierceEnemiesAtFullCharge && seconds >= Mathf.Max(0.01f, maxChargeSeconds);
+    }
+
     [Min(0.1f)] public float arrowSpeed = 30f;
     [Min(0.1f)] public float arrowLifetime = 3f;
 

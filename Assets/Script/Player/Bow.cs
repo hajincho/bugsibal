@@ -17,6 +17,7 @@ public class Bow : MonoBehaviour
     SpriteRenderer sprite;
     Player owner;
     BowChargeSettings chargingSettings;
+    BowDrawMotion drawMotion;
 
     void Awake()
     {
@@ -36,6 +37,9 @@ public class Bow : MonoBehaviour
         chargeSprites = profile.drawSprites;
         if (profile.arrowPrefab != null) arrow = profile.arrowPrefab;
         if (sprite != null) sprite.sprite = bow_idle;
+        if (drawMotion == null) drawMotion = GetComponent<BowDrawMotion>();
+        if (drawMotion == null && profile.proceduralDrawMotion) drawMotion = gameObject.AddComponent<BowDrawMotion>();
+        if (drawMotion != null) drawMotion.Apply(profile, sprite);
     }
 
     public bool BeginCharge()
@@ -72,6 +76,7 @@ public class Bow : MonoBehaviour
     void UpdateVisuals()
     {
         if (chargeBar != null) chargeBar.Show(ChargeSeconds, chargingSettings);
+        if (drawMotion != null) drawMotion.SetDraw(chargingSettings.ChargeFraction(ChargeSeconds));
         if (sprite != null && chargeSprites != null && chargeSprites.Length > 0)
         {
             int index = Mathf.Min(chargeSprites.Length - 1, Mathf.FloorToInt(chargingSettings.ChargeFraction(ChargeSeconds) * chargeSprites.Length));
@@ -96,17 +101,19 @@ public class Bow : MonoBehaviour
         if (projectile != null)
         {
             projectile.Fire(target, chargingSettings.DamageAt(ChargeSeconds), chargingSettings.arrowSpeed,
-                chargingSettings.arrowLifetime, owner.transform);
+                chargingSettings.arrowLifetime, owner.transform, chargingSettings.ShouldPierce(ChargeSeconds));
             var explosiveSkill = owner.GetComponent<BowExplosiveArrowSkill>();
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
         }
         else Destroy(shot);
         ResetCharge();
+        if (drawMotion != null) drawMotion.Release();
         owner.EndBowCharge(true);
     }
 
     public void CancelCharge()
     {
+        if (drawMotion != null) drawMotion.ResetDraw();
         bool wasCharging = IsCharging;
         ResetCharge();
         if (wasCharging && owner != null) owner.EndBowCharge(false);

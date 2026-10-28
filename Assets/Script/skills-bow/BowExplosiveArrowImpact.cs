@@ -7,6 +7,9 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
     public float visualScale = 2.25f;
     public float radius = 3.25f;
     bool exploded;
+    public bool HasExploded => exploded;
+    readonly HashSet<EnemyData> damagedEnemies = new HashSet<EnemyData>();
+    public IEnumerable<EnemyData> DamagedEnemies => damagedEnemies;
 
     public void Explode(EnemyData primary, Vector3 position, float arrowDamage)
     {
@@ -39,6 +42,7 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
         foreach (var enemy in targets)
         {
             if (enemy == null || enemy.enemy_current_HP <= 0f) continue;
+            damagedEnemies.Add(enemy);
             enemy.TakeDamage(arrowDamage * 2f, CombatDamageKind.Skill);
             enemy.Hitted();
         }

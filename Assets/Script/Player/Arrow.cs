@@ -48,7 +48,21 @@ public class Arrow : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f);
         rigid.velocity = direction * Mathf.Max(0.1f, speed);
         launched = true;
-        Destroy(gameObject, Mathf.Max(0.1f, lifetime));
+        if (GetComponent<BowRicochetImpact>() != null) Invoke(nameof(DetonateRicochetArrow), 1f);
+        else Destroy(gameObject, Mathf.Max(0.1f, lifetime));
+    }
+
+    void DetonateRicochetArrow()
+    {
+        var special = GetComponent<BowRicochetImpact>();
+        if (special != null) special.Detonate();
+        else Destroy(gameObject);
+    }
+
+    public void ApplyRicochetDamage(float value)
+    {
+        Damage = Mathf.Max(0f, value);
+        hitEnemies.Clear();
     }
 
     void FixedUpdate()
@@ -123,8 +137,8 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
-        if (special != null) special.Explode(enemy, transform.position, Damage);
-        if (!continues) Destroy(gameObject);
+        if (special != null && enemy != null) special.OnEnemyHit(enemy, transform.position, Damage);
+        if (!continues && special == null) Destroy(gameObject);
         return true;
     }
 }

@@ -31,7 +31,7 @@ public sealed class BowChargeSettings : ScriptableObject
     public bool pierceEnemiesAtFullCharge;
     [InspectorName("항상 적 관통")]
     public bool alwaysPierceEnemies;
-    [Min(0)] public int fullChargeRicochets;
+    [HideInInspector] public int fullChargeRicochets; // Legacy serialized value; timed arrows have no bounce limit.
     public bool impactExplosion;
     public bool scaleTrailWithCharge = true;
     [Header("활 전용 색상 및 잔상")]

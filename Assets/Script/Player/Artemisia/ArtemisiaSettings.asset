@@ -19,8 +19,8 @@ MonoBehaviour:
   baseDamage: 20
   maxChargeBonusPercent: 100
   maxSpreadDegrees: 30
-  pierceEnemiesAtFullCharge: 1
-  alwaysPierceEnemies: 0
+  pierceEnemiesAtFullCharge: 0
+  alwaysPierceEnemies: 1
   fullChargeRicochets: 2
   impactExplosion: 1
   scaleTrailWithCharge: 0
@@ -30,4 +30,4 @@ MonoBehaviour:
   maxArrowTrailSeconds: 0.8
   proceduralDrawMotion: 1
   arrowSpeed: 45
-  arrowLifetime: 3
+  arrowLifetime: 1

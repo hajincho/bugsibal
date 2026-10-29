@@ -47,10 +47,13 @@ public class Player : MonoBehaviour
 
     //스킬 관련 변수
     public bool skill_using = false;
+    public BowFullChargeSkill BowXSkill { get; private set; }
 
     void Awake()
     {
         animator = GetComponent<Animator>();
+        BowXSkill = GetComponent<BowFullChargeSkill>();
+        if (BowXSkill == null) BowXSkill = gameObject.AddComponent<BowFullChargeSkill>();
         if (chargeBow == null && bow_animator != null) chargeBow = bow_animator.GetComponent<Bow>();
         playertransform = GetComponent<Transform>();
         itemdrop = GetComponent<ItemDrop>();
@@ -181,6 +184,7 @@ public class Player : MonoBehaviour
 
     public void ResetWeaponModeAfterRevive()
     {
+        if (BowXSkill != null) BowXSkill.CancelBuff();
         if (chargeBow != null) chargeBow.CancelCharge();
         CancelInvoke(nameof(ToIdle));
         weapon_mode = 1;

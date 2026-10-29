@@ -9,14 +9,18 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D rigid;
     Animator animator;
     Transform player_transform;
+    Player owner;
     public static bool moveable;
     public int player_direction = 1;
+    public float CurrentMoveSpeed => RunUpgradeState.MoveSpeed *
+        (owner != null && owner.BowXSkill != null ? owner.BowXSkill.MoveSpeedMultiplier : 1f);
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         player_transform = GetComponent<Transform>();
+        owner = GetComponent<Player>();
         moveable = true;
     }
 
@@ -63,7 +67,7 @@ public class PlayerMove : MonoBehaviour
     void FixedUpdate()
     {
         if (moveable && !StageRewardController.InputBlocked)
-            rigid.velocity = new Vector2(moveX, moveY).normalized * RunUpgradeState.MoveSpeed;
+            rigid.velocity = new Vector2(moveX, moveY).normalized * CurrentMoveSpeed;
         else
             rigid.velocity = Vector2.zero;
     }

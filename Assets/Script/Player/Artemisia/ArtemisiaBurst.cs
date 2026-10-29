@@ -7,10 +7,12 @@ public sealed class ArtemisiaBurst : MonoBehaviour
     readonly List<LineRenderer> rings = new List<LineRenderer>();
     readonly List<LineRenderer> rays = new List<LineRenderer>();
     float startedAt, radius;
+    bool pink;
     const float Duration = .45f;
 
-    public void Initialize(Material material, float effectRadius)
+    public void Initialize(Material material, float effectRadius, bool pinkEffect = false)
     {
+        pink = pinkEffect;
         startedAt = Time.time;
         radius = effectRadius;
         for (int i = 0; i < 2; i++) rings.Add(CreateLine(material, "SkyShockRing", 49, true));
@@ -46,7 +48,7 @@ public sealed class ArtemisiaBurst : MonoBehaviour
                 line.SetPosition(i, new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f) * size);
             }
             line.widthMultiplier = Mathf.Lerp(.09f, .015f, t);
-            line.startColor = line.endColor = new Color(.55f, .9f, 1f, fade * (j == 0 ? .9f : .65f));
+            line.startColor = line.endColor = pink ? new Color(1f, .7f, .84f, fade * (j == 0 ? .9f : .65f)) : new Color(.55f, .9f, 1f, fade * (j == 0 ? .9f : .65f));
         }
         for (int i = 0; i < rays.Count; i++)
         {
@@ -57,8 +59,8 @@ public sealed class ArtemisiaBurst : MonoBehaviour
             rays[i].SetPosition(1, direction * end);
             rays[i].startWidth = .065f * (1f - t);
             rays[i].endWidth = .008f;
-            rays[i].startColor = new Color(.8f, .97f, 1f, fade);
-            rays[i].endColor = new Color(.2f, .75f, 1f, 0f);
+            rays[i].startColor = pink ? new Color(1f, .85f, .93f, fade) : new Color(.8f, .97f, 1f, fade);
+            rays[i].endColor = pink ? new Color(1f, .55f, .75f, 0f) : new Color(.2f, .75f, 1f, 0f);
         }
         if (t >= 1f) Destroy(gameObject);
     }

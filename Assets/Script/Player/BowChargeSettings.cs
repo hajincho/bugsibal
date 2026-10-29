@@ -23,8 +23,10 @@ public sealed class BowChargeSettings : ScriptableObject
 
     [Header("차징 비례 명중 정확도")]
     [InspectorName("미차징 최대 비산 각도 (±도)")]
-    [Tooltip("10이면 조준 방향의 -10도~+10도 사이로 무작위 발사합니다. 차징 비율에 따라 선형으로 줄어들며 최대 차징에서는 오차가 0도입니다.")]
+    [Tooltip("10이면 조준 방향의 -10도~+10도 사이로 무작위 발사합니다. 차징 비율에 따라 최대 차징 오차 설정값까지 선형으로 줄어듭니다.")]
     [Min(0f)] public float maxSpreadDegrees = 7.5f;
+    [Tooltip("Remaining random error at full charge (plus/minus degrees).")]
+    [Min(0f)] public float fullChargeSpreadDegrees;
 
     [Header("활 고유 특성")]
     [InspectorName("최대 차징 시 적 관통")]
@@ -33,6 +35,15 @@ public sealed class BowChargeSettings : ScriptableObject
     public bool alwaysPierceEnemies;
     [HideInInspector] public int fullChargeRicochets; // Legacy serialized value; timed arrows have no bounce limit.
     public bool impactExplosion;
+    public bool explodeOnAnyContact;
+    public bool ricochetWithoutFullCharge;
+    [Min(0f)] public float ricochetDamageBonus = .2f;
+    public bool explodeOnRicochetEnemyHit = true;
+    public bool usePinkEffects;
+    [Range(1, 4)] public int projectileCount = 1;
+    [Min(0f)] public float projectileSpacingDegrees;
+    [Tooltip("Adjacent arrow spacing at full charge; negative keeps constant spacing.")]
+    public float fullChargeProjectileSpacingDegrees = -1f;
     public bool scaleTrailWithCharge = true;
     [Header("활 전용 색상 및 잔상")]
     public bool useGoldenEffects;
@@ -64,7 +75,7 @@ public sealed class BowChargeSettings : ScriptableObject
 
     public float SpreadAt(float seconds)
     {
-        return Mathf.Max(0f, maxSpreadDegrees) * (1f - ChargeFraction(seconds));
+        return Mathf.Lerp(Mathf.Max(0f, maxSpreadDegrees), Mathf.Max(0f, fullChargeSpreadDegrees), ChargeFraction(seconds));
     }
 
     public Vector2 ShotDirection(Vector2 aimedDirection, float seconds)
@@ -78,6 +89,35 @@ public sealed class BowChargeSettings : ScriptableObject
         float sine = Mathf.Sin(angle);
         return new Vector2(aimedDirection.x * cosine - aimedDirection.y * sine,
             aimedDirection.x * sine + aimedDirection.y * cosine);
+    }
+
+    public float ProjectileSpacingAt(float seconds)
+    {
+        return fullChargeProjectileSpacingDegrees < 0f ? projectileSpacingDegrees :
+            Mathf.Lerp(projectileSpacingDegrees, fullChargeProjectileSpacingDegrees, ChargeFraction(seconds));
+    }
+
+    public Vector2[] ShotDirections(Vector2 aim, float seconds)
+    {
+        int count = Mathf.Clamp(projectileCount, 1, 4);
+        if(count == 1) return new[] { ShotDirection(aim, seconds) };
+        if(aim.sqrMagnitude < .0001f) aim = Vector2.right;
+        float center = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
+        float spread = SpreadAt(seconds);
+        float spacing = Mathf.Max(8f, ProjectileSpacingAt(seconds));
+        float previous = float.NegativeInfinity;
+        var result = new Vector2[count];
+        for(int i=0;i<count;i++)
+        {
+            float nominal = (i - (count-1)*.5f) * spacing;
+            // Independent inaccuracy, constrained so adjacent arrows never converge below 8 degrees.
+            float low = Mathf.Max(nominal-spread, previous+8f);
+            float offset = Random.Range(low, nominal+spread);
+            previous = offset;
+            float angle = (center+offset) * Mathf.Deg2Rad;
+            result[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        }
+        return result;
     }
 
     public float DamageAt(float seconds)

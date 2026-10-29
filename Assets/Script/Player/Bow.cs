@@ -94,7 +94,9 @@ public class Bow : MonoBehaviour
         if (camera == null || arrow == null || arrow_location == null) { CancelCharge(); return; }
         Vector3 target = camera.ScreenToWorldPoint(Input.mousePosition);
         target.z = arrow_location.position.z;
-        Vector2 direction = chargingSettings.ShotDirection(target - arrow_location.position, ChargeSeconds);
+        Vector2[] directions = chargingSettings.ShotDirections(target - arrow_location.position, ChargeSeconds);
+        foreach (var direction in directions)
+        {
         target = arrow_location.position + new Vector3(direction.x, direction.y, 0f);
         GameObject shot = Instantiate(arrow, arrow_location.position, Quaternion.identity);
         Arrow projectile = shot.GetComponent<Arrow>();
@@ -111,6 +113,7 @@ public class Bow : MonoBehaviour
                 shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, ChargeSeconds);
         }
         else Destroy(shot);
+        }
         ResetCharge();
         if (drawMotion != null) drawMotion.Release();
         owner.EndBowCharge(true);

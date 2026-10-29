@@ -305,6 +305,8 @@ public class Player : MonoBehaviour
         if (item == null || !item.IsBow || item.bowSettings == null || chargeBow == null) return false;
         chargeBow.CancelCharge();
         CancelInvoke(nameof(ToIdle));
+        var judgement = GetComponent<JudgementModeSkill>();
+        if (judgement != null) judgement.ResetForEquip(item);
         equippedBowItem = item;
         ownedBow = item.bowSettings;
         bow_num = item.value;

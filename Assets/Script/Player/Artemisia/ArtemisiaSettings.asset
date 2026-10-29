@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
   m_Name: ArtemisiaSettings
   m_EditorClassIdentifier: 
-  idleSprite: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
+  idleSprite: {fileID: 21300000, guid: 749aefcb76b1bc8438789b06a909dc6e, type: 3}
   drawSprites: []
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
-  maxChargeSeconds: 0.5
+  maxChargeSeconds: 1
   baseDamage: 10
   maxChargeBonusPercent: 100
-  maxSpreadDegrees: 22.5
+  maxSpreadDegrees: 10
   pierceEnemiesAtFullCharge: 0
-  alwaysPierceEnemies: 1
+  alwaysPierceEnemies: 0
   fullChargeRicochets: 2
-  impactExplosion: 1
+  impactExplosion: 0
   scaleTrailWithCharge: 0
-  useGoldenEffects: 1
-  goldSpriteMaterial: {fileID: 2100000, guid: 76db169aad43d0f408a742e27f84f62f, type: 2}
-  goldGlowMaterial: {fileID: 2100000, guid: 2dd70780ae3f4454cabe9c858cd6b6fe, type: 2}
-  maxArrowTrailSeconds: 0.8
-  proceduralDrawMotion: 1
-  arrowSpeed: 45
+  useGoldenEffects: 0
+  goldSpriteMaterial: {fileID: 0}
+  goldGlowMaterial: {fileID: 0}
+  maxArrowTrailSeconds: 0
+  proceduralDrawMotion: 0
+  arrowSpeed: 30
   arrowLifetime: 1

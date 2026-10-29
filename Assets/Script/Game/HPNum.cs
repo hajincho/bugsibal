@@ -1,14 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HPNum : MonoBehaviour
 {
-    public Text hpText;
-
+    public UnityEngine.UI.Text hpText;
+    public static string FormattedHealth()
+    {
+        string health = GameManager.player_current_HP.ToString("0.0");
+        string maximum = GameManager.player_HP.ToString("0.0");
+        if (RunUpgradeState.Shield > 0f)
+            return health + " <color=#FFDC45>+ " + RunUpgradeState.Shield.ToString("0.0") + "</color> / " + maximum;
+        return health + " / " + maximum;
+    }
     void Update()
     {
-        hpText.text = GameManager.player_current_HP.ToString() + " / " + GameManager.player_HP.ToString();
+        if (hpText == null) return;
+        hpText.supportRichText = true;
+        hpText.text = FormattedHealth();
     }
 }

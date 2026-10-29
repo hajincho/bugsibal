@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -33,7 +33,7 @@ public class Shoot : MonoBehaviour
 
             if (!skilldamaged.ult3)
             {
-                enemy_data.TakeDamage(RunUpgradeState.SkillPower + RunUpgradeState.NormalPower + 30, CombatDamageKind.Skill);
+                enemy_data.TakeDamage(RunUpgradeState.SkillPower + GameManager.player_power + 30, CombatDamageKind.Skill);
                 enemy_data.Hitted();
                 skilldamaged.ult3 = true;
                 ultimate.SkillDamageEnable(skilldamaged, 8);

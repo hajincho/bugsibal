@@ -123,6 +123,6 @@ public sealed class BowChargeSettings : ScriptableObject
     public float DamageAt(float seconds)
     {
         float bonusRate = ChargeFraction(seconds) * Mathf.Max(0f, maxChargeBonusPercent) / 100f;
-        return Mathf.Max(0f, baseDamage) * (1f + bonusRate);
+        return Mathf.Max(0f, baseDamage + RunUpgradeState.PowerBonus) * (1f + bonusRate);
     }
 }

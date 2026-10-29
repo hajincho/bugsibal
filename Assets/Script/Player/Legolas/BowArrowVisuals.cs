@@ -42,8 +42,8 @@ public sealed class BowArrowVisuals : MonoBehaviour
         trail.minVertexDistance = .045f;
         trail.startWidth = .10f;
         trail.endWidth = .008f;
-        trail.startColor = new Color(1f, .8f, .13f, .85f);
-        trail.endColor = new Color(1f, .48f, .025f, 0f);
+        trail.startColor = profile.usePinkEffects ? new Color(1f, .75f, .86f, .9f) : new Color(1f, .8f, .13f, .85f);
+        trail.endColor = profile.usePinkEffects ? new Color(1f, .6f, .78f, 0f) : new Color(1f, .48f, .025f, 0f);
         trail.numCornerVertices = 2;
         trail.numCapVertices = 2;
         trail.sortingLayerID = first != null ? first.sortingLayerID : 0;

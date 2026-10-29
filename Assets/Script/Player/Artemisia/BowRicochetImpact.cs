@@ -4,21 +4,28 @@ using UnityEngine;
 public sealed class BowRicochetImpact : MonoBehaviour
 {
     bool canBounce, detonated;
+    bool pinkEffects, explodeOnEnemyHit;
+    float bounceDamageBonus = .2f;
     Collider2D lastWall;
     float lastBounceAt = -1f;
     Material explosionMaterial;
     float radius, initialDamage;
     Arrow arrow;
+    public bool ExplodesOnContact { get; private set; }
     public int BounceCount { get; private set; }
     public int ExplosionCount { get; private set; }
-    public float DamageMultiplier => 1f + BounceCount * .2f;
+    public float DamageMultiplier => 1f + BounceCount * bounceDamageBonus;
 
     public void Initialize(BowChargeSettings profile, float seconds, BowExplosiveArrowSkill q)
     {
         arrow = GetComponent<Arrow>();
         initialDamage = arrow != null ? arrow.Damage : 0f;
         explosionMaterial = profile.goldGlowMaterial;
-        canBounce = seconds >= Mathf.Max(.01f, profile.maxChargeSeconds);
+        ExplodesOnContact = profile.explodeOnAnyContact;
+        canBounce = !ExplodesOnContact && (profile.ricochetWithoutFullCharge || seconds >= Mathf.Max(.01f, profile.maxChargeSeconds));
+        bounceDamageBonus = profile.ricochetDamageBonus;
+        pinkEffects = profile.usePinkEffects;
+        explodeOnEnemyHit = profile.explodeOnRicochetEnemyHit;
         radius = q != null ? q.explosionRadius : 3.25f;
     }
 
@@ -44,23 +51,26 @@ public sealed class BowRicochetImpact : MonoBehaviour
 
     public void OnEnemyHit(EnemyData enemy, Vector3 position, float damage)
     {
-        if (BounceCount > 0 && !detonated) Explode(enemy, position, damage);
+        if (explodeOnEnemyHit && BounceCount > 0 && !detonated) Explode(enemy, position, damage);
     }
 
-    public void Detonate()
+    public void Detonate() { DetonateOnContact(null, transform.position); }
+
+    public void DetonateOnContact(EnemyData primary, Vector3 position)
     {
         if (detonated) return;
         detonated = true;
-        Explode(null, transform.position, arrow != null ? arrow.Damage : initialDamage);
+        CancelInvoke();
+        Explode(primary, position, arrow != null ? arrow.Damage : initialDamage);
         Destroy(gameObject);
     }
 
     void Explode(EnemyData primary, Vector3 position, float arrowDamage)
     {
         ExplosionCount++;
-        var effect = new GameObject("ArtemisiaSkyBurst");
+        var effect = new GameObject(pinkEffects ? "JudgementPinkBurst" : "ArtemisiaSkyBurst");
         effect.transform.position = position;
-        effect.AddComponent<ArtemisiaBurst>().Initialize(explosionMaterial, radius);
+        effect.AddComponent<ArtemisiaBurst>().Initialize(explosionMaterial, radius, pinkEffects);
         var targets = new HashSet<EnemyData>();
         if (primary != null) targets.Add(primary);
         foreach (var c in Physics2D.OverlapCircleAll(position, radius))

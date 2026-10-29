@@ -48,7 +48,7 @@ public class Arrow : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f);
         rigid.velocity = direction * Mathf.Max(0.1f, speed);
         launched = true;
-        if (GetComponent<BowRicochetImpact>() != null) Invoke(nameof(DetonateRicochetArrow), 1f);
+        if (GetComponent<BowRicochetImpact>() != null) Invoke(nameof(DetonateRicochetArrow), Mathf.Max(.1f, lifetime));
         else Destroy(gameObject, Mathf.Max(0.1f, lifetime));
     }
 
@@ -108,12 +108,15 @@ public class Arrow : MonoBehaviour
         EnemyData enemy = other.GetComponentInParent<EnemyData>();
         // Ignore queued contacts with an enemy that died earlier in this physics step.
         if (enemy != null && enemy.enemy_current_HP <= 0f) return false;
-        if (enemy == null && (other.isTrigger || other.attachedRigidbody != null)) return false;
+        // Static Rigidbody2D walls (including FinalBoss SlopeWall) are solid surfaces.
+        // Continue ignoring triggers and movable props/pickups.
+        if (enemy == null && (other.isTrigger ||
+            (other.attachedRigidbody != null && other.attachedRigidbody.bodyType != RigidbodyType2D.Static))) return false;
 
         if (enemy != null && !hitEnemies.Add(enemy)) return false;
         var special = GetComponent<BowRicochetImpact>();
         if (enemy == null && special != null && special.TryBounce(other, normal, contactPosition, rigid)) return true;
-        bool continues = enemy != null && PiercesEnemies;
+        bool continues = enemy != null && PiercesEnemies && (special == null || !special.ExplodesOnContact);
         // Mark terminal hits before callbacks; piercing shots retain their velocity and colliders.
         if (!continues)
         {
@@ -137,7 +140,11 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
-        if (special != null && enemy != null) special.OnEnemyHit(enemy, transform.position, Damage);
+        if (special != null)
+        {
+            if (special.ExplodesOnContact) special.DetonateOnContact(enemy, transform.position);
+            else if (enemy != null) special.OnEnemyHit(enemy, transform.position, Damage);
+        }
         if (!continues && special == null) Destroy(gameObject);
         return true;
     }

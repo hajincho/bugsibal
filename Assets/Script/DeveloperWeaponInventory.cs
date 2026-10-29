@@ -41,7 +41,7 @@ public sealed class DeveloperWeaponInventory : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Print)) SetOpen(!IsOpen);
+        if (Input.GetKeyDown(KeyCode.Slash)) SetOpen(!IsOpen);
         else if (IsOpen && Input.GetKeyDown(KeyCode.Escape)) SetOpen(false);
     }
 
@@ -147,7 +147,7 @@ public sealed class DeveloperWeaponInventory : MonoBehaviour
         FeatureUI.Text("Title", body.transform, new Vector2(1000, 64), new Vector2(0, 385),
             "개발자 무기 인벤토리", 42, font, Color.white);
         FeatureUI.Text("Hint", body.transform, new Vector2(1100, 45), new Vector2(0, 330),
-            "PRINT SCREEN / ESC 닫기  ·  게임 일시 정지", 22, font, new Color(.6f,.72f,.85f));
+            "슬래시(/) / ESC 닫기  ·  게임 일시 정지", 22, font, new Color(.6f,.72f,.85f));
         var close = FeatureUI.Button("Close", body.transform, new Vector2(80, 55), new Vector2(650,385),
             new Color(.22f,.28f,.36f));
         FeatureUI.Text("Label", close.transform, new Vector2(75,50), Vector2.zero, "닫기", 22, font, Color.white);

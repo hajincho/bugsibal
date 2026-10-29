@@ -28,7 +28,7 @@ MonoBehaviour:
   ricochetWithoutFullCharge: 0
   ricochetDamageBonus: 0
   explodeOnRicochetEnemyHit: 0
-  usePinkEffects: 1
+  usePinkEffects: 0
   projectileCount: 1
   projectileSpacingDegrees: 0
   fullChargeProjectileSpacingDegrees: 0

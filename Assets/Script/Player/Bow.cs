@@ -11,6 +11,9 @@ public class Bow : MonoBehaviour
     public BowChargeBar chargeBar;
     public bool IsCharging { get; private set; }
     public float ChargeSeconds { get; private set; }
+    public float EffectiveChargeSeconds => chargingSettings != null && owner != null &&
+        owner.BowXSkill != null && owner.BowXSkill.IsActive
+        ? Mathf.Max(0.01f, chargingSettings.maxChargeSeconds) : ChargeSeconds;
     public bool IsBowMode => owner != null && owner.weapon_mode == 0;
 
     Animator animator;
@@ -75,11 +78,12 @@ public class Bow : MonoBehaviour
 
     void UpdateVisuals()
     {
-        if (chargeBar != null) chargeBar.Show(ChargeSeconds, chargingSettings);
-        if (drawMotion != null) drawMotion.SetDraw(chargingSettings.ChargeFraction(ChargeSeconds));
+        float visualChargeSeconds = EffectiveChargeSeconds;
+        if (chargeBar != null) chargeBar.Show(visualChargeSeconds, chargingSettings);
+        if (drawMotion != null) drawMotion.SetDraw(chargingSettings.ChargeFraction(visualChargeSeconds));
         if (sprite != null && chargeSprites != null && chargeSprites.Length > 0)
         {
-            int index = Mathf.Min(chargeSprites.Length - 1, Mathf.FloorToInt(chargingSettings.ChargeFraction(ChargeSeconds) * chargeSprites.Length));
+            int index = Mathf.Min(chargeSprites.Length - 1, Mathf.FloorToInt(chargingSettings.ChargeFraction(visualChargeSeconds) * chargeSprites.Length));
             sprite.sprite = chargeSprites[index];
         }
     }
@@ -94,21 +98,22 @@ public class Bow : MonoBehaviour
         if (camera == null || arrow == null || arrow_location == null) { CancelCharge(); return; }
         Vector3 target = camera.ScreenToWorldPoint(Input.mousePosition);
         target.z = arrow_location.position.z;
-        Vector2 direction = chargingSettings.ShotDirection(target - arrow_location.position, ChargeSeconds);
+        float shotChargeSeconds = EffectiveChargeSeconds;
+        Vector2 direction = chargingSettings.ShotDirection(target - arrow_location.position, shotChargeSeconds);
         target = arrow_location.position + new Vector3(direction.x, direction.y, 0f);
         GameObject shot = Instantiate(arrow, arrow_location.position, Quaternion.identity);
         Arrow projectile = shot.GetComponent<Arrow>();
         if (projectile != null)
         {
             if (chargingSettings.impactExplosion) shot.AddComponent<BowRicochetImpact>();
-            projectile.Fire(target, chargingSettings.DamageAt(ChargeSeconds), chargingSettings.arrowSpeed,
-                chargingSettings.arrowLifetime, owner.transform, chargingSettings.ShouldPierce(ChargeSeconds));
+            projectile.Fire(target, chargingSettings.DamageAt(shotChargeSeconds), chargingSettings.arrowSpeed,
+                chargingSettings.arrowLifetime, owner.transform, chargingSettings.ShouldPierce(shotChargeSeconds));
             var explosiveSkill = owner.GetComponent<BowExplosiveArrowSkill>();
             if (chargingSettings.impactExplosion)
-                shot.GetComponent<BowRicochetImpact>().Initialize(chargingSettings, ChargeSeconds, explosiveSkill);
+                shot.GetComponent<BowRicochetImpact>().Initialize(chargingSettings, shotChargeSeconds, explosiveSkill);
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
             if (chargingSettings.useGoldenEffects)
-                shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, ChargeSeconds);
+                shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, shotChargeSeconds);
         }
         else Destroy(shot);
         ResetCharge();

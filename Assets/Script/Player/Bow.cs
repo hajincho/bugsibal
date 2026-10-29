@@ -103,7 +103,11 @@ public class Bow : MonoBehaviour
             projectile.Fire(target, chargingSettings.DamageAt(ChargeSeconds), chargingSettings.arrowSpeed,
                 chargingSettings.arrowLifetime, owner.transform, chargingSettings.ShouldPierce(ChargeSeconds));
             var explosiveSkill = owner.GetComponent<BowExplosiveArrowSkill>();
+            if (chargingSettings.impactExplosion)
+                shot.AddComponent<BowRicochetImpact>().Initialize(chargingSettings, ChargeSeconds, explosiveSkill);
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
+            if (chargingSettings.useGoldenEffects)
+                shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, ChargeSeconds);
         }
         else Destroy(shot);
         ResetCharge();

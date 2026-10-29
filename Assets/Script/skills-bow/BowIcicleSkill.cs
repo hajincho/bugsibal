@@ -4,11 +4,12 @@ public sealed class BowIcicleSkill : MonoBehaviour
 {
     public Sprite icicleSprite;
     public Material trailMaterial;
+    [Min(0f)] public float trailSeconds = .8f;
     public CoolDown cooldown;
     [Min(0.1f)] public float cooldownSeconds = 16f;
     public int icicleCount = 20;
-    public float minLifetime = 5f;
-    public float maxLifetime = 5.5f;
+    public float minLifetime = 4f;
+    public float maxLifetime = 4.5f;
     public float minRadius = 1f;
     public float maxRadius = 5.72f;
     public float angularSpeed = 351f;
@@ -16,8 +17,14 @@ public sealed class BowIcicleSkill : MonoBehaviour
     public float icicleHeight = 1.08f;
     public float hitRadius = .264f;
     [Tooltip("Minimum damage per icicle hit.")]
-    public float damage = 2f;
-    [Range(0f, 1f)] public float maxHealthDamageFraction = .005f;
+    public float damage = 1f;
+    [Range(0f, 1f)] public float maxHealthDamageFraction = .002f;
+    [Header("타격 누적 회복")]
+    [Min(1)] public int hitsToHeal = 10;
+    [Min(0f)] public float healAmount = 2f;
+    int healingHitCount;
+    public int HealingHitCount => healingHitCount;
+
     [Min(1)] public int hitsToFreeze = 10;
     public float slowMultiplier = 0.6f;
     public float slowSeconds = 2f;
@@ -29,7 +36,20 @@ public sealed class BowIcicleSkill : MonoBehaviour
 
     public float DamageForMaxHealth(float maxHealth)
     {
-        return Mathf.Max(damage, Mathf.Max(0f, maxHealth) * maxHealthDamageFraction);
+        return Mathf.Max(0f, Mathf.Max(damage, Mathf.Max(0f, maxHealth) * maxHealthDamageFraction) * GameManager.BowSkillDamageMultiplier);
+    }
+
+    public void ResetHealingHits() { healingHitCount = 0; }
+
+    public void RegisterHealingHit()
+    {
+        if (GameManager.player_current_HP <= 0f) { ResetHealingHits(); return; }
+        healingHitCount++;
+        if (healingHitCount >= Mathf.Max(1, hitsToHeal))
+        {
+            healingHitCount = 0;
+            GameManager.HealPlayer(healAmount);
+        }
     }
 
     public float RotationSpeedAtRadius(float radius)
@@ -40,6 +60,7 @@ public sealed class BowIcicleSkill : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.player_current_HP <= 0f) ResetHealingHits();
         if (Input.GetKeyDown(KeyCode.E)) Cast();
     }
 

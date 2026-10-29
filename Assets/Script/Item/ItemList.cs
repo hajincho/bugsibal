@@ -8,8 +8,14 @@ public class Item
     public string itemName;
     public Sprite icon;
     public int value;
+    [InspectorName("검 공격력 증가")]
     public int power;
+    [InspectorName("검 스킬 공격력 증가")]
     public int skillpower;
+    [InspectorName("활 스킬 피해 배율 (%)")]
+    [Tooltip("100은 기본 피해, 120은 1.2배, 80은 0.8배입니다. 활 Q 폭발과 E 고드름에 곱해지며 검과 일반 화살에는 적용되지 않습니다.")]
+    [Min(0)] public int bowSkillPower = 100;
+    [InspectorName("공용 추가 체력")]
     public int health;
     public int attackSpeed;
     public int duration;

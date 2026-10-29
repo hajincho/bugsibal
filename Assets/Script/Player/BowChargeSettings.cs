@@ -29,12 +29,29 @@ public sealed class BowChargeSettings : ScriptableObject
     [Header("활 고유 특성")]
     [InspectorName("최대 차징 시 적 관통")]
     public bool pierceEnemiesAtFullCharge;
+    [InspectorName("항상 적 관통")]
+    public bool alwaysPierceEnemies;
+    [Min(0)] public int fullChargeRicochets;
+    public bool impactExplosion;
+    public bool scaleTrailWithCharge = true;
+    [Header("활 전용 색상 및 잔상")]
+    public bool useGoldenEffects;
+    public Material goldSpriteMaterial;
+    public Material goldGlowMaterial;
+    [InspectorName("최대 차징 잔상 시간 (초)")]
+    [Min(0f)] public float maxArrowTrailSeconds;
+
+    public float TrailDurationAt(float seconds)
+    {
+        return Mathf.Max(0f, maxArrowTrailSeconds) * (scaleTrailWithCharge ? ChargeFraction(seconds) : 1f);
+    }
+
     [InspectorName("절차적 활 당기기 모션")]
     public bool proceduralDrawMotion;
 
     public bool ShouldPierce(float seconds)
     {
-        return pierceEnemiesAtFullCharge && seconds >= Mathf.Max(0.01f, maxChargeSeconds);
+        return alwaysPierceEnemies || (pierceEnemiesAtFullCharge && seconds >= Mathf.Max(0.01f, maxChargeSeconds));
     }
 
     [Min(0.1f)] public float arrowSpeed = 30f;

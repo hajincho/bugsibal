@@ -38,6 +38,8 @@ public sealed class BowExplosiveArrowSkill : MonoBehaviour
         impact.explosionPrefab = explosionPrefab;
         impact.visualScale = explosionScale;
         impact.radius = explosionRadius;
+        // Keep the equipped bow skill multiplier with this shot if equipment changes in flight.
+        impact.skillDamageMultiplier = GameManager.BowSkillDamageMultiplier;
         foreach (var renderer in arrow.GetComponentsInChildren<SpriteRenderer>(true))
             renderer.color = new Color(1f, 0.25f, 0.2f, renderer.color.a);
         IsArmed = false;

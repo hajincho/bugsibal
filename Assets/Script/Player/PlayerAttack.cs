@@ -66,7 +66,7 @@ public class PlayerAttack : MonoBehaviour
                 else if(player.weapon_mode == 0)
                 {
 
-                    enemy_data.TakeDamage(RunUpgradeState.NormalPower / 2, CombatDamageKind.Normal);
+                    enemy_data.TakeDamage(player.ownedBow != null ? player.ownedBow.DamageAt(0f) : 0f, CombatDamageKind.Normal);
                 }
 
                 if (skilldamaged != null)

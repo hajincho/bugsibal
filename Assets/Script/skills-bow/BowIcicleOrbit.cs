@@ -23,6 +23,8 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     Player player;
     float cleanupAt;
     float startedAt;
+    Material defaultSpriteMaterial;
+    BowChargeSettings appearanceProfile;
     public int LiveCount { get { int count = 0; foreach (var s in shards) if (!s.expired) count++; return count; } }
     public Vector3 Center => transform.position;
 
@@ -32,7 +34,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
         transform.position = owner.transform.position + skill.centerOffset;
         float now = Time.time;
         startedAt = now;
-        cleanupAt = now + skill.maxLifetime + 1.1f;
+        cleanupAt = now + skill.maxLifetime + Mathf.Max(0f, skill.trailSeconds) + .1f;
         var playerSprite = owner.GetComponentInChildren<SpriteRenderer>();
         // One random orbit in each radial band keeps the whole radius populated.
         var radii = new float[Mathf.Max(0, skill.icicleCount)];
@@ -49,13 +51,14 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             go.transform.SetParent(transform, false);
             var sprite = go.GetComponent<SpriteRenderer>();
             sprite.sprite = skill.icicleSprite;
+            if (defaultSpriteMaterial == null) defaultSpriteMaterial = sprite.sharedMaterial;
             sprite.sortingLayerID = playerSprite != null ? playerSprite.sortingLayerID : 0;
             sprite.sortingOrder = 15;
             float scale = skill.icicleHeight / Mathf.Max(.01f, skill.icicleSprite.bounds.size.y);
             go.transform.localScale = new Vector3(scale, scale, 1f);
             var trail = go.GetComponent<TrailRenderer>();
             trail.sharedMaterial = skill.trailMaterial;
-            trail.time = 1f; trail.minVertexDistance = .035f;
+            trail.time = Mathf.Max(0f, skill.trailSeconds); trail.minVertexDistance = .035f;
             trail.startWidth = .045f; trail.endWidth = .003f;
             trail.startColor = new Color(.35f, .85f, 1f, .65f);
             trail.endColor = new Color(.12f, .4f, 1f, 0f);
@@ -73,6 +76,26 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             Position(shard); shard.previous = go.transform.position;
             trail.Clear(); trail.emitting = true;
             shards.Add(shard);
+        }
+        RefreshAppearance();
+    }
+
+    public void RefreshAppearance()
+    {
+        if (player == null || skill == null) return;
+        var profile = player.EquippedBowItem != null ? player.EquippedBowItem.bowSettings : null;
+        if (appearanceProfile == profile) return;
+        appearanceProfile = profile;
+        bool gold = profile != null && profile.useGoldenEffects;
+        foreach (var shard in shards)
+        {
+            if (shard.expired || shard.sprite == null) continue;
+            shard.sprite.sharedMaterial = gold && profile.goldSpriteMaterial != null ? profile.goldSpriteMaterial : defaultSpriteMaterial;
+            shard.sprite.color = Color.white;
+            if (shard.trail == null) continue;
+            shard.trail.sharedMaterial = gold && profile.goldGlowMaterial != null ? profile.goldGlowMaterial : skill.trailMaterial;
+            shard.trail.startColor = gold ? new Color(1f, .8f, .13f, .65f) : new Color(.35f, .85f, 1f, .65f);
+            shard.trail.endColor = gold ? new Color(1f, .48f, .025f, 0f) : new Color(.12f, .4f, 1f, 0f);
         }
     }
 
@@ -109,8 +132,8 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             if (Time.time >= s.expiresAt)
             {
                 s.expired = true; s.sprite.enabled = false; s.trail.emitting = false; s.contacts.Clear();
-                // Let the one-second trail finish at the actual last world position.
-                s.transform.SetParent(null, true); Destroy(s.transform.gameObject, 1.05f);
+                // Let the configured trail finish at the actual last world position.
+                s.transform.SetParent(null, true); Destroy(s.transform.gameObject, Mathf.Max(0f, skill.trailSeconds) + .05f);
                 continue;
             }
             s.angle += s.speed * Mathf.Deg2Rad * Time.fixedDeltaTime;
@@ -135,6 +158,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     void LateUpdate()
     {
         if (player != null) transform.position = player.transform.position + skill.centerOffset;
+        RefreshAppearance();
     }
 
     public int StackCount(EnemyData enemy) { int count; return enemy != null && stacks.TryGetValue(enemy, out count) ? count : 0; }
@@ -142,7 +166,8 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     public bool RegisterHit(EnemyData enemy)
     {
         if (enemy == null || enemy.enemy_current_HP <= 0f || StageRewardController.InputBlocked) return false;
-        enemy.TakeDamage(skill.DamageForMaxHealth(enemy.enemy_HP), CombatDamageKind.Skill);
+        float applied = enemy.TakeDamage(skill.DamageForMaxHealth(enemy.enemy_HP), CombatDamageKind.Skill);
+        if (applied > 0f) skill.RegisterHealingHit();
         if (enemy.enemy_current_HP <= 0f || EnemyFrostStatus.IsImmune(enemy)) return true;
         int count = StackCount(enemy) + 1;
         var frost = enemy.GetComponent<EnemyFrostStatus>();

@@ -6,6 +6,7 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
     public GameObject explosionPrefab;
     public float visualScale = 2.25f;
     public float radius = 3.25f;
+    public float skillDamageMultiplier = 1f;
     bool exploded;
     public bool HasExploded => exploded;
     readonly HashSet<EnemyData> damagedEnemies = new HashSet<EnemyData>();
@@ -43,7 +44,7 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
         {
             if (enemy == null || enemy.enemy_current_HP <= 0f) continue;
             damagedEnemies.Add(enemy);
-            enemy.TakeDamage(arrowDamage * 2f, CombatDamageKind.Skill);
+            enemy.TakeDamage(Mathf.Max(0f, arrowDamage * 2f * skillDamageMultiplier), CombatDamageKind.Skill);
             enemy.Hitted();
         }
     }

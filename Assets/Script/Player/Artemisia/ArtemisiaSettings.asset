@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
+  m_Name: ArtemisiaSettings
+  m_EditorClassIdentifier: 
+  idleSprite: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
+  drawSprites: []
+  arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
+  maxChargeSeconds: 0.2
+  baseDamage: 20
+  maxChargeBonusPercent: 100
+  maxSpreadDegrees: 30
+  pierceEnemiesAtFullCharge: 1
+  alwaysPierceEnemies: 0
+  fullChargeRicochets: 2
+  impactExplosion: 1
+  scaleTrailWithCharge: 0
+  useGoldenEffects: 1
+  goldSpriteMaterial: {fileID: 2100000, guid: 76db169aad43d0f408a742e27f84f62f, type: 2}
+  goldGlowMaterial: {fileID: 2100000, guid: 2dd70780ae3f4454cabe9c858cd6b6fe, type: 2}
+  maxArrowTrailSeconds: 0.8
+  proceduralDrawMotion: 1
+  arrowSpeed: 45
+  arrowLifetime: 3

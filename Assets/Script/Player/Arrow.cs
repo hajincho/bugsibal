@@ -71,7 +71,8 @@ public class Arrow : MonoBehaviour
         }
         for (int i = 0; i < count; i++)
         {
-            if (TryHit(hits[i].collider) && !launched) break;
+            bool wall = hits[i].collider != null && hits[i].collider.GetComponentInParent<EnemyData>() == null;
+            if (TryHit(hits[i].collider, hits[i].normal, hits[i].centroid) && (!launched || wall)) break;
         }
     }
 
@@ -79,6 +80,13 @@ public class Arrow : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other) { TryHit(other.collider); }
 
     public bool TryHit(Collider2D other)
+    {
+        Vector2 normal = other != null ? rigid.position - other.ClosestPoint(rigid.position) : Vector2.zero;
+        if (normal.sqrMagnitude < .0001f) normal = -rigid.velocity.normalized;
+        return TryHit(other, normal.normalized, rigid.position);
+    }
+
+    bool TryHit(Collider2D other, Vector2 normal, Vector2 contactPosition)
     {
         if (HasHit || !launched || other == null || StageRewardController.InputBlocked) return false;
         if (other.transform.IsChildOf(transform) || (owner != null && other.transform.IsChildOf(owner)) ||
@@ -89,6 +97,8 @@ public class Arrow : MonoBehaviour
         if (enemy == null && (other.isTrigger || other.attachedRigidbody != null)) return false;
 
         if (enemy != null && !hitEnemies.Add(enemy)) return false;
+        var special = GetComponent<BowRicochetImpact>();
+        if (enemy == null && special != null && special.TryBounce(other, normal, contactPosition, rigid)) return true;
         bool continues = enemy != null && PiercesEnemies;
         // Mark terminal hits before callbacks; piercing shots retain their velocity and colliders.
         if (!continues)
@@ -113,6 +123,7 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
+        if (special != null) special.Explode(enemy, transform.position, Damage);
         if (!continues) Destroy(gameObject);
         return true;
     }

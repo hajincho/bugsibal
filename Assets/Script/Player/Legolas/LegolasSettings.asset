@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
+  m_Name: LegolasSettings
+  m_EditorClassIdentifier: 
+  idleSprite: {fileID: 21300000, guid: 143d7c12ae06da149824921eef8347c1, type: 3}
+  drawSprites: []
+  arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
+  maxChargeSeconds: 1.5
+  baseDamage: 10
+  maxChargeBonusPercent: 500
+  maxSpreadDegrees: 15
+  pierceEnemiesAtFullCharge: 0
+  alwaysPierceEnemies: 1
+  useGoldenEffects: 1
+  goldSpriteMaterial: {fileID: 2100000, guid: 9f846a25e8120df43a568901a040ac46, type: 2}
+  goldGlowMaterial: {fileID: 2100000, guid: 60c1bc20add38f349936274bbdc04435, type: 2}
+  maxArrowTrailSeconds: 0.8
+  proceduralDrawMotion: 1
+  arrowSpeed: 24
+  arrowLifetime: 3

@@ -189,6 +189,8 @@ public class Player : MonoBehaviour
         animator.speed = 1f;
         var bowSkill = GetComponent<BowExplosiveArrowSkill>();
         if (bowSkill != null) bowSkill.CancelArmed();
+        var icicleSkill = GetComponent<BowIcicleSkill>();
+        if (icicleSkill != null) icicleSkill.ResetHealingHits();
         ApplyWeaponVisibility();
         gamemanager.AddItemValue();
     }
@@ -280,6 +282,7 @@ public class Player : MonoBehaviour
         ownedBow = item.bowSettings;
         bow_num = item.value;
         chargeBow.ApplySettings(ownedBow, item.icon);
+        gamemanager.AddItemValue();
         weapon_mode = 0;
         on_attack = false;
         animator.SetInteger("Attack", -1);

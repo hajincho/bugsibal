@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public static int player_speed=8;
     public static int player_power=10;
     public static int player_skill_power = 10;
+    public static int player_bow_skill_power = 100;
+    public static float BowSkillDamageMultiplier => Mathf.Max(0f, player_bow_skill_power) / 100f;
     public static float player_HP=100;
     public static float player_current_HP=100;
 
@@ -100,8 +102,10 @@ public class GameManager : MonoBehaviour
             }
         }
         if (itemheld == null) return;
+        Item bowHeld = player.EquippedBowItem;
         float minus_HP = (player_HP - player_current_HP);
-        player_HP = itemheld.health + 100 + RunUpgradeState.HealthBonus + (player.midboss_cleared ? 50 : 0);
+        // Both equipped weapons contribute to the same health pool, regardless of current mode.
+        player_HP = Mathf.Max(1f, itemheld.health + (bowHeld != null ? bowHeld.health : 0) + 100 + RunUpgradeState.HealthBonus + (player.midboss_cleared ? 50 : 0));
         player_current_HP = player_HP - minus_HP;
         if (player_current_HP > player_HP)
         {
@@ -109,6 +113,7 @@ public class GameManager : MonoBehaviour
         }
         player_power = itemheld.power + 10 + (player.midboss_cleared ? 7 : 0);
         player_skill_power = itemheld.skillpower + 10;
+        player_bow_skill_power = bowHeld != null ? bowHeld.bowSkillPower : 100;
 
     }
     public static float DamagePlayer(float amount)
@@ -137,6 +142,7 @@ public class GameManager : MonoBehaviour
     {
         RunUpgradeState.Reset();
         player_level = 0; player_speed = 8; player_power = 10; player_skill_power = 10;
+        player_bow_skill_power = 100;
         player_HP = player_current_HP = 100;
         current_stage = -1;
     }

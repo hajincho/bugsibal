@@ -273,6 +273,33 @@ public class Player : MonoBehaviour
         return true;
     }
 
+    // Developer inventory equips directly without consuming a ground drop.
+    public bool EquipDeveloperWeapon(Item item)
+    {
+        if (item == null || item.itemType != ItemType.Weapon || on_dash || skill_using ||
+            GameManager.player_current_HP <= 0f) return false;
+        if (item.IsBow)
+        {
+            if (!EquipBow(item)) return false;
+        }
+        else
+        {
+            if (item.value <= 0 || item.value >= weapons.Count || weapons[item.value] == null) return false;
+            if (chargeBow != null) chargeBow.CancelCharge();
+            CancelInvoke(nameof(ToIdle));
+            on_attack = false;
+            animator.SetInteger("Attack", -1);
+            animator.speed = 1f;
+            sword_num = item.value;
+            weapon_mode = 1;
+            gamemanager.AddItemValue();
+            ApplyWeaponVisibility();
+        }
+        var inventory = GetComponent<Inventory>();
+        if (inventory != null && !inventory.Inven.Contains(item)) inventory.Inven.Add(item);
+        return true;
+    }
+
     public bool EquipBow(Item item)
     {
         if (item == null || !item.IsBow || item.bowSettings == null || chargeBow == null) return false;

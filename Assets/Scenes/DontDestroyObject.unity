@@ -1579,7 +1579,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uB300\uB9C8\uB3C4\uC0AC\uC758 \uC9C0\uD321\uC774"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 79ac2c61ea22483428b831638e3a9368, type: 3}
     value: 3
     power: 5
     skillpower: 30
@@ -1591,7 +1591,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uC544\uB9C8\uCE74\uC81C"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: eea80e88e5ec0f54fa0b0b53f0c0482d, type: 3}
     value: 4
     power: 55
     skillpower: 0
@@ -1627,7 +1627,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uD639\uD55C\uC758 \uC2EC\uD310"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: d4fa63e285aeac04a8a274da42be07a4, type: 3}
     value: 7
     power: 30
     skillpower: 30
@@ -1639,7 +1639,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uB370\uC2A4\uBE0C\uB9C1\uC5B4"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: 5723a664a3b5dc14a82cf5b337945a80, type: 3}
     value: 8
     power: 40
     skillpower: 10
@@ -1651,7 +1651,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uBE59\uB9C8\uCC38\uB3C4"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: 1905ac9073bb97b48b9c684009077b35, type: 3}
     value: 9
     power: 10
     skillpower: 10
@@ -1663,7 +1663,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uBBF8\uC2A4\uD2F8\uD14C\uC778"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: 3ebb8c867226eb24ab563996c95f9208, type: 3}
     value: 10
     power: 25
     skillpower: 100
@@ -1675,7 +1675,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uB300\uCC9C\uC0AC\uC758 \uC9C0\uD321\uC774"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: 2c0154b5db456794a850606509362760, type: 3}
     value: 11
     power: 5
     skillpower: 65
@@ -1687,7 +1687,7 @@ MonoBehaviour:
     bowSettings: {fileID: 0}
     itemType: 0
   - itemName: "\uD0C1\uC2E0\uBB38\uC758 \uAC15\uCCA0\uAC80"
-    icon: {fileID: 21300000, guid: 6d1d4857735d3c24c9dbb57b3935d44b, type: 3}
+    icon: {fileID: 21300000, guid: bf2121e9fe3b51f43a22044530eecb7b, type: 3}
     value: 12
     power: 290
     skillpower: -999
@@ -10144,6 +10144,53 @@ Transform:
   - {fileID: 791310473}
   m_Father: {fileID: 1057506433}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1484074135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1484074137}
+  - component: {fileID: 1484074136}
+  m_Layer: 0
+  m_Name: DeveloperWeaponInventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1484074136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484074135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 337917a67a935e14d8be03cc1c60a539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemManager: {fileID: 227506860}
+  player: {fileID: 1326420232}
+  font: {fileID: 11400000, guid: 55fd42e361242cb449f72919587dad88, type: 2}
+--- !u!4 &1484074137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484074135}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1503456688
 GameObject:
   m_ObjectHideFlags: 0
@@ -14177,3 +14224,4 @@ SceneRoots:
   - {fileID: 1512326268}
   - {fileID: 8570425580914938316}
   - {fileID: 607620731}
+  - {fileID: 1484074137}

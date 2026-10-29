@@ -10,7 +10,7 @@ public class StageRewardController : MonoBehaviour
 {
     public CombatFeatureConfig config;
     public static StageRewardController Instance { get; private set; }
-    public static bool InputBlocked => Instance != null && (Instance.IsOpen || Instance.transitioning || Time.frameCount <= Instance.blockThroughFrame);
+    public static bool InputBlocked => DeveloperWeaponInventory.InputBlocked || (Instance != null && (Instance.IsOpen || Instance.transitioning || Time.frameCount <= Instance.blockThroughFrame));
     public bool IsOpen { get; private set; }
     public bool StageCleared { get; private set; }
     public StageRewardDefinition[] Offered { get; private set; }

@@ -86,6 +86,14 @@ public sealed class EnemyFrostStatus : MonoBehaviour
         for (int i = 0; i < bodies.Length; i++) if (bodies[i] != null) bodies[i].constraints = constraints[i];
     }
 
+    public void MoveFrozenAnchor(Vector2 position)
+    {
+        if (!IsFrozen) return;
+        frozenPosition.x = position.x;
+        frozenPosition.y = position.y;
+        HoldFrozen();
+    }
+
     public void CancelStatus()
     {
         slowUntil = frozenUntil = 0f; slowFactor = 1f; RestoreFreeze();

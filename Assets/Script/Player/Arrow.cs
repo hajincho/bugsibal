@@ -140,6 +140,8 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
+        var queenImpact = GetComponent<BowQueenImpact>();
+        if (queenImpact != null) queenImpact.OnImpact(enemy, contactPosition);
         if (special != null)
         {
             if (special.ExplodesOnContact) special.DetonateOnContact(enemy, transform.position);

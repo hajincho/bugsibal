@@ -60,6 +60,26 @@ public sealed class BowChargeSettings : ScriptableObject
     [InspectorName("절차적 활 당기기 모션")]
     public bool proceduralDrawMotion;
 
+    [Header("지속 피해")]
+    [InspectorName("초당 도트 피해")]
+    [Min(0f)] public float dotDamagePerSecond;
+    [InspectorName("도트 지속 시간 (초)")]
+    [Tooltip("동일 효과 재적중 시 중첩 없이 지속시간을 갱신합니다.")]
+    [Min(0f)] public float dotDuration = 2f;
+
+    [Header("풀차징 적중 시 끌어당김")]
+    [InspectorName("풀차징 끌어당김 사용")]
+    public bool pullOnFullCharge;
+    [InspectorName("끌어당김 반경")]
+    [Min(0f)] public float pullRadius = 2.5f;
+    [InspectorName("모이는 지점의 전방 거리")]
+    [Tooltip("적중 지점에서 플레이어의 반대 방향으로 이 거리만큼 더 떨어진 한 점에 모읍니다.")]
+    [Min(0f)] public float pullForwardOffset = 3f;
+    [InspectorName("끌어당김 지속 시간 (초)")]
+    [Min(0.01f)] public float pullDuration = 0.3f;
+    [InspectorName("끌어당김 속도")]
+    [Min(0f)] public float pullSpeed = 12f;
+
     public bool ShouldPierce(float seconds)
     {
         return alwaysPierceEnemies || (pierceEnemiesAtFullCharge && seconds >= Mathf.Max(0.01f, maxChargeSeconds));

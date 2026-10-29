@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +28,7 @@ public class Slash : MonoBehaviour
 
             if (!skilldamaged.ult2)
             {
-                enemy_data.TakeDamage(RunUpgradeState.SkillPower * 2 + RunUpgradeState.NormalPower * 2 + 20, CombatDamageKind.Skill);
+                enemy_data.TakeDamage(RunUpgradeState.SkillPower * 2 + GameManager.player_power * 2 + 20, CombatDamageKind.Skill);
                 enemy_data.Hitted();
                 skilldamaged.ult2 = true;
                 ultimate.SkillDamageEnable(skilldamaged, 7);

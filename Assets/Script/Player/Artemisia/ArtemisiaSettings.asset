@@ -15,15 +15,15 @@ MonoBehaviour:
   idleSprite: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
   drawSprites: []
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
-  maxChargeSeconds: 1
+  maxChargeSeconds: 0.5
   baseDamage: 10
   maxChargeBonusPercent: 100
   maxSpreadDegrees: 10
   fullChargeSpreadDegrees: 0
   pierceEnemiesAtFullCharge: 0
-  alwaysPierceEnemies: 0
+  alwaysPierceEnemies: 1
   fullChargeRicochets: 2
-  impactExplosion: 0
+  impactExplosion: 1
   explodeOnAnyContact: 0
   ricochetWithoutFullCharge: 0
   ricochetDamageBonus: 0.2
@@ -34,16 +34,9 @@ MonoBehaviour:
   fullChargeProjectileSpacingDegrees: -1
   scaleTrailWithCharge: 0
   useGoldenEffects: 1
-  goldSpriteMaterial: {fileID: 0}
-  goldGlowMaterial: {fileID: 0}
-  maxArrowTrailSeconds: 3
-  proceduralDrawMotion: 1
-  dotDamagePerSecond: 0
-  dotDuration: 2
-  pullOnFullCharge: 0
-  pullRadius: 2.5
-  pullForwardOffset: 3
-  pullDuration: 0.3
-  pullSpeed: 12
-  arrowSpeed: 30
+  goldSpriteMaterial: {fileID: 2100000, guid: 9f846a25e8120df43a568901a040ac46, type: 2}
+  goldGlowMaterial: {fileID: 2100000, guid: 60c1bc20add38f349936274bbdc04435, type: 2}
+  maxArrowTrailSeconds: 0.6
+  proceduralDrawMotion: 0
+  arrowSpeed: 45
   arrowLifetime: 1

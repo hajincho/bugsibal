@@ -47,6 +47,7 @@ public class GameOverBG : MonoBehaviour
     void TriggerGameOver()
     {
         gameOverTriggered = true;
+        RunUpgradeState.ClearShield();
         EnsureInputSystem();
         gameoverUI.SetActive(true);
         button.SetActive(true);

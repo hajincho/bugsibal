@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +55,7 @@ public class DropSword : MonoBehaviour
 
             if (!skilldamaged.ult1)
             {
-                enemy_data.TakeDamage(RunUpgradeState.SkillPower * 3 + RunUpgradeState.NormalPower * 3, CombatDamageKind.Skill);
+                enemy_data.TakeDamage(RunUpgradeState.SkillPower * 3 + GameManager.player_power * 3, CombatDamageKind.Skill);
                 enemy_data.Hitted();
                 skilldamaged.ult1 = true;
                 ultimate.SkillDamageEnable(skilldamaged, 6);

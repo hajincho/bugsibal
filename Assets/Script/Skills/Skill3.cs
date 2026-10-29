@@ -90,7 +90,7 @@ public class Skill3 : MonoBehaviour
             float beforeHP = enemy.enemy_current_HP;
 
             // 데미지 입히기
-            enemy.TakeDamage(skillDamage * (1f + RunUpgradeState.PowerBonus), CombatDamageKind.Skill);
+            enemy.TakeDamage(skillDamage, CombatDamageKind.Skill);
 
             float afterHP = enemy.enemy_current_HP;
             float applied = Mathf.Max(0, beforeHP - afterHP);

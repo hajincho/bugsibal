@@ -119,9 +119,10 @@ public class GameManager : MonoBehaviour
     public static float DamagePlayer(float amount)
     {
         if (amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount) || player_current_HP <= 0) return 0;
+        float absorbed = RunUpgradeState.AbsorbWithShield(amount);
         float before = player_current_HP;
-        player_current_HP = Mathf.Clamp(player_current_HP - amount, 0, player_HP);
-        float applied = before - player_current_HP;
+        player_current_HP = Mathf.Clamp(player_current_HP - (amount - absorbed), 0, player_HP);
+        float applied = absorbed + before - player_current_HP;
         var character = GameObject.FindGameObjectWithTag("Player");
         if (character != null) CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(character.transform), applied, CombatDamageKind.PlayerHit);
         return applied;

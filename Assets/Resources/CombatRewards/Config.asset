@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ed00dafed73ee249b75e947e2b6129d, type: 2}
   - {fileID: 11400000, guid: d479727114e0d27429bdf696b3e7cde1, type: 2}
   - {fileID: 11400000, guid: 9193c03dc62e91c43b0284457bead2d3, type: 2}
+  - {fileID: 11400000, guid: 2a884a6182e860a4e98a91046e917a03, type: 2}
   font: {fileID: 11400000, guid: 20315fe5656d3514caa97b71fd73c049, type: 2}
   healthFill: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   panelSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}

@@ -70,7 +70,7 @@ public class Bow : MonoBehaviour
             CancelCharge();
             return;
         }
-        ChargeSeconds = Mathf.Min(ChargeSeconds + Time.deltaTime, Mathf.Max(0.01f, chargingSettings.maxChargeSeconds));
+        ChargeSeconds = Mathf.Min(ChargeSeconds + Time.deltaTime * RunUpgradeState.BowChargeRate, Mathf.Max(0.01f, chargingSettings.maxChargeSeconds));
         UpdateVisuals();
         if (Input.GetMouseButtonUp(0)) Release();
         else if (!Input.GetMouseButton(0)) CancelCharge();

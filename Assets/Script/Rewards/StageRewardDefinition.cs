@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum StageRewardKind { Heal, Power, AttackSpeed, MaxHealth, MoveSpeed }
+public enum StageRewardKind { Heal, Power, AttackSpeed, MaxHealth, MoveSpeed, Shield }
 
 [CreateAssetMenu(menuName = "bugsibal/Stage Reward")]
 public class StageRewardDefinition : ScriptableObject

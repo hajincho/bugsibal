@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
   m_Name: BasicBowSettings
   m_EditorClassIdentifier: 
-  idleSprite: {fileID: 21300000, guid: 749aefcb76b1bc8438789b06a909dc6e, type: 3}
+  idleSprite: {fileID: 21300000, guid: 83f8ad5308636fa4b89f27231031974e, type: 3}
   drawSprites:
   - {fileID: -1146458614, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
   - {fileID: -1454613296, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
@@ -21,8 +21,8 @@ MonoBehaviour:
   - {fileID: 940348508, guid: a037f9435303a714e9d6af185d2565f8, type: 3}
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
   maxChargeSeconds: 1
-  baseDamage: 10
-  maxChargeBonusPercent: 100
+  baseDamage: 5
+  maxChargeBonusPercent: 150
   maxSpreadDegrees: 10
   fullChargeSpreadDegrees: 0
   pierceEnemiesAtFullCharge: 0
@@ -43,5 +43,12 @@ MonoBehaviour:
   goldGlowMaterial: {fileID: 0}
   maxArrowTrailSeconds: 0
   proceduralDrawMotion: 0
+  dotDamagePerSecond: 0
+  dotDuration: 2
+  pullOnFullCharge: 0
+  pullRadius: 2.5
+  pullForwardOffset: 3
+  pullDuration: 0.3
+  pullSpeed: 12
   arrowSpeed: 50
   arrowLifetime: 3

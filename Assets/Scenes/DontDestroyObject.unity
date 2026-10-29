@@ -1927,6 +1927,18 @@ MonoBehaviour:
     weight: 800
     bowSettings: {fileID: 11400000, guid: b901156621d88df48b42dffbbcef9e53, type: 2}
     itemType: 0
+  - itemName: "\uC99D\uC624\uC758 \uC5EC\uC655"
+    icon: {fileID: 21300000, guid: 11f31b78020280342a33183d043fb756, type: 3}
+    value: 13
+    power: 0
+    skillpower: 0
+    bowSkillPower: 100
+    health: 0
+    attackSpeed: 0
+    duration: 0
+    weight: 800
+    bowSettings: {fileID: 11400000, guid: d1e6bb19c0f44ad4ea1e6830fac3c32c, type: 2}
+    itemType: 0
   - itemName: "\uC544\uB974\uD14C\uBBF8\uC2DC\uC544"
     icon: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
     value: 3
@@ -1950,18 +1962,6 @@ MonoBehaviour:
     duration: 0
     weight: 50
     bowSettings: {fileID: 11400000, guid: d6bddc2fa6c5e7c489ee674698412d58, type: 2}
-    itemType: 0
-  - itemName: "\uC99D\uC624\uC758 \uC5EC\uC655"
-    icon: {fileID: 21300000, guid: 11f31b78020280342a33183d043fb756, type: 3}
-    value: 13
-    power: 0
-    skillpower: 0
-    bowSkillPower: 100
-    health: 0
-    attackSpeed: 0
-    duration: 0
-    weight: 1
-    bowSettings: {fileID: 11400000, guid: d1e6bb19c0f44ad4ea1e6830fac3c32c, type: 2}
     itemType: 0
   legacyItems: []
 --- !u!4 &227506861

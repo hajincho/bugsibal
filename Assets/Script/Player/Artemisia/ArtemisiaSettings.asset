@@ -15,10 +15,10 @@ MonoBehaviour:
   idleSprite: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
   drawSprites: []
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
-  maxChargeSeconds: 0.2
-  baseDamage: 20
+  maxChargeSeconds: 0.5
+  baseDamage: 10
   maxChargeBonusPercent: 100
-  maxSpreadDegrees: 30
+  maxSpreadDegrees: 22.5
   pierceEnemiesAtFullCharge: 0
   alwaysPierceEnemies: 1
   fullChargeRicochets: 2

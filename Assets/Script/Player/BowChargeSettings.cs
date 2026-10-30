@@ -4,6 +4,14 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(menuName = "Combat/Bow Charge Settings", fileName = "BowSettings")]
 public sealed class BowChargeSettings : ScriptableObject
 {
+    public const float MinimumFireChargeFraction = .2f;
+
+    public bool CanFireAt(float seconds)
+    {
+        float fraction = ChargeFraction(seconds);
+        return fraction >= MinimumFireChargeFraction || Mathf.Approximately(fraction, MinimumFireChargeFraction);
+    }
+
     public Sprite idleSprite;
     public Sprite[] drawSprites;
     public GameObject arrowPrefab;

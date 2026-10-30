@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public static int player_power=10;
     public static int player_skill_power = 10;
     public static int player_bow_skill_power = 100;
+    public static int player_sword_attack_speed; // Equipment attack speed bonus, in percent.
     public static float BowSkillDamageMultiplier => Mathf.Max(0f, player_bow_skill_power) / 100f;
     public static float player_HP=100;
     public static float player_current_HP=100;
@@ -113,6 +114,7 @@ public class GameManager : MonoBehaviour
         }
         player_power = itemheld.power + 10 + (player.midboss_cleared ? 7 : 0);
         player_skill_power = itemheld.skillpower + 10;
+        player_sword_attack_speed = itemheld.attackSpeed;
         player_bow_skill_power = bowHeld != null ? bowHeld.bowSkillPower : 100;
 
     }
@@ -144,6 +146,7 @@ public class GameManager : MonoBehaviour
         RunUpgradeState.Reset();
         player_level = 0; player_speed = 8; player_power = 10; player_skill_power = 10;
         player_bow_skill_power = 100;
+        player_sword_attack_speed = 0;
         player_HP = player_current_HP = 100;
         current_stage = -1;
     }

@@ -29,12 +29,16 @@ MonoBehaviour:
   alwaysPierceEnemies: 0
   fullChargeRicochets: 0
   impactExplosion: 0
+  crystalBow: 0
   explodeOnAnyContact: 0
   ricochetWithoutFullCharge: 0
   ricochetDamageBonus: 0.2
   explodeOnRicochetEnemyHit: 0
   usePinkEffects: 0
   projectileCount: 1
+  fullChargeProjectileCount: 0
+  fullChargeDamageMultiplier: 1
+  minimumProjectileSpacingDegrees: 8
   projectileSpacingDegrees: 0
   fullChargeProjectileSpacingDegrees: -1
   scaleTrailWithCharge: 1
@@ -50,5 +54,5 @@ MonoBehaviour:
   pullForwardOffset: 3
   pullDuration: 0.3
   pullSpeed: 12
-  arrowSpeed: 50
+  arrowSpeed: 20
   arrowLifetime: 3

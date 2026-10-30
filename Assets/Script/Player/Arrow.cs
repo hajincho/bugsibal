@@ -86,7 +86,7 @@ public class Arrow : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             bool wall = hits[i].collider != null && hits[i].collider.GetComponentInParent<EnemyData>() == null;
-            if (TryHit(hits[i].collider, hits[i].normal, hits[i].centroid) && (!launched || wall)) break;
+            if (TryHit(hits[i].collider, hits[i].normal, hits[i].centroid, hits[i].point) && (!launched || wall)) break;
         }
     }
 
@@ -100,7 +100,7 @@ public class Arrow : MonoBehaviour
         return TryHit(other, normal.normalized, rigid.position);
     }
 
-    bool TryHit(Collider2D other, Vector2 normal, Vector2 contactPosition)
+    bool TryHit(Collider2D other, Vector2 normal, Vector2 contactPosition, Vector2? surfacePoint = null)
     {
         if (HasHit || !launched || other == null || StageRewardController.InputBlocked) return false;
         if (other.transform.IsChildOf(transform) || (owner != null && other.transform.IsChildOf(owner)) ||
@@ -140,6 +140,8 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
+        var crystalImpact = GetComponent<CrystalArrowImpact>();
+        if (crystalImpact != null) crystalImpact.OnImpact(enemy, contactPosition, surfacePoint);
         var queenImpact = GetComponent<BowQueenImpact>();
         if (queenImpact != null) queenImpact.OnImpact(enemy, contactPosition);
         if (special != null)

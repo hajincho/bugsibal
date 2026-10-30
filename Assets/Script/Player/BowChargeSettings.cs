@@ -35,12 +35,18 @@ public sealed class BowChargeSettings : ScriptableObject
     public bool alwaysPierceEnemies;
     [HideInInspector] public int fullChargeRicochets; // Legacy serialized value; timed arrows have no bounce limit.
     public bool impactExplosion;
+    public bool crystalBow;
     public bool explodeOnAnyContact;
     public bool ricochetWithoutFullCharge;
     [Min(0f)] public float ricochetDamageBonus = .2f;
     public bool explodeOnRicochetEnemyHit = true;
     public bool usePinkEffects;
     [Range(1, 4)] public int projectileCount = 1;
+    [Tooltip("0 keeps the regular projectile count; otherwise used only at full charge.")]
+    [Range(0, 4)] public int fullChargeProjectileCount;
+    [Tooltip("Per-arrow damage multiplier applied only when fully charged.")]
+    [Min(0f)] public float fullChargeDamageMultiplier = 1f;
+    [Min(0f)] public float minimumProjectileSpacingDegrees = 8f;
     [Min(0f)] public float projectileSpacingDegrees;
     [Tooltip("Adjacent arrow spacing at full charge; negative keeps constant spacing.")]
     public float fullChargeProjectileSpacingDegrees = -1f;
@@ -119,19 +125,21 @@ public sealed class BowChargeSettings : ScriptableObject
 
     public Vector2[] ShotDirections(Vector2 aim, float seconds)
     {
-        int count = Mathf.Clamp(projectileCount, 1, 4);
+        int count = Mathf.Clamp(fullChargeProjectileCount > 0 && ChargeFraction(seconds) >= 1f
+            ? fullChargeProjectileCount : projectileCount, 1, 4);
         if(count == 1) return new[] { ShotDirection(aim, seconds) };
         if(aim.sqrMagnitude < .0001f) aim = Vector2.right;
         float center = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
         float spread = SpreadAt(seconds);
-        float spacing = Mathf.Max(8f, ProjectileSpacingAt(seconds));
+        float minimumSpacing = Mathf.Max(0f, minimumProjectileSpacingDegrees);
+        float spacing = Mathf.Max(minimumSpacing, ProjectileSpacingAt(seconds));
         float previous = float.NegativeInfinity;
         var result = new Vector2[count];
         for(int i=0;i<count;i++)
         {
             float nominal = (i - (count-1)*.5f) * spacing;
-            // Independent inaccuracy, constrained so adjacent arrows never converge below 8 degrees.
-            float low = Mathf.Max(nominal-spread, previous+8f);
+            // Preserve the configured minimum separation while applying independent inaccuracy.
+            float low = Mathf.Max(nominal-spread, previous+minimumSpacing);
             float offset = Random.Range(low, nominal+spread);
             previous = offset;
             float angle = (center+offset) * Mathf.Deg2Rad;
@@ -143,6 +151,7 @@ public sealed class BowChargeSettings : ScriptableObject
     public float DamageAt(float seconds)
     {
         float bonusRate = ChargeFraction(seconds) * Mathf.Max(0f, maxChargeBonusPercent) / 100f;
-        return Mathf.Max(0f, baseDamage + RunUpgradeState.PowerBonus) * (1f + bonusRate);
+        float damage = Mathf.Max(0f, baseDamage + RunUpgradeState.PowerBonus) * (1f + bonusRate);
+        return ChargeFraction(seconds) >= 1f ? damage * Mathf.Max(0f, fullChargeDamageMultiplier) : damage;
     }
 }

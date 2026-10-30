@@ -8,6 +8,9 @@ public sealed class ArtemisiaBurst : MonoBehaviour
     readonly List<LineRenderer> rays = new List<LineRenderer>();
     float startedAt, radius;
     bool pink;
+    bool customTint;
+    Color tint;
+    float widthScale = 1f;
     const float Duration = .45f;
 
     public void Initialize(Material material, float effectRadius, bool pinkEffect = false)
@@ -18,6 +21,12 @@ public sealed class ArtemisiaBurst : MonoBehaviour
         for (int i = 0; i < 2; i++) rings.Add(CreateLine(material, "SkyShockRing", 49, true));
         for (int i = 0; i < 14; i++) rays.Add(CreateLine(material, "SkyLightShard", 2, false));
         Update();
+    }
+
+    public void InitializeColored(Material material, float effectRadius, Color color, float sizeScale = 1f)
+    {
+        customTint = true; tint = color; widthScale = sizeScale;
+        Initialize(material, effectRadius);
     }
 
     LineRenderer CreateLine(Material material, string label, int count, bool loop)
@@ -47,8 +56,8 @@ public sealed class ArtemisiaBurst : MonoBehaviour
                 float a = i * Mathf.PI * 2f / (line.positionCount - 1);
                 line.SetPosition(i, new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f) * size);
             }
-            line.widthMultiplier = Mathf.Lerp(.09f, .015f, t);
-            line.startColor = line.endColor = pink ? new Color(1f, .7f, .84f, fade * (j == 0 ? .9f : .65f)) : new Color(.55f, .9f, 1f, fade * (j == 0 ? .9f : .65f));
+            line.widthMultiplier = Mathf.Lerp(.09f, .015f, t) * widthScale;
+            line.startColor = line.endColor = customTint ? new Color(tint.r, tint.g, tint.b, fade * (j == 0 ? .9f : .65f)) : pink ? new Color(1f, .7f, .84f, fade * (j == 0 ? .9f : .65f)) : new Color(.55f, .9f, 1f, fade * (j == 0 ? .9f : .65f));
         }
         for (int i = 0; i < rays.Count; i++)
         {
@@ -57,10 +66,10 @@ public sealed class ArtemisiaBurst : MonoBehaviour
             float end = radius * Mathf.Lerp(.12f, .75f + (i % 3) * .12f, Mathf.Sqrt(t));
             rays[i].SetPosition(0, direction * end * Mathf.Lerp(.1f, .85f, t));
             rays[i].SetPosition(1, direction * end);
-            rays[i].startWidth = .065f * (1f - t);
-            rays[i].endWidth = .008f;
-            rays[i].startColor = pink ? new Color(1f, .85f, .93f, fade) : new Color(.8f, .97f, 1f, fade);
-            rays[i].endColor = pink ? new Color(1f, .55f, .75f, 0f) : new Color(.2f, .75f, 1f, 0f);
+            rays[i].startWidth = .065f * (1f - t) * widthScale;
+            rays[i].endWidth = .008f * widthScale;
+            rays[i].startColor = customTint ? new Color(1,1,1,fade) : pink ? new Color(1f, .85f, .93f, fade) : new Color(.8f, .97f, 1f, fade);
+            rays[i].endColor = customTint ? new Color(tint.r,tint.g,tint.b,0) : pink ? new Color(1f, .55f, .75f, 0f) : new Color(.2f, .75f, 1f, 0f);
         }
         if (t >= 1f) Destroy(gameObject);
     }

@@ -118,6 +118,11 @@ public class Bow : MonoBehaviour
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
             if (chargingSettings.useGoldenEffects)
                 shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, shotChargeSeconds);
+            if (chargingSettings.crystalBow)
+            {
+                var crystal = owner.GetComponent<CrystalBowSkill>();
+                if (crystal != null) crystal.OnArrowFired(projectile, shotChargeSeconds);
+            }
         }
         else Destroy(shot);
         }

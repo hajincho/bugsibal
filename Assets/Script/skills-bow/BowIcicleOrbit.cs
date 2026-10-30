@@ -12,7 +12,9 @@ public sealed class BowIcicleOrbit : MonoBehaviour
         public float angle, radius, speed, expiresAt;
         public float axisRatio, orbitTilt, wobblePhase, precession;
         public bool expired;
+        public int crystalColor = -1;
         public Vector2 previous;
+        public Vector2 velocity;
         public HashSet<EnemyData> contacts = new HashSet<EnemyData>();
         public HashSet<EnemyData> current = new HashSet<EnemyData>();
     }
@@ -25,6 +27,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     float startedAt;
     Material defaultSpriteMaterial;
     BowChargeSettings appearanceProfile;
+    bool appearanceCrystal, crystalPaletteAssigned;
     public int LiveCount { get { int count = 0; foreach (var s in shards) if (!s.expired) count++; return count; } }
     public Vector3 Center => transform.position;
 
@@ -36,8 +39,10 @@ public sealed class BowIcicleOrbit : MonoBehaviour
         startedAt = now;
         cleanupAt = now + skill.maxLifetime + Mathf.Max(0f, skill.trailSeconds) + .1f;
         var playerSprite = owner.GetComponentInChildren<SpriteRenderer>();
+        var crystal = owner.GetComponent<CrystalBowSkill>();
+        int orbitCount = crystal != null && crystal.IsActiveBow ? 19 : skill.icicleCount;
         // One random orbit in each radial band keeps the whole radius populated.
-        var radii = new float[Mathf.Max(0, skill.icicleCount)];
+        var radii = new float[Mathf.Max(0, orbitCount)];
         for (int i = 0; i < radii.Length; i++)
             radii[i] = Mathf.Lerp(skill.minRadius, skill.maxRadius, (i + Random.value) / radii.Length);
         for (int i = radii.Length - 1; i > 0; i--)
@@ -45,7 +50,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             int j = Random.Range(0, i + 1);
             float swap = radii[i]; radii[i] = radii[j]; radii[j] = swap;
         }
-        for (int i = 0; i < skill.icicleCount; i++)
+        for (int i = 0; i < orbitCount; i++)
         {
             var go = new GameObject("Icicle_" + (i + 1), typeof(SpriteRenderer), typeof(TrailRenderer));
             go.transform.SetParent(transform, false);
@@ -65,7 +70,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             trail.sortingLayerID = sprite.sortingLayerID; trail.sortingOrder = sprite.sortingOrder - 1;
             trail.numCornerVertices = 2; trail.numCapVertices = 2; trail.emitting = false;
             var shard = new Shard { transform = go.transform, sprite = sprite, trail = trail,
-                angle = i * Mathf.PI * 2f / Mathf.Max(1, skill.icicleCount),
+                angle = i * Mathf.PI * 2f / Mathf.Max(1, orbitCount),
                 radius = radii[i],
                 axisRatio = Random.Range(.82f, .94f),
                 orbitTilt = i * 2.39996323f + Random.Range(-.15f, .15f),
@@ -84,19 +89,74 @@ public sealed class BowIcicleOrbit : MonoBehaviour
     {
         if (player == null || skill == null) return;
         var profile = player.EquippedBowItem != null ? player.EquippedBowItem.bowSettings : null;
-        if (appearanceProfile == profile) return;
-        appearanceProfile = profile;
+        var crystal = player.GetComponent<CrystalBowSkill>();
+        bool rainbow = crystal != null && crystal.IsActiveBow;
+        if (appearanceProfile == profile && appearanceCrystal == rainbow) return;
+        appearanceProfile = profile; appearanceCrystal = rainbow;
+        if(rainbow && !crystalPaletteAssigned)
+        {
+            int[] deck = {0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2};
+            for(int i=deck.Length-1;i>0;i--){int j=Random.Range(0,i+1);int temp=deck[i];deck[i]=deck[j];deck[j]=temp;}
+            for(int i=0;i<shards.Count;i++)
+            {
+                if(i<deck.Length)shards[i].crystalColor=deck[i];
+                else
+                {
+                    shards[i].expired=true;shards[i].sprite.enabled=false;
+                    shards[i].trail.emitting=false;shards[i].trail.Clear();
+                }
+            }
+            crystalPaletteAssigned=true;
+        }
         bool gold = profile != null && profile.useGoldenEffects;
         foreach (var shard in shards)
         {
             if (shard.expired || shard.sprite == null) continue;
-            shard.sprite.sharedMaterial = gold && profile.goldSpriteMaterial != null ? profile.goldSpriteMaterial : defaultSpriteMaterial;
+            int tint=Mathf.Clamp(shard.crystalColor,0,2);
+            shard.sprite.sharedMaterial = rainbow ? crystal.spriteMaterials[tint] :
+                gold && profile.goldSpriteMaterial != null ? profile.goldSpriteMaterial : defaultSpriteMaterial;
             shard.sprite.color = Color.white;
             if (shard.trail == null) continue;
-            shard.trail.sharedMaterial = gold && profile.goldGlowMaterial != null ? profile.goldGlowMaterial : skill.trailMaterial;
-            shard.trail.startColor = gold ? new Color(1f, .8f, .13f, .65f) : new Color(.35f, .85f, 1f, .65f);
-            shard.trail.endColor = gold ? new Color(1f, .48f, .025f, 0f) : new Color(.12f, .4f, 1f, 0f);
+            shard.trail.sharedMaterial = rainbow ? crystal.glowMaterials[tint] :
+                gold && profile.goldGlowMaterial != null ? profile.goldGlowMaterial : skill.trailMaterial;
+            shard.trail.startColor = rainbow ? new Color(1,1,1,.7f) :
+                gold ? new Color(1f, .8f, .13f, .65f) : new Color(.35f, .85f, 1f, .65f);
+            shard.trail.endColor = rainbow ? new Color(1,1,1,0) :
+                gold ? new Color(1f, .48f, .025f, 0f) : new Color(.12f, .4f, 1f, 0f);
         }
+    }
+    public int[] CrystalColorCounts
+    {
+        get
+        {
+            var counts=new int[3];
+            foreach(var s in shards)if(!s.expired && s.crystalColor>=0)counts[s.crystalColor]++;
+            return counts;
+        }
+    }
+    public int ReleaseCrystal(List<EnemyData> targets,CrystalBowSkill crystal)
+    {
+        if(targets==null || crystal==null)return 0;
+        RefreshAppearance();
+        int count=0;
+        int total=LiveCount;
+        float outwardPhase=Random.Range(0f,360f);
+        foreach(var s in shards)
+        {
+            if(s.expired)continue;
+            Vector2 local=OrbitPoint(s,s.angle,Time.time-startedAt);
+            Vector2 tangent=s.velocity.sqrMagnitude>.001f ? s.velocity :
+                (OrbitPoint(s,s.angle+Mathf.Sign(s.speed)*.01f,Time.time-startedAt)-local)*
+                (Mathf.Abs(s.speed)*Mathf.Deg2Rad/.01f);
+            s.expired=true;s.contacts.Clear();s.current.Clear();
+            s.transform.SetParent(null,true);
+            s.transform.gameObject.AddComponent<CrystalIcicleProjectile>().Initialize(
+                crystal,skill,Mathf.Clamp(s.crystalColor,0,2),
+                targets.Count>0 ? targets[count%targets.Count] : null,tangent,
+                (Vector2)(Quaternion.Euler(0,0,outwardPhase+count*360f/Mathf.Max(1,total))*Vector2.right),Mathf.Sign(s.speed));
+            count++;
+        }
+        return count;
     }
 
     void Position(Shard s)
@@ -140,6 +200,7 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             Position(s);
             Vector2 current = s.transform.position;
             Vector2 travel = current - s.previous;
+            s.velocity = travel / Mathf.Max(.001f,Time.fixedDeltaTime);
             s.current.Clear();
             int count = Physics2D.CircleCastNonAlloc(s.previous, skill.hitRadius,
                 travel.sqrMagnitude > .000001f ? travel.normalized : Vector2.right, hits, travel.magnitude);

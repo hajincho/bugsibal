@@ -13,7 +13,7 @@ public static class RunUpgradeState
     public static float Shield { get; private set; }
     public static float NormalPower => GameManager.player_power + PowerBonus;
     public static float SkillPower => GameManager.player_skill_power;
-    public static float AttackRate => 1f + AttackSpeedBonus;
+    public static float AttackRate => Mathf.Max(.01f, 1f + AttackSpeedBonus + GameManager.player_sword_attack_speed / 100f);
     public static float BowChargeRate => 1f + AttackSpeedBonus;
     public static float MoveSpeed => GameManager.player_speed * (1f + MoveSpeedBonus);
     static readonly HashSet<string> claimed = new HashSet<string>();

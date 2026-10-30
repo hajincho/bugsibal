@@ -49,7 +49,7 @@ public class CombatPresentation : MonoBehaviour
     }
     public void Register(EnemyData enemy)
     {
-        if(enemy==null || enemy.CompareTag("drumtong"))return;
+        if(enemy==null || enemy.CompareTag("drumtong") || enemy.GetComponent<TrainingDummy>()!=null)return;
         if(enemy.IsBoss){boss=enemy;lastBossHP=lastBossMax=-1;return;}
         if(bars.ContainsKey(enemy))return;
         EnemyBar bar;

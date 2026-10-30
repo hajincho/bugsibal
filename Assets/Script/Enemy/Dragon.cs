@@ -59,7 +59,7 @@ public class Dragon : MonoBehaviour
             return;
         }
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        if (!breathing && Time.time >= nextAttack && Vector2.Distance(PlayerPoint(), fire.position) <= fireLength * 0.9f)
+        if (!breathing && Time.time >= nextAttack && Vector2.Distance(AimTargetPoint(), fire.position) <= fireLength * 0.9f)
             StartCoroutine(Breathe());
     }
 
@@ -70,9 +70,9 @@ public class Dragon : MonoBehaviour
         animator.SetBool("Breathing", true);
 
         // 플레이어 쪽으로 몸을 돌리고 커진 뒤 입 위치에서 조준. 뿜는 동안 방향은 고정
-        facing = PlayerPoint().x >= transform.position.x ? originX : -originX;
+        facing = AimTargetPoint().x >= transform.position.x ? originX : -originX;
         yield return Resize(1f, attackScale, windup);
-        aim = (PlayerPoint() - (Vector2)fire.position).normalized;
+        aim = (AimTargetPoint() - (Vector2)fire.position).normalized;
         if (aim == Vector2.zero) aim = Vector2.right * Mathf.Sign(-transform.localScale.x);
         Vector3 local = transform.InverseTransformVector(aim); // 뒤집힌 루트 기준 방향
         fire.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(local.y, local.x) * Mathf.Rad2Deg);
@@ -86,6 +86,7 @@ public class Dragon : MonoBehaviour
                 GameManager.DamagePlayer(enemyData.enemy_power);
                 playerScript.Hited();
             }
+            if(!EnemyFrostStatus.IsFrozenOn(this))LunarClone.HurtInCone(fire.position,aim,fireLength,fireWidth,enemyData.enemy_power);
             yield return new WaitForSeconds(tickInterval);
         }
         fire.gameObject.SetActive(false);
@@ -132,6 +133,8 @@ public class Dragon : MonoBehaviour
         float half = Mathf.Lerp(0.3f, fireWidth / 2f, along / fireLength);
         return Mathf.Abs(d.x * aim.y - d.y * aim.x) <= half;
     }
+
+    Vector2 AimTargetPoint(){var t=LunarClone.ResolveTarget(transform.position,player);var echo=t!=null?t.GetComponent<LunarClone>():null;return echo!=null?echo.AimPoint:PlayerPoint();}
 
     Vector2 PlayerPoint() => playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)player.position;
 

@@ -50,7 +50,7 @@ public class DevilMage : MonoBehaviour
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
         int rand = Random.Range(0, 3);
         
-        distance = Vector2.Distance(transform.position, player_transform.position);
+        distance = Vector2.Distance(transform.position, LunarClone.TargetPosition(this,player_transform));
 
         if (enemyData.enemy_current_HP <= 0) // 사망
         {

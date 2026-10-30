@@ -53,7 +53,7 @@ public class Golem : MonoBehaviour
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
         rigidbody.velocity = Vector3.zero;
-        distance = Vector2.Distance(transform.position, player_transform.position);
+        distance = Vector2.Distance(transform.position, LunarClone.TargetPosition(this,player_transform));
         //���� ��Ÿ�� ����
         dash_cooltime += Time.deltaTime;
         //�����ȯ ��Ÿ�� ����
@@ -99,7 +99,7 @@ public class Golem : MonoBehaviour
             //��� ����
             enemyMove.moveable = false;
             //Ÿ�� ��ġ ����
-            dash_target = new Vector3(player_transform.position.x, player_transform.position.y, 0);
+            dash_target = new Vector3(LunarClone.TargetPosition(this,player_transform).x, LunarClone.TargetPosition(this,player_transform).y, 0);
             dash_cooltime = 0;
             Invoke("Dash_set", 1f);
             

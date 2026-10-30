@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class EnemyData : MonoBehaviour
 {
+    public static event System.Action<EnemyData> Died;
     public float enemy_HP;
     public float enemy_current_HP;
     public float enemy_power;
@@ -61,6 +62,7 @@ public class EnemyData : MonoBehaviour
             var frost = GetComponent<EnemyFrostStatus>();
             if (frost != null) frost.CancelStatus();
             DisableDeathHitboxes();
+            if(Died!=null)Died(this);
         }
         float applied=before-enemy_current_HP;
         if(applied>0f)LastHitTime=Time.time;

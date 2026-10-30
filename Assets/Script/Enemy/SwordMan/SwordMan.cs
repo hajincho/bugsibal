@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +74,7 @@ public class SwordMan : MonoBehaviour
     {
         if (dead || player == null || player_script == null) return;
 
-        float distance = Vector2.Distance(player.transform.position, transform.position);
+        float distance = Vector2.Distance(LunarClone.TargetPosition(this,player.transform), transform.position);
 
         if (distance < 4)
         {
@@ -134,9 +134,9 @@ public class SwordMan : MonoBehaviour
 
     bool PlayerBelow()
     {
-        bool yInRange = player.transform.position.y < transform.position.y - 3.5f && player.transform.position.y >= transform.position.y - 6.0f;
+        bool yInRange = LunarClone.TargetPosition(this,player.transform).y < transform.position.y - 3.5f && LunarClone.TargetPosition(this,player.transform).y >= transform.position.y - 6.0f;
 
-        bool xInRange = player.transform.position.x < transform.position.x + 3.0f && player.transform.position.x > transform.position.x - 3.0f;
+        bool xInRange = LunarClone.TargetPosition(this,player.transform).x < transform.position.x + 3.0f && LunarClone.TargetPosition(this,player.transform).x > transform.position.x - 3.0f;
 
         if (yInRange && xInRange)
         {
@@ -290,7 +290,7 @@ public class SwordMan : MonoBehaviour
 
             if (swordInstance != null)
             {
-                Vector3 directionToPlayer = (player.transform.position - swordInstance.transform.position).normalized;
+                Vector3 directionToPlayer = (LunarClone.TargetPosition(this,player.transform) - swordInstance.transform.position).normalized;
                 ThrownSword swordScript = swordInstance.GetComponent<ThrownSword>();
 
                 if (swordScript != null)
@@ -332,7 +332,9 @@ public class SwordMan : MonoBehaviour
         }
 
         Vector2 startPos = transform.position;
-        Vector2 targetPos = player.transform.position;
+        Transform lunarTarget = LunarClone.ResolveTarget(transform.position,player.transform);
+        bool targetIsEcho=lunarTarget!=player.transform;
+        Vector2 targetPos = lunarTarget.position;
         yield return StartCoroutine(MoveToPosition(targetPos, 0.133f));
 
         Vector2 overshoot = targetPos + (targetPos - startPos).normalized * 20f;
@@ -343,8 +345,8 @@ public class SwordMan : MonoBehaviour
         rigid.velocity = Vector2.zero;
 
         yield return new WaitForSeconds(0.2f);
-        GameManager.DamagePlayer(GameManager.player_current_HP * 0.5f);
-        player_script.Hited();
+        if(targetIsEcho){var echoTarget=lunarTarget!=null?lunarTarget.GetComponent<LunarClone>():null;if(echoTarget!=null)echoTarget.Hurt(echoTarget.Health*.5f);}
+        else {GameManager.DamagePlayer(GameManager.player_current_HP * 0.5f);player_script.Hited();}
         yield return new WaitForSeconds(0.8f);
 
         foreach (Collider2D collider in childColliders)
@@ -425,7 +427,7 @@ public class SwordMan : MonoBehaviour
             if (wallCol.IsTouching(playerCollider))
             {
 
-                Vector3 direction = (player.transform.position.x < transform.position.x) ? Vector3.left : Vector3.right;
+                Vector3 direction = (LunarClone.TargetPosition(this,player.transform).x < transform.position.x) ? Vector3.left : Vector3.right;
                 player.transform.position = transform.position + direction * 3f;
 
                 if (able2 && attack_able)

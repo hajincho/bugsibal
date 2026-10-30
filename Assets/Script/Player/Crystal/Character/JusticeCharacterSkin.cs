@@ -37,6 +37,7 @@ public sealed class JusticeCharacterSkin : MonoBehaviour
     public JusticeSkinPart[] parts;
     public SpriteRenderer[] originalRenderers;
     public bool IsTransformed { get; private set; }
+    public Vector3 VisualHeadCenter => skinRenderers.Count>0 && skinRenderers[0]!=null ? skinRenderers[0].bounds.center : transform.position+Vector3.up*1.6f;
     public Transform headMotionRoot;
     public Transform visualScaleRoot;
     [Min(.01f)] public float visualScale=1f;
@@ -105,7 +106,7 @@ public sealed class JusticeCharacterSkin : MonoBehaviour
             }
             else renderer.transform.localRotation=Quaternion.Euler(0,0,
                 Mathf.Sin(Time.time*(moving?11f:3.5f)+i*.9f)*part.swayDegrees*motion);
-            renderer.color=animator!=null && animator.GetInteger("Attacked")>=0 ?
+            renderer.color=owner!=null && owner.IsDamageFlashing ?
                 new Color(1f,.72f,.72f,1f) : Color.white;
         }
         if(moving)ReduceRunningHeadMotion();

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +21,8 @@ public class SwordAttack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        var echo=other.GetComponentInParent<LunarClone>();
+        if(echo!=null){float multiplier=sword_man.attack_mode==SwordMan.AttackMode.Sting?.5f:sword_man.attack_mode==SwordMan.AttackMode.ParryWindow?2f:1f;echo.Hurt(enemy_data.enemy_power*multiplier);return;}
         if (other.CompareTag("PlayerWeapon") && sword_man.attack_mode == SwordMan.AttackMode.ParryWindow)
         {
             sword_man.Parrying();

@@ -39,7 +39,7 @@ public class Bat : MonoBehaviour
     void Update()
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        distance = Vector2.Distance(transform.position, player_transform.position);
+        distance = Vector2.Distance(transform.position, LunarClone.TargetPosition(this,player_transform));
         
         if (enemyData.enemy_current_HP <= 0)
         {

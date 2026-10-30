@@ -120,6 +120,8 @@ public class Bow : MonoBehaviour
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
             if (chargingSettings.useGoldenEffects)
                 shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, shotChargeSeconds);
+            var lunar = owner.GetComponent<LunarBowSkill>();
+            if(lunar != null)lunar.OnArrowFired(projectile,shotChargeSeconds);
             if (chargingSettings.crystalBow)
             {
                 var crystal = owner.GetComponent<CrystalBowSkill>();

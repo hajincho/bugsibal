@@ -73,6 +73,7 @@ public sealed class BowChargeSettings : ScriptableObject
 
     [InspectorName("절차적 활 당기기 모션")]
     public bool proceduralDrawMotion;
+    public bool rigidStringDraw;
     [Min(.01f)] public float heldVisualScale=1f;
 
     [Header("지속 피해")]

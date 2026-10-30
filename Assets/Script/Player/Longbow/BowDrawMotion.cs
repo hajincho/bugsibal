@@ -12,11 +12,14 @@ public sealed class BowDrawMotion : MonoBehaviour
     Vector3[] vertices;
     float halfLength, bendDistance, lastDraw, recoilTime;
     bool activeMotion;
+    LunarRigidBowDraw rigidDraw;
 
     public void Apply(BowChargeSettings profile, SpriteRenderer renderer)
     {
         ClearVisual();
         source = renderer;
+        if(profile!=null && profile.rigidStringDraw && source!=null)
+        {rigidDraw=GetComponent<LunarRigidBowDraw>();if(rigidDraw==null)rigidDraw=gameObject.AddComponent<LunarRigidBowDraw>();rigidDraw.Initialize(profile,source);return;}
         activeMotion = profile != null && profile.proceduralDrawMotion && source != null && profile.idleSprite != null;
         if (!activeMotion) return;
         var sprite = profile.idleSprite;
@@ -69,6 +72,7 @@ public sealed class BowDrawMotion : MonoBehaviour
 
     public void SetDraw(float fraction)
     {
+        if(rigidDraw!=null){rigidDraw.SetDraw(fraction);return;}
         if (!activeMotion || mesh == null) return;
         recoilTime = 0f;
         lastDraw = Mathf.Clamp01(fraction);
@@ -91,11 +95,13 @@ public sealed class BowDrawMotion : MonoBehaviour
 
     public void Release()
     {
+        if(rigidDraw!=null){rigidDraw.Release();return;}
         if (activeMotion) recoilTime = .18f;
     }
 
     public void ResetDraw()
     {
+        if(rigidDraw!=null)rigidDraw.ResetDraw();
         recoilTime = 0f;
         if (activeMotion && mesh != null) Deform(0f);
     }
@@ -112,6 +118,7 @@ public sealed class BowDrawMotion : MonoBehaviour
     void OnDestroy() { ClearVisual(); }
     void ClearVisual()
     {
+        if(rigidDraw!=null){rigidDraw.Clear();rigidDraw=null;}
         activeMotion = false;
         if (source != null) source.enabled = true;
         if (visual != null) { visual.SetActive(false); Destroy(visual); }

@@ -45,7 +45,7 @@ public class Devil1 : MonoBehaviour
     void Update()
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        distance = Vector2.Distance(transform.position, player_transform.position);
+        distance = Vector2.Distance(transform.position, LunarClone.TargetPosition(this,player_transform));
 
         if (enemyData.enemy_current_HP <= 0) // 사망
         {
@@ -75,11 +75,11 @@ public class Devil1 : MonoBehaviour
             reinforced_attack = true;
             if (playerMove.player_direction == 0) // 텔레포트 방향 설정
             {
-                targetPosition = player_transform.position - (Vector3)Vector2.right * 1.5f;
+                targetPosition = LunarClone.TargetPosition(this,player_transform) - (Vector3)Vector2.right * 1.5f;
             }
             else if (playerMove.player_direction == 1)
             {
-                targetPosition = player_transform.position - (Vector3)Vector2.left * 1.5f;
+                targetPosition = LunarClone.TargetPosition(this,player_transform) - (Vector3)Vector2.left * 1.5f;
             }
            
             transform.position = targetPosition;

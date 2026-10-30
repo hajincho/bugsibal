@@ -17,6 +17,8 @@ public class CombatPresentation : MonoBehaviour
         public float lastHP=-1,lastMax=-1;
     }
     readonly Dictionary<EnemyData,EnemyBar> bars=new Dictionary<EnemyData,EnemyBar>();
+    readonly Dictionary<LunarClone,EnemyBar> cloneBars=new Dictionary<LunarClone,EnemyBar>();
+    readonly List<LunarClone> removeClones=new List<LunarClone>();
     readonly Stack<EnemyBar> spareBars=new Stack<EnemyBar>();
     readonly Stack<DamageText> spareNumbers=new Stack<DamageText>();
     readonly List<DamageText> activeNumbers=new List<DamageText>();
@@ -62,8 +64,52 @@ public class CombatPresentation : MonoBehaviour
             bar.text=FeatureUI.Text("HP",bar.root,new Vector2(148,25),new Vector2(0,-12),"",21,config.font,Color.white);
             bar.text.outlineWidth=.12f;bar.text.outlineColor=new Color32(10,12,19,255);
         }
+        bar.fill.color=new Color(.6f,.88f,.4f);bar.text.color=Color.white;
         bar.lastHP=bar.lastMax=-1;bar.root.gameObject.SetActive(true);bars.Add(enemy,bar);
     }
+
+    public void RegisterClone(LunarClone clone)
+    {
+        if(clone==null || cloneBars.ContainsKey(clone))return;
+        EnemyBar bar;
+        if(spareBars.Count>0)bar=spareBars.Pop();
+        else
+        {
+            bar=new EnemyBar();bar.root=FeatureUI.Rect("LunarCloneHealth",canvas,new Vector2(148,40),Vector2.zero);
+            var bg=FeatureUI.Image("Track",bar.root,new Vector2(136,13),new Vector2(0,7),new Color(.03f,.035f,.05f,.95f));
+            bar.fill=FeatureUI.Image("Fill",bg.transform,new Vector2(130,7),Vector2.zero,Color.white);ConfigureFill(bar.fill);
+            bar.text=FeatureUI.Text("HP",bar.root,new Vector2(148,25),new Vector2(0,-12),"",21,config.font,Color.white);
+            bar.text.outlineWidth=.12f;bar.text.outlineColor=new Color32(10,12,19,255);
+        }
+        bar.fill.color=new Color(.74f,.77f,.82f);bar.text.color=new Color(.83f,.86f,.9f);
+        bar.lastHP=bar.lastMax=-1;bar.root.gameObject.SetActive(true);cloneBars.Add(clone,bar);
+    }
+    public void UnregisterClone(LunarClone clone)
+    {
+        EnemyBar bar;if(cloneBars.TryGetValue(clone,out bar)){bar.root.gameObject.SetActive(false);spareBars.Push(bar);cloneBars.Remove(clone);}
+    }
+    void UpdateCloneBars()
+    {
+        removeClones.Clear();
+        foreach(var pair in cloneBars)
+        {
+            var clone=pair.Key;var bar=pair.Value;
+            if(clone==null){removeClones.Add(clone);bar.root.gameObject.SetActive(false);spareBars.Push(bar);continue;}
+            Vector2 point;
+            bool visible=clone.isActiveAndEnabled && clone.Health>0 && Project(clone.transform.position+Vector3.up*2.65f,out point);
+            if(!visible){bar.root.gameObject.SetActive(false);continue;}
+            bar.root.gameObject.SetActive(true);
+            Project(clone.transform.position+Vector3.up*2.65f,out point);bar.root.anchoredPosition=point;
+            if(!Mathf.Approximately(bar.lastHP,clone.Health)||!Mathf.Approximately(bar.lastMax,clone.MaxHealth))
+            {
+                bar.fill.fillAmount=Mathf.Clamp01(clone.Health/clone.MaxHealth);
+                bar.text.text=string.Format("{0:0.#} / {1:0.#}",clone.Health,clone.MaxHealth);
+                bar.lastHP=clone.Health;bar.lastMax=clone.MaxHealth;
+            }
+        }
+        foreach(var clone in removeClones)cloneBars.Remove(clone);
+    }
+
     public void Unregister(EnemyData enemy)
     {
         if(boss==enemy){boss=null;bossRoot.gameObject.SetActive(false);}
@@ -73,6 +119,8 @@ public class CombatPresentation : MonoBehaviour
     public void SceneChanged()
     {
         foreach(var pair in bars){pair.Value.root.gameObject.SetActive(false);spareBars.Push(pair.Value);}
+        foreach(var pair in cloneBars){pair.Value.root.gameObject.SetActive(false);spareBars.Push(pair.Value);}
+        cloneBars.Clear();
         bars.Clear();boss=null;if(bossRoot!=null)bossRoot.gameObject.SetActive(false);
         for(int i=activeNumbers.Count-1;i>=0;i--)if(activeNumbers[i]!=null)activeNumbers[i].Recycle();
     }
@@ -123,6 +171,7 @@ public class CombatPresentation : MonoBehaviour
             {bar.fill.fillAmount=enemy.enemy_HP>0?Mathf.Clamp01(enemy.enemy_current_HP/enemy.enemy_HP):0;bar.text.text=string.Format("{0:0.#} / {1:0.#}",Mathf.Max(0,enemy.enemy_current_HP),enemy.enemy_HP);bar.lastHP=enemy.enemy_current_HP;bar.lastMax=enemy.enemy_HP;}
         }
         foreach(var enemy in remove)bars.Remove(enemy);
+        UpdateCloneBars();
         bool showBoss=boss!=null && boss.gameObject.activeInHierarchy && boss.enemy_current_HP>0;bossRoot.gameObject.SetActive(showBoss);if(!showBoss)return;
         if(!Mathf.Approximately(lastBossHP,boss.enemy_current_HP)||!Mathf.Approximately(lastBossMax,boss.enemy_HP))
         {

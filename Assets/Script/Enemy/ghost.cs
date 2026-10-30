@@ -260,13 +260,13 @@ public class Ghost : MonoBehaviour
         {
             Vector3 offset = playerMove.player_direction == 0 ? 
                 Vector3.right * teleportDistance : Vector3.left * teleportDistance;
-            targetPosition = playerTransform.position + offset;
+            targetPosition = LunarClone.TargetPosition(this,playerTransform) + offset;
         }
         else
         {
             Vector3 offset = playerMove.player_direction == 0 ? 
                 Vector3.left * teleportDistance : Vector3.right * teleportDistance;
-            targetPosition = playerTransform.position + offset;
+            targetPosition = LunarClone.TargetPosition(this,playerTransform) + offset;
         }
 
         targetPosition = ValidateTeleportPosition(targetPosition);
@@ -343,21 +343,21 @@ public class Ghost : MonoBehaviour
             
             if (playerMove.player_direction == 0) 
             {
-                frontPos = playerTransform.position + Vector3.left * teleportDistance;
-                backPos = playerTransform.position + Vector3.right * teleportDistance;
+                frontPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.left * teleportDistance;
+                backPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.right * teleportDistance;
             }
             else 
             {
-                frontPos = playerTransform.position + Vector3.right * teleportDistance;
-                backPos = playerTransform.position + Vector3.left * teleportDistance;
+                frontPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.right * teleportDistance;
+                backPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.left * teleportDistance;
             }
             
             Gizmos.DrawWireSphere(frontPos, 0.5f);
-            Gizmos.DrawLine(playerTransform.position, frontPos);
+            Gizmos.DrawLine(LunarClone.TargetPosition(this,playerTransform), frontPos);
             
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(backPos, 0.5f);
-            Gizmos.DrawLine(playerTransform.position, backPos);
+            Gizmos.DrawLine(LunarClone.TargetPosition(this,playerTransform), backPos);
         }
     }
 }

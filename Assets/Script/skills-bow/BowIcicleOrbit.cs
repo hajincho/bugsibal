@@ -108,20 +108,22 @@ public sealed class BowIcicleOrbit : MonoBehaviour
             }
             crystalPaletteAssigned=true;
         }
+        var lunar=player.GetComponent<LunarBowSkill>();
+        bool silver=lunar!=null && lunar.IsActiveBow;
         bool gold = profile != null && profile.useGoldenEffects;
         foreach (var shard in shards)
         {
             if (shard.expired || shard.sprite == null) continue;
             int tint=Mathf.Clamp(shard.crystalColor,0,2);
-            shard.sprite.sharedMaterial = rainbow ? crystal.spriteMaterials[tint] :
+            shard.sprite.sharedMaterial = silver ? lunar.silverMaterial : rainbow ? crystal.spriteMaterials[tint] :
                 gold && profile.goldSpriteMaterial != null ? profile.goldSpriteMaterial : defaultSpriteMaterial;
             shard.sprite.color = Color.white;
             if (shard.trail == null) continue;
-            shard.trail.sharedMaterial = rainbow ? crystal.glowMaterials[tint] :
+            shard.trail.sharedMaterial = silver ? lunar.trailMaterial : rainbow ? crystal.glowMaterials[tint] :
                 gold && profile.goldGlowMaterial != null ? profile.goldGlowMaterial : skill.trailMaterial;
-            shard.trail.startColor = rainbow ? new Color(1,1,1,.7f) :
+            shard.trail.startColor = silver ? new Color(.88f,.94f,1f,.65f) : rainbow ? new Color(1,1,1,.7f) :
                 gold ? new Color(1f, .8f, .13f, .65f) : new Color(.35f, .85f, 1f, .65f);
-            shard.trail.endColor = rainbow ? new Color(1,1,1,0) :
+            shard.trail.endColor = silver ? new Color(.7f,.8f,.9f,0) : rainbow ? new Color(1,1,1,0) :
                 gold ? new Color(1f, .48f, .025f, 0f) : new Color(.12f, .4f, 1f, 0f);
         }
     }

@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         player_current_HP = Mathf.Clamp(player_current_HP - (amount - absorbed), 0, player_HP);
         float applied = absorbed + before - player_current_HP;
         var character = GameObject.FindGameObjectWithTag("Player");
-        if (character != null) CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(character.transform), applied, CombatDamageKind.PlayerHit);
+        if (character != null){if(applied>0){var hurtPlayer=character.GetComponent<Player>();if(hurtPlayer!=null)hurtPlayer.NotifyDamageTaken();}CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(character.transform), applied, CombatDamageKind.PlayerHit);}
         return applied;
     }
 

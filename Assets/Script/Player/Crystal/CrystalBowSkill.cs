@@ -8,6 +8,7 @@ public sealed class CrystalBowSkill : MonoBehaviour
     public Material[] glowMaterials = new Material[3];
     public Material[] trailMaterials = new Material[3];
     public Material sparkleMaterial;
+    public Sprite[] explosionSprites = new Sprite[3];
     public GameObject hud;
     public UnityEngine.UI.Image icon;
     public UnityEngine.UI.Image cooldownMask;
@@ -55,11 +56,34 @@ public sealed class CrystalBowSkill : MonoBehaviour
         var orbit=e.ActiveOrbit;
         int released=orbit.ReleaseCrystal(targets,this);
         if(released<=0)return false;
+        KnockbackNearbyEnemies(e);
         readyAt=Time.time+cooldownSeconds;
         e.ConsumeOrbitForCrystal(orbit);
         RefreshHUD();
         return true;
     }
+    void KnockbackNearbyEnemies(BowIcicleSkill orbitSkill)
+    {
+        Vector2 center=orbitSkill.transform.position+orbitSkill.centerOffset;
+        float radius=Mathf.Max(.01f,orbitSkill.maxRadius);
+        var pushes=new List<EnemyBowPull>();
+        foreach(var enemy in CrystalEffects.Targets(center,radius))
+        {
+            Vector2 target=CrystalEffects.TargetPoint(enemy);
+            Vector2 radial=target-center;
+            if(radial.sqrMagnitude>=radius*radius)continue;
+            Vector2 direction=radial.sqrMagnitude>.0001f ? radial.normalized :
+                (Vector2)(Quaternion.Euler(0,0,Random.Range(0f,360f))*Vector2.right);
+            Vector2 destination=(Vector2)enemy.transform.position+center+direction*radius-target;
+            var push=enemy.GetComponent<EnemyBowPull>();
+            if(push==null)push=enemy.gameObject.AddComponent<EnemyBowPull>();
+            push.KnockbackTo(destination,.3f);
+            pushes.Add(push);
+        }
+        for(int i=0;i<pushes.Count;i++)
+            for(int j=i+1;j<pushes.Count;j++)pushes[i].IgnoreCollisionsWith(pushes[j]);
+    }
+
     public float ExplosionRadius => owner != null && owner.GetComponent<BowExplosiveArrowSkill>() != null ?
         owner.GetComponent<BowExplosiveArrowSkill>().explosionRadius : 3.25f;
     void RefreshHUD()

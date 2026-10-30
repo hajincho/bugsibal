@@ -11,6 +11,7 @@ public sealed class EnemyBowPull : MonoBehaviour
     EnemyFrostStatus frost;
     Vector2 destination;
     float speed, remaining;
+    float knockbackUntil;
     Vector2 commandedPosition;
     bool hasCommandedPosition;
     Collider2D[] colliders;
@@ -29,13 +30,23 @@ public sealed class EnemyBowPull : MonoBehaviour
 
     public void PullTo(Vector2 point, float pullSpeed, float seconds)
     {
-        if (enemy == null || enemy.enemy_current_HP <= 0f) return;
+        if (enemy == null || enemy.enemy_current_HP <= 0f || Time.time < knockbackUntil) return;
         destination = point;
         speed = Mathf.Max(0f, pullSpeed);
         remaining = Mathf.Max(0f, seconds);
         frost = GetComponent<EnemyFrostStatus>();
         hasCommandedPosition = false;
         enabled = remaining > 0f && speed > 0f;
+    }
+
+    public void KnockbackTo(Vector2 point, float seconds)
+    {
+        if(enemy==null || enemy.enemy_current_HP<=0f)return;
+        float duration=Mathf.Max(.02f,seconds);
+        float distance=Vector2.Distance(transform.position,point);
+        knockbackUntil=0f;
+        PullTo(point,distance/duration*1.15f,duration);
+        knockbackUntil=Time.time+duration;
     }
 
     public void IgnoreCollisionsWith(EnemyBowPull other)
@@ -107,6 +118,7 @@ public sealed class EnemyBowPull : MonoBehaviour
     void OnDisable()
     {
         remaining = 0f;
+        knockbackUntil = 0f;
         hasCommandedPosition = false;
         foreach (ulong key in ignoredPairs)
         {

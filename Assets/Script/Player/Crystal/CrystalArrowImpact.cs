@@ -10,6 +10,7 @@ public sealed class CrystalArrowImpact : MonoBehaviour
     float radius;
     Material material,sparkMaterial;
     CrystalTracer tracer;
+    Sprite explosionSprite;
     Vector3 localTip,launchTip;
     Vector2 launchDirection;
     public void Initialize(CrystalBowSkill skill,int color,float effectRadius,bool fullCharge)
@@ -21,6 +22,7 @@ public sealed class CrystalArrowImpact : MonoBehaviour
         tracer=gameObject.AddComponent<CrystalTracer>();
         tracer.Initialize(transform,localTip,skill.trailMaterials[color],skill.sparkleMaterial,fullCharge);
         launchTip=tracer.Tip;
+        explosionSprite=skill.explosionSprites!=null && color<skill.explosionSprites.Length ? skill.explosionSprites[color] : null;
     }
     public void OnImpact(EnemyData primary,Vector2 contactCenter,Vector2? surfacePoint=null)
     {
@@ -32,7 +34,7 @@ public sealed class CrystalArrowImpact : MonoBehaviour
         if(tracer!=null)tracer.FinishAt(TraceEnd);
         if(!CanExplode)return;
         HasExploded=true;
-        CrystalEffects.Burst(ColorIndex,position,radius,material,primary);
+        CrystalEffects.Burst(ColorIndex,position,radius,material,primary,1f,false,explosionSprite);
         CrystalEffects.BurstSparkles(position,radius,ColorIndex,sparkMaterial);
     }
 }

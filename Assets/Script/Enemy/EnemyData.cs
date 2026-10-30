@@ -51,6 +51,8 @@ public class EnemyData : MonoBehaviour
     public float TakeDamage(float amount,CombatDamageKind kind=CombatDamageKind.Normal)
     {
         if(float.IsNaN(amount)||float.IsInfinity(amount)||amount<=0 || enemy_current_HP<=0)return 0;
+        var dummy=GetComponent<TrainingDummy>();
+        if(dummy!=null && dummy.isActiveAndEnabled)return dummy.TakeHit(amount,kind);
         float before=enemy_current_HP;
         enemy_current_HP=Mathf.Clamp(enemy_current_HP-amount,0,Mathf.Max(0,enemy_HP));
         if (enemy_current_HP <= 0f)

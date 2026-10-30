@@ -35,11 +35,14 @@ public static class CrystalEffects
         }
     }
     public static void Burst(int color,Vector2 position,float radius,Material material,
-        EnemyData primary=null,float visualScale=1f,bool icicleBurst=false)
+        EnemyData primary=null,float visualScale=1f,bool icicleBurst=false,Sprite explosionSprite=null)
     {
         var root=new GameObject("CrystalBurst_"+color);
         root.transform.position=position;
-        root.AddComponent<ArtemisiaBurst>().InitializeColored(material,radius,CrystalBowSkill.ColorAt(color),visualScale);
+        if(color!=0 && explosionSprite!=null)
+            root.AddComponent<CrystalElementBurst>().Initialize(explosionSprite,radius,color);
+        else
+            root.AddComponent<ArtemisiaBurst>().InitializeColored(material,radius,CrystalBowSkill.ColorAt(color),visualScale);
         var targets=Targets(position,radius,primary);
         var pulls=new List<EnemyBowPull>();
         foreach(var enemy in targets)

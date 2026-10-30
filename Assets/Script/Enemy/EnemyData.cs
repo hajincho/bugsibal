@@ -10,6 +10,7 @@ public class EnemyData : MonoBehaviour
     bool initialized;
     Collider2D[] deathColliders;
     Rigidbody2D[] deathBodies;
+    public static float LastHitTime=-999f;// 마지막으로 적이 피해를 입은 시각, EnemyDirectionArrow가 사용
     public bool IsBoss => GetComponent<Golem>()!=null || GetComponent<SwordMan>()!=null || name=="FinalBoss";
     void Start()
     {
@@ -62,6 +63,7 @@ public class EnemyData : MonoBehaviour
             DisableDeathHitboxes();
         }
         float applied=before-enemy_current_HP;
+        if(applied>0f)LastHitTime=Time.time;
         CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(transform),applied,kind);
         if(enemy_current_HP<=0 && IsBoss && SceneManager.GetActiveScene().name=="MidBoss" && FindObjectOfType<StageManager>()==null)
         {var controller=StageRewardController.Ensure();if(controller!=null)controller.MarkCleared();}

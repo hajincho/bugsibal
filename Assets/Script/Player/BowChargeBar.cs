@@ -5,6 +5,8 @@ public sealed class BowChargeBar : MonoBehaviour
     public CanvasGroup visibility;
     public UnityEngine.UI.Image fill;
     public Bow source;
+    public UnityEngine.UI.Image minimumChargeMarker;
+    public Color belowMinimumColor = new Color(1f, .08f, .08f);
     public Color emptyColor = new Color(1f, 0.38f, 0.06f);
     public Color middleColor = new Color(1f, 0.88f, 0.08f);
     public Color fullColor = new Color(0.2f, 0.95f, 0.3f);
@@ -14,7 +16,7 @@ public sealed class BowChargeBar : MonoBehaviour
     void LateUpdate()
     {
         if (source != null && source.isActiveAndEnabled && source.IsBowMode)
-            Show(source.ChargeSeconds, source.settings);
+            Show(source.IsCharging ? source.EffectiveChargeSeconds : 0f, source.settings);
         else Hide();
     }
 
@@ -26,7 +28,7 @@ public sealed class BowChargeBar : MonoBehaviour
         if (fill != null)
         {
             fill.rectTransform.anchorMax = new Vector2(fraction, 1f);
-            fill.color = fraction <= 0.5f
+            fill.color = !settings.CanFireAt(seconds) ? belowMinimumColor : fraction <= 0.5f
                 ? Color.Lerp(emptyColor, middleColor, fraction * 2f)
                 : Color.Lerp(middleColor, fullColor, (fraction - 0.5f) * 2f);
         }

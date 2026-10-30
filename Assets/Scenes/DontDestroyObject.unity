@@ -2298,7 +2298,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 200
+    weight: 100
     bowSettings: {fileID: 11400000, guid: 90654bb9c2a82dc4eb2651f770d49f93, type: 2}
     itemType: 0
   - itemName: "\uC815\uC758\uC758 \uC774\uB984\uC73C\uB85C"
@@ -2310,7 +2310,7 @@ MonoBehaviour:
     health: 10
     attackSpeed: 0
     duration: 0
-    weight: 50
+    weight: 25
     bowSettings: {fileID: 11400000, guid: 1d35d6084c374f04884e71269b65b5f8, type: 2}
     itemType: 0
   - itemName: "\uC0AC\uB791\uC758 \uC774\uB984\uC73C\uB85C"
@@ -2322,7 +2322,7 @@ MonoBehaviour:
     health: 10
     attackSpeed: 0
     duration: 0
-    weight: 50
+    weight: 25
     bowSettings: {fileID: 11400000, guid: d6bddc2fa6c5e7c489ee674698412d58, type: 2}
     itemType: 0
   legacyItems: []

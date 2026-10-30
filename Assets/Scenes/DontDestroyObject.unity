@@ -2058,7 +2058,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 1500
+    weight: 1200
     bowSettings: {fileID: 11400000, guid: 6c416ce5c3557004baa5d058f866d7f2, type: 2}
     itemType: 0
   - itemName: "\uC99D\uC624\uC758 \uC5EC\uC655"
@@ -2070,7 +2070,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 800
+    weight: 500
     bowSettings: {fileID: 11400000, guid: d1e6bb19c0f44ad4ea1e6830fac3c32c, type: 2}
     itemType: 0
   - itemName: "\uB808\uACE8\uB77C\uC2A4"

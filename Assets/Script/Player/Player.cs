@@ -311,6 +311,8 @@ public class Player : MonoBehaviour
         CancelInvoke(nameof(ToIdle));
         var judgement = GetComponent<JudgementModeSkill>();
         if (judgement != null) judgement.ResetForEquip(item);
+        var crystal = GetComponent<CrystalBowSkill>();
+        if (crystal != null) crystal.ResetForEquip(item);
         equippedBowItem = item;
         ownedBow = item.bowSettings;
         bow_num = item.value;

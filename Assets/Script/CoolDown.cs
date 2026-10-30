@@ -42,6 +42,14 @@ public class CoolDown : MonoBehaviour
     }
 
 
+    public void Restart(float seconds)
+    {
+        skillcooltime=Mathf.Max(.001f,seconds);
+        currentcooltime=skillcooltime;
+        iscoolingdown=true;
+        if(cooltime!=null)cooltime.fillAmount=1f;
+    }
+
     public void UseSkill()
     {
 

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
+  m_Name: GakgungSettings
+  m_EditorClassIdentifier: 
+  idleSprite: {fileID: 21300000, guid: fb2d739f3df8f8b43b8929032a5c60a6, type: 3}
+  drawSprites: []
+  arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
+  maxChargeSeconds: 1
+  baseDamage: 5
+  maxChargeBonusPercent: 150
+  maxSpreadDegrees: 10
+  fullChargeSpreadDegrees: 0
+  pierceEnemiesAtFullCharge: 0
+  alwaysPierceEnemies: 0
+  fullChargeRicochets: 0
+  impactExplosion: 0
+  crystalBow: 0
+  explodeOnAnyContact: 0
+  ricochetWithoutFullCharge: 0
+  ricochetDamageBonus: 0.2
+  explodeOnRicochetEnemyHit: 0
+  usePinkEffects: 0
+  projectileCount: 1
+  fullChargeProjectileCount: 3
+  fullChargeDamageMultiplier: 0.67
+  minimumProjectileSpacingDegrees: 4
+  projectileSpacingDegrees: 4
+  fullChargeProjectileSpacingDegrees: 4
+  scaleTrailWithCharge: 1
+  useGoldenEffects: 0
+  goldSpriteMaterial: {fileID: 0}
+  goldGlowMaterial: {fileID: 0}
+  maxArrowTrailSeconds: 0
+  proceduralDrawMotion: 1
+  dotDamagePerSecond: 0
+  dotDuration: 2
+  pullOnFullCharge: 0
+  pullRadius: 2.5
+  pullForwardOffset: 3
+  pullDuration: 0.3
+  pullSpeed: 12
+  arrowSpeed: 25
+  arrowLifetime: 3

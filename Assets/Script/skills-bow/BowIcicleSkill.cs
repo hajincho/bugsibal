@@ -64,6 +64,15 @@ public sealed class BowIcicleSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) Cast();
     }
 
+    public void ConsumeOrbitForCrystal(BowIcicleOrbit orbit)
+    {
+        if(ActiveOrbit!=orbit)return;
+        ActiveOrbit=null;
+        readyAt=Time.time+cooldownSeconds;
+        if(cooldown!=null)cooldown.Restart(cooldownSeconds);
+        if(orbit!=null)Destroy(orbit.gameObject);
+    }
+
     public bool Cast()
     {
         if (RemainingCooldown > 0f || icicleSprite == null || !WeaponSkillLoadout.CanUse(this)) return false;

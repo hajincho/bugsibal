@@ -458,7 +458,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.8}
+  m_AnchoredPosition: {x: 0.5, y: 1.35}
   m_SizeDelta: {x: 2.95, y: 2.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &24240843
@@ -2298,7 +2298,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 200
+    weight: 100
     bowSettings: {fileID: 11400000, guid: 90654bb9c2a82dc4eb2651f770d49f93, type: 2}
     itemType: 0
   - itemName: "\uC815\uC758\uC758 \uC774\uB984\uC73C\uB85C"
@@ -2310,7 +2310,7 @@ MonoBehaviour:
     health: 10
     attackSpeed: 0
     duration: 0
-    weight: 50
+    weight: 25
     bowSettings: {fileID: 11400000, guid: 1d35d6084c374f04884e71269b65b5f8, type: 2}
     itemType: 0
   - itemName: "\uC0AC\uB791\uC758 \uC774\uB984\uC73C\uB85C"
@@ -2322,7 +2322,7 @@ MonoBehaviour:
     health: 10
     attackSpeed: 0
     duration: 0
-    weight: 50
+    weight: 25
     bowSettings: {fileID: 11400000, guid: d6bddc2fa6c5e7c489ee674698412d58, type: 2}
     itemType: 0
   legacyItems: []
@@ -2548,7 +2548,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.8}
+  m_AnchoredPosition: {x: -0.375, y: 1.55}
   m_SizeDelta: {x: 2.95, y: 2.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &303003728
@@ -11981,6 +11981,484 @@ MonoBehaviour:
   cooldownText: {fileID: 358359339}
   targetRadius: 8
   cooldownSeconds: 32
+--- !u!114 &1326420279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326420228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec29d41e12eee048b23bf05159452c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requiredBow: {fileID: 11400000, guid: 1d35d6084c374f04884e71269b65b5f8, type: 2}
+  skinPrefix: JusticeSkin
+  partsTexture: {fileID: 2800000, guid: 0bfa878f3cf8bde48a0593fbbd38f6d4, type: 3}
+  parts:
+  - name: Head
+    rectangle:
+      serializedVersion: 2
+      x: 15
+      y: 512
+      width: 464
+      height: 447
+    pivot: {x: 0.5, y: 0.03}
+    bone: {fileID: 1057506433}
+    localPosition: {x: 0, y: -0.03, z: 0}
+    height: 0.55
+    widthScale: 1
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 7
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: Body
+    rectangle:
+      serializedVersion: 2
+      x: 611
+      y: 533
+      width: 408
+      height: 369
+    pivot: {x: 0.5, y: 0.96}
+    bone: {fileID: 1792235620}
+    localPosition: {x: 0, y: 0.15, z: 0}
+    height: 0.35
+    widthScale: 1.1
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 1
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: LeftArm
+    rectangle:
+      serializedVersion: 2
+      x: 1151
+      y: 532
+      width: 224
+      height: 348
+    pivot: {x: 0.78, y: 0.94}
+    bone: {fileID: 854868249}
+    localPosition: {x: -0.03, y: 0.03, z: 0}
+    height: 0.22
+    widthScale: 1.4
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: -20
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 1792235620}
+    shoulderPosition: {x: -0.135, y: 0.1, z: 0}
+    handPosition: {x: -0.095, y: -0.13}
+    spriteHandVector: {x: -0.085, y: -0.235}
+  - name: RightArm
+    rectangle:
+      serializedVersion: 2
+      x: 1709
+      y: 532
+      width: 226
+      height: 348
+    pivot: {x: 0.22, y: 0.94}
+    bone: {fileID: 396375553}
+    localPosition: {x: 0.1, y: 0.03, z: 0}
+    height: 0.22
+    widthScale: 1.4
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 20
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 1792235620}
+    shoulderPosition: {x: 0.135, y: 0.1, z: 0}
+    handPosition: {x: 0.125, y: -0.13}
+    spriteHandVector: {x: 0.085, y: -0.235}
+  - name: LeftLeg
+    rectangle:
+      serializedVersion: 2
+      x: 704
+      y: 81
+      width: 160
+      height: 350
+    pivot: {x: 0.5, y: 0.98}
+    bone: {fileID: 2054441988}
+    localPosition: {x: 0, y: 0.02, z: 0}
+    height: 0.19
+    widthScale: 1.8
+    flipX: 0
+    compactLegRoot: {fileID: 1792235621}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: -0.12500018, y: 0.18749997, z: 0.005235735}
+    restPosition: {x: -0.09, y: 0.18749997, z: 0.005235735}
+    sortingOrder: -9
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: RightLeg
+    rectangle:
+      serializedVersion: 2
+      x: 704
+      y: 81
+      width: 160
+      height: 350
+    pivot: {x: 0.5, y: 0.98}
+    bone: {fileID: 1717943718}
+    localPosition: {x: 0, y: 0.02, z: 0}
+    height: 0.19
+    widthScale: 1.8
+    flipX: 0
+    compactLegRoot: {fileID: 1792235621}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0.124999955, y: 0.18749997, z: -0.005235735}
+    restPosition: {x: 0.09, y: 0.18749997, z: -0.005235735}
+    sortingOrder: -4
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: Ponytail
+    rectangle:
+      serializedVersion: 2
+      x: 1186
+      y: 28
+      width: 350
+      height: 449
+    pivot: {x: 0.18, y: 0.92}
+    bone: {fileID: 1057506433}
+    localPosition: {x: 0.2, y: 0.46, z: 0}
+    height: 0.416
+    widthScale: 1
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: -25
+    swayDegrees: 7
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: Ribbon
+    rectangle:
+      serializedVersion: 2
+      x: 1693
+      y: 119
+      width: 215
+      height: 293
+    pivot: {x: 0.2, y: 0.95}
+    bone: {fileID: 1057506433}
+    localPosition: {x: 0.22, y: 0.33, z: 0}
+    height: 0.23
+    widthScale: 1
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 8
+    swayDegrees: 10
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  originalRenderers:
+  - {fileID: 1946185518}
+  - {fileID: 830892314}
+  - {fileID: 1934103122}
+  - {fileID: 457468600}
+  - {fileID: 1503456690}
+  - {fileID: 791310474}
+  - {fileID: 1945087118}
+  - {fileID: 1918086648}
+  - {fileID: 1452732427}
+  - {fileID: 1461981624}
+  - {fileID: 1263994282}
+  - {fileID: 1906125902}
+  - {fileID: 1802371005}
+  - {fileID: 1104883578}
+  - {fileID: 1047356475}
+  - {fileID: 988242016}
+  - {fileID: 866660203}
+  - {fileID: 1979618842}
+  - {fileID: 793618590}
+  - {fileID: 889757232}
+  - {fileID: 1489218458}
+  - {fileID: 1051322921}
+  - {fileID: 1704788763}
+  - {fileID: 894003900}
+  - {fileID: 314681060}
+  headMotionRoot: {fileID: 1792235620}
+  visualScaleRoot: {fileID: 1792235621}
+  visualScale: 1.0891688
+  idleHeadCenter: {x: -0.016690046, y: 0.35326332, z: -0.0007924096}
+  runningHeadMotion: 0.5
+--- !u!114 &1326420280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326420228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec29d41e12eee048b23bf05159452c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requiredBow: {fileID: 11400000, guid: d6bddc2fa6c5e7c489ee674698412d58, type: 2}
+  skinPrefix: LoveSkin
+  partsTexture: {fileID: 2800000, guid: 912afe7daa7124940861659b3ff660b4, type: 3}
+  parts:
+  - name: Head
+    rectangle:
+      serializedVersion: 2
+      x: 11
+      y: 256
+      width: 238
+      height: 205
+    pivot: {x: 0.5, y: 0.03}
+    bone: {fileID: 1057506433}
+    localPosition: {x: 0, y: -0.03, z: 0}
+    height: 0.55
+    widthScale: 0.89410263
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 7
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: Body
+    rectangle:
+      serializedVersion: 2
+      x: 300
+      y: 263
+      width: 212
+      height: 192
+    pivot: {x: 0.5, y: 0.96}
+    bone: {fileID: 1792235620}
+    localPosition: {x: 0, y: 0.15, z: 0}
+    height: 0.35
+    widthScale: 1.1015186
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 1
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: LeftArm
+    rectangle:
+      serializedVersion: 2
+      x: 568
+      y: 256
+      width: 140
+      height: 185
+    pivot: {x: 0.78, y: 0.94}
+    bone: {fileID: 854868249}
+    localPosition: {x: -0.03, y: 0.03, z: 0}
+    height: 0.22
+    widthScale: 1.1908046
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 3
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 1792235620}
+    shoulderPosition: {x: -0.105, y: 0.09, z: 0}
+    handPosition: {x: -0.085, y: -0.13}
+    spriteHandVector: {x: -0.085, y: -0.235}
+  - name: RightArm
+    rectangle:
+      serializedVersion: 2
+      x: 837
+      y: 256
+      width: 140
+      height: 186
+    pivot: {x: 0.22, y: 0.94}
+    bone: {fileID: 396375553}
+    localPosition: {x: 0.1, y: 0.03, z: 0}
+    height: 0.22
+    widthScale: 1.207931
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: 20
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 1792235620}
+    shoulderPosition: {x: 0.105, y: 0.09, z: 0}
+    handPosition: {x: 0.115, y: -0.13}
+    spriteHandVector: {x: 0.085, y: -0.235}
+  - name: LeftLeg
+    rectangle:
+      serializedVersion: 2
+      x: 346
+      y: 31
+      width: 88
+      height: 197
+    pivot: {x: 0.5, y: 0.98}
+    bone: {fileID: 2054441988}
+    localPosition: {x: 0, y: 0.02, z: 0}
+    height: 0.19
+    widthScale: 1.8420779
+    flipX: 0
+    compactLegRoot: {fileID: 1792235621}
+    hipAnchor: {fileID: 1792235620}
+    hipRestPosition: {x: -0.000000074505806, y: 0.28964177, z: 0}
+    sourceRestPosition: {x: -0.12500018, y: 0.18749997, z: 0.005235735}
+    restPosition: {x: -0.083, y: 0.18749997, z: 0.005235735}
+    sortingOrder: -9
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: RightLeg
+    rectangle:
+      serializedVersion: 2
+      x: 346
+      y: 31
+      width: 88
+      height: 197
+    pivot: {x: 0.5, y: 0.98}
+    bone: {fileID: 1717943718}
+    localPosition: {x: 0, y: 0.02, z: 0}
+    height: 0.19
+    widthScale: 1.8420779
+    flipX: 0
+    compactLegRoot: {fileID: 1792235621}
+    hipAnchor: {fileID: 1792235620}
+    hipRestPosition: {x: -0.000000074505806, y: 0.28964177, z: 0}
+    sourceRestPosition: {x: 0.124999955, y: 0.18749997, z: -0.005235735}
+    restPosition: {x: 0.083, y: 0.18749997, z: -0.005235735}
+    sortingOrder: -4
+    swayDegrees: 0
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: LeftTwinTail
+    rectangle:
+      serializedVersion: 2
+      x: 540
+      y: 22
+      width: 150
+      height: 227
+    pivot: {x: 0.8, y: 0.94}
+    bone: {fileID: 1057506433}
+    localPosition: {x: -0.22, y: 0.38, z: 0}
+    height: 0.6
+    widthScale: 0.6
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: -25
+    swayDegrees: 7
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  - name: RightTwinTail
+    rectangle:
+      serializedVersion: 2
+      x: 847
+      y: 22
+      width: 149
+      height: 227
+    pivot: {x: 0.2, y: 0.94}
+    bone: {fileID: 1057506433}
+    localPosition: {x: 0.22, y: 0.38, z: 0}
+    height: 0.6
+    widthScale: 0.6
+    flipX: 0
+    compactLegRoot: {fileID: 0}
+    hipAnchor: {fileID: 0}
+    hipRestPosition: {x: 0, y: 0, z: 0}
+    sourceRestPosition: {x: 0, y: 0, z: 0}
+    restPosition: {x: 0, y: 0, z: 0}
+    sortingOrder: -25
+    swayDegrees: 7
+    shoulderAnchor: {fileID: 0}
+    shoulderPosition: {x: 0, y: 0, z: 0}
+    handPosition: {x: 0, y: 0}
+    spriteHandVector: {x: 0, y: 0}
+  originalRenderers:
+  - {fileID: 1946185518}
+  - {fileID: 830892314}
+  - {fileID: 1934103122}
+  - {fileID: 457468600}
+  - {fileID: 1503456690}
+  - {fileID: 791310474}
+  - {fileID: 1945087118}
+  - {fileID: 1918086648}
+  - {fileID: 1452732427}
+  - {fileID: 1461981624}
+  - {fileID: 1263994282}
+  - {fileID: 1906125902}
+  - {fileID: 1802371005}
+  - {fileID: 1104883578}
+  - {fileID: 1047356475}
+  - {fileID: 988242016}
+  - {fileID: 866660203}
+  - {fileID: 1979618842}
+  - {fileID: 793618590}
+  - {fileID: 889757232}
+  - {fileID: 1489218458}
+  - {fileID: 1051322921}
+  - {fileID: 1704788763}
+  - {fileID: 894003900}
+  - {fileID: 314681060}
+  headMotionRoot: {fileID: 1792235620}
+  visualScaleRoot: {fileID: 1792235621}
+  visualScale: 1.0891688
+  idleHeadCenter: {x: -0.016690046, y: 0.35326332, z: -0.0007924096}
+  runningHeadMotion: 0.5
 --- !u!1 &1329834846
 GameObject:
   m_ObjectHideFlags: 0
@@ -12984,63 +13462,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1486029682
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12.9628105
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.6789234
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1936857506999451394, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7855975257183592281, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
-      propertyPath: m_Name
-      value: PortalToStage8
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: abeaa678c59819947a2a3c75caeeb59c, type: 3}
+--- !u!212 &1489218458 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1318015052646631560, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+  m_PrefabInstance: {fileID: 1792235618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503456688
 GameObject:
   m_ObjectHideFlags: 0
@@ -15243,6 +15669,162 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _eyeList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _eyeList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _eyeList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _eyeList.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _backList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _bodyList.Array.data[5]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _hairList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _hairList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _hairList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _hairList.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[5]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[6]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[7]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[8]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[9]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _pantList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _pantList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _armorList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _armorList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _armorList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _clothList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _clothList.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _clothList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[10]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[13]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[14]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _itemList.Array.data[15]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _weaponList.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 361460055840478724, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      propertyPath: _weaponList.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1464730375410413697, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -15519,6 +16101,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3612574541986927706, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1326420276}
+    - targetCorrespondingSourceObject: {fileID: 3612574541986927706, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1326420279}
+    - targetCorrespondingSourceObject: {fileID: 3612574541986927706, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1326420280}
     - targetCorrespondingSourceObject: {fileID: 7189260121402408894, guid: cd7f90e88b30cd5459078a455e48f276, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1084269662}
@@ -18051,7 +18639,6 @@ SceneRoots:
   - {fileID: 764294658}
   - {fileID: 2040147032}
   - {fileID: 803282310}
-  - {fileID: 1486029682}
   - {fileID: 22920635}
   - {fileID: 1803832983}
   - {fileID: 1512326268}

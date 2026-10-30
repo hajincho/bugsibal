@@ -56,6 +56,7 @@ public sealed class BowDrawMotion : MonoBehaviour
         material.color = source.color;
         visual = new GameObject("LongbowDrawVisual", typeof(MeshFilter), typeof(MeshRenderer));
         visual.transform.SetParent(transform, false);
+        visual.transform.localScale=Vector3.one*Mathf.Max(.01f,profile.heldVisualScale);
         visual.layer = gameObject.layer;
         visual.GetComponent<MeshFilter>().sharedMesh = mesh;
         var meshRenderer = visual.GetComponent<MeshRenderer>();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,14 +28,15 @@ public sealed class LunarBowSkill : MonoBehaviour
     Vector3 haloPosition,haloVelocity;
     bool haloFollowing;
     bool hadEquipped;
+    readonly HashSet<int> qualifiedDeaths=new HashSet<int>();
     static readonly string[] Stages={"I","II","III"};
     void Awake(){owner=GetComponent<Player>();}
     void OnEnable(){EnemyData.Died+=OnEnemyDied;SceneManager.activeSceneChanged+=SceneChanged;}
     void OnDisable(){EnemyData.Died-=OnEnemyDied;SceneManager.activeSceneChanged-=SceneChanged;Cleanup();if(halo!=null)halo.enabled=false;if(hud!=null)hud.SetActive(false);}
     void OnDestroy(){if(halo!=null)Destroy(halo.gameObject);}
     void SceneChanged(Scene a,Scene b){Cleanup();}
-    void Cleanup(){LunarClone.Clear(this);foreach(var orb in FindObjectsOfType<LunarSoulOrb>())if(orb.Source==this)Destroy(orb.gameObject);hasteUntil=0;}
-    public void ResetForEquip(Item item){Mode=1;readyAt=0;hasteUntil=0;}
+    void Cleanup(){qualifiedDeaths.Clear();LunarClone.Clear(this);foreach(var orb in FindObjectsOfType<LunarSoulOrb>())if(orb.Source==this)Destroy(orb.gameObject);hasteUntil=0;}
+    public void ResetForEquip(Item item){Mode=1;readyAt=0;hasteUntil=0;qualifiedDeaths.Clear();}
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.C))TryCycle();
@@ -51,8 +53,8 @@ public sealed class LunarBowSkill : MonoBehaviour
     void LateUpdate()
     {
         if(hud!=null)hud.SetActive(IsActiveBow);
-        if(icon!=null && modeIcons!=null && modeIcons.Length>=Mode)icon.sprite=modeIcons[Mode-1];
-        if(modeLabel!=null)modeLabel.text=Stages[Mode-1];
+        if(icon!=null && modeIcons!=null && modeIcons.Length>=Mode)icon.sprite=modeIcons[Mode==1?2:Mode==2?0:1];
+        if(modeLabel!=null){modeLabel.text=string.Empty;modeLabel.enabled=false;}
         if(cooldownMask!=null)cooldownMask.fillAmount=cooldownSeconds>0 ? RemainingCooldown/cooldownSeconds : 0;
         if(halo==null && haloSprite!=null)
         {
@@ -80,11 +82,18 @@ public sealed class LunarBowSkill : MonoBehaviour
             halo.color=new Color(1f,1f,1f,.58f+.08f*Mathf.Sin(Time.time*2f));
         }
     }
-    void OnEnemyDied(EnemyData enemy)
+    void OnEnemyDied(EnemyData enemy){}
+    // Only projectile and Bow Q paths call this; Bow E never qualifies for clone modes.
+    public void OnQualifiedEnemyDefeated(EnemyData enemy,Vector3 position)
     {
-        if(!IsEquipped || SuppressKillRewards || enemy==null || enemy.GetComponent<TrainingDummy>()!=null || GameManager.player_current_HP<=0)return;
-        if(Mode<3)LunarClone.Create(this,enemy.transform.position,Mode==1);
-        else if(Random.value<.5f)SpawnOrb(enemy.transform.position);
+        if(!IsEquipped || SuppressKillRewards || Mode==1 || enemy==null || enemy.GetComponent<TrainingDummy>()!=null || GameManager.player_current_HP<=0)return;
+        if(!qualifiedDeaths.Add(enemy.GetInstanceID()))return;
+        LunarClone.Create(this,position,Mode==2);
+    }
+    public void OnEnemyHit(EnemyData enemy,Vector3 position)
+    {
+        if(!IsEquipped || SuppressKillRewards || Mode!=1 || enemy==null || !enemy.CompareTag("Enemy") || enemy.GetComponent<drum>()!=null || enemy.GetComponent<TrainingDummy>()!=null || GameManager.player_current_HP<=0)return;
+        if(Random.value<.25f)SpawnOrb(position);
     }
     public LunarSoulOrb SpawnOrb(Vector3 position)
     {

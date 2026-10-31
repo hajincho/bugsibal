@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
   m_Name: LunarArtemisiaSettings
   m_EditorClassIdentifier: 
+  queenGatherWaveSprite: {fileID: 0}
   idleSprite: {fileID: 21300000, guid: 7bd71d92682e37b498793c7de788b50c, type: 3}
   drawSprites: []
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
   maxChargeSeconds: 1
   baseDamage: 10
-  maxChargeBonusPercent: 200
+  maxChargeBonusPercent: 300
   maxSpreadDegrees: 7
   fullChargeSpreadDegrees: 0
   pierceEnemiesAtFullCharge: 0

@@ -11,7 +11,13 @@ public sealed class CrystalTracer : MonoBehaviour
     Color sparkTint;
     int sparkColorIndex;
     bool whiteFirst;
-    public Vector3 Tip => source!=null ? source.TransformPoint(localTip) : lastTip;
+    public bool PhysicsTip { get; set; }
+    public Vector3 Tip { get { if(source==null)return lastTip;var rb=PhysicsTip?source.GetComponent<Rigidbody2D>():null;return rb!=null?(Vector3)rb.position+Quaternion.Euler(0,0,rb.rotation)*localTip:source.TransformPoint(localTip); } }
+    public void ContinueFromBounce(Vector3 corner)
+    {
+        if(finished || trail==null)return;
+        trail.AddPosition(corner);trail.transform.position=corner;lastSample=lastTip=corner;localTip=Vector3.zero;
+    }
     public TrailRenderer Trail => trail;
     public void Initialize(Transform follow,Vector3 tip,Material glow,Material white,bool sparkles=true)
     {

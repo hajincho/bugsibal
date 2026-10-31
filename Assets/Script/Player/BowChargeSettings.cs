@@ -4,6 +4,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(menuName = "Combat/Bow Charge Settings", fileName = "BowSettings")]
 public sealed class BowChargeSettings : ScriptableObject
 {
+    public Sprite queenGatherWaveSprite;
+
     public const float MinimumFireChargeFraction = .2f;
 
     public bool CanFireAt(float seconds)

@@ -115,6 +115,8 @@ public class Arrow : MonoBehaviour
 
         if (enemy != null && !hitEnemies.Add(enemy)) return false;
         var special = GetComponent<BowRicochetImpact>();
+        var lunarBounce=GetComponent<LunarArrowImpact>();
+        if(enemy==null && lunarBounce!=null && lunarBounce.TryBounce(other,normal,contactPosition,surfacePoint))return true;
         if (enemy == null && special != null && special.TryBounce(other, normal, contactPosition, rigid)) return true;
         bool continues = enemy != null && PiercesEnemies && (special == null || !special.ExplodesOnContact);
         // Mark terminal hits before callbacks; piercing shots retain their velocity and colliders.

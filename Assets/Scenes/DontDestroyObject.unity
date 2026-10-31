@@ -2341,7 +2341,7 @@ MonoBehaviour:
     itemType: 0
   - itemName: "\uAC01\uAD81"
     icon: {fileID: 21300000, guid: fb2d739f3df8f8b43b8929032a5c60a6, type: 3}
-    value: 7
+    value: 3
     power: 0
     skillpower: 0
     bowSkillPower: 100
@@ -2365,7 +2365,7 @@ MonoBehaviour:
     itemType: 0
   - itemName: "\uB808\uACE8\uB77C\uC2A4"
     icon: {fileID: 21300000, guid: 143d7c12ae06da149824921eef8347c1, type: 3}
-    value: 3
+    value: 5
     power: 0
     skillpower: 0
     bowSkillPower: 140
@@ -2377,7 +2377,7 @@ MonoBehaviour:
     itemType: 0
   - itemName: "\uD5E4\uB974\uBA54\uC2A4"
     icon: {fileID: 21300000, guid: a8d626d94593ee34985b0d0b99881a66, type: 3}
-    value: 5
+    value: 6
     power: 0
     skillpower: 0
     bowSkillPower: 140
@@ -2389,7 +2389,7 @@ MonoBehaviour:
     itemType: 0
   - itemName: "\uC815\uC758\uC758 \uC774\uB984\uC73C\uB85C"
     icon: {fileID: 21300000, guid: 95939d27781895e4596e27f99015a7ae, type: 3}
-    value: 8
+    value: 7
     power: 0
     skillpower: 0
     bowSkillPower: 130
@@ -2401,7 +2401,7 @@ MonoBehaviour:
     itemType: 0
   - itemName: "\uC0AC\uB791\uC758 \uC774\uB984\uC73C\uB85C"
     icon: {fileID: 21300000, guid: 6ff0469bedfbb704dbb3b279805ee519, type: 3}
-    value: 6
+    value: 8
     power: 0
     skillpower: 0
     bowSkillPower: 120
@@ -2420,7 +2420,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 10
+    weight: 5000000
     bowSettings: {fileID: 11400000, guid: ccaa8388619eff94f97838d93ef61299, type: 2}
     itemType: 0
   legacyItems: []
@@ -13065,7 +13065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredBow: {fileID: 11400000, guid: ccaa8388619eff94f97838d93ef61299, type: 2}
   skinPrefix: ArtemisiaSkin
-  partsTexture: {fileID: 2800000, guid: 48b11ce2f156ffe468c48936220022c9, type: 3}
+  partsTexture: {fileID: 2800000, guid: 84a5c531220b29942af7461c8eb74f7b, type: 3}
   parts:
   - name: Head
     rectangle:
@@ -13076,8 +13076,8 @@ MonoBehaviour:
       height: 108
     pivot: {x: 0.5, y: 0.03}
     bone: {fileID: 1057506433}
-    localPosition: {x: 0, y: -0.03, z: 0}
-    height: 0.55
+    localPosition: {x: 0.012, y: -0.042, z: 0}
+    height: 0.52
     widthScale: 0.9265073
     flipX: 0
     compactLegRoot: {fileID: 0}
@@ -13220,9 +13220,9 @@ MonoBehaviour:
       height: 115
     pivot: {x: 0.72, y: 0.96}
     bone: {fileID: 1057506433}
-    localPosition: {x: -0.16, y: 0.34, z: 0}
-    height: 0.6
-    widthScale: 0.72
+    localPosition: {x: -0.045, y: 0.315, z: 0}
+    height: 0.62
+    widthScale: 0.84
     flipX: 0
     compactLegRoot: {fileID: 0}
     hipAnchor: {fileID: 0}
@@ -13230,7 +13230,7 @@ MonoBehaviour:
     sourceRestPosition: {x: 0, y: 0, z: 0}
     restPosition: {x: 0, y: 0, z: 0}
     sortingOrder: -25
-    swayDegrees: 1.5
+    swayDegrees: 0.75
     shoulderAnchor: {fileID: 0}
     shoulderPosition: {x: 0, y: 0, z: 0}
     handPosition: {x: 0, y: 0}
@@ -13244,9 +13244,9 @@ MonoBehaviour:
       height: 117
     pivot: {x: 0.28, y: 0.96}
     bone: {fileID: 1057506433}
-    localPosition: {x: 0.16, y: 0.34, z: 0}
-    height: 0.6
-    widthScale: 0.72
+    localPosition: {x: 0.045, y: 0.315, z: 0}
+    height: 0.62
+    widthScale: 0.84
     flipX: 0
     compactLegRoot: {fileID: 0}
     hipAnchor: {fileID: 0}
@@ -13254,7 +13254,7 @@ MonoBehaviour:
     sourceRestPosition: {x: 0, y: 0, z: 0}
     restPosition: {x: 0, y: 0, z: 0}
     sortingOrder: -25
-    swayDegrees: 1.5
+    swayDegrees: 0.75
     shoulderAnchor: {fileID: 0}
     shoulderPosition: {x: 0, y: 0, z: 0}
     handPosition: {x: 0, y: 0}

@@ -87,7 +87,7 @@ public sealed class LunarClone : MonoBehaviour
         if(StageRewardController.InputBlocked || Time.timeScale<=0){motion=Vector2.zero;body.velocity=Vector2.zero;return;}
         float elapsed=Mathf.Max(0,Time.time-born-3f);
         float decay=Mathf.Max(0,elapsed-decayedSeconds);decayedSeconds=elapsed;
-        Health=Mathf.Max(0,Health-decay);if(Health<=0){Die();return;}
+        Health=Mathf.Max(0,Health-decay*2f);if(Health<=0){Die();return;}
         if(pendingAttack && Time.time>=resolveAttackAt)
         {
             pendingAttack=false;

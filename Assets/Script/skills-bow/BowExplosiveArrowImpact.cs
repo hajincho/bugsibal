@@ -17,7 +17,9 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
         if (exploded || primary == null) return;
         exploded = true;
         // Reuse only the sword R visual; its collider/script must not apply sword damage.
-        if (explosionPrefab != null)
+        var lunarVisual=GetComponent<LunarArrowImpact>();
+        if(lunarVisual!=null)lunarVisual.PlayQExplosion(position,radius);
+        if (lunarVisual==null && explosionPrefab != null)
         {
             var effect = Instantiate(explosionPrefab, position, Quaternion.identity);
             effect.name = "BowQExplosion";
@@ -46,6 +48,8 @@ public sealed class BowExplosiveArrowImpact : MonoBehaviour
             damagedEnemies.Add(enemy);
             enemy.TakeDamage(Mathf.Max(0f, arrowDamage * 2f * skillDamageMultiplier), CombatDamageKind.Skill);
             enemy.Hitted();
+            var lunarImpact=GetComponent<LunarArrowImpact>();
+            if(lunarImpact!=null && enemy.enemy_current_HP<=0f)lunarImpact.OnQualifiedEnemyDefeated(enemy,enemy.transform.position);
         }
     }
 }

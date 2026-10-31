@@ -126,6 +126,12 @@ public class CombatPresentation : MonoBehaviour
     }
     public static Vector3 HeadPosition(Transform target)
     {
+        // Slime animation frames include large transparent margins above the body.
+        if(target.GetComponent<Slime>()!=null)
+        {
+            var body=target.GetComponent<Collider2D>();
+            if(body!=null && body.enabled)return new Vector3(target.position.x,body.bounds.max.y+.4f,target.position.z);
+        }
         var renderer=target.GetComponentInChildren<SpriteRenderer>();
         return renderer!=null?new Vector3(target.position.x,renderer.bounds.max.y+.4f,target.position.z):target.position+Vector3.up*2;
     }
@@ -165,7 +171,8 @@ public class CombatPresentation : MonoBehaviour
             var enemy=pair.Key;var bar=pair.Value;
             if(enemy==null){remove.Add(enemy);bar.root.gameObject.SetActive(false);spareBars.Push(bar);continue;}
             Vector2 point=Vector2.zero;
-            bool visible=enemy.gameObject.activeInHierarchy && enemy.enemy_current_HP>0 && Project(HeadPosition(enemy.transform),out point);
+            var ghost=enemy.GetComponent<Ghost>();
+            bool visible=enemy.gameObject.activeInHierarchy && enemy.enemy_current_HP>0 && (ghost==null || ghost.IsRevealed) && Project(HeadPosition(enemy.transform),out point);
             bar.root.gameObject.SetActive(visible);if(!visible)continue;bar.root.anchoredPosition=point;
             if(!Mathf.Approximately(bar.lastHP,enemy.enemy_current_HP)||!Mathf.Approximately(bar.lastMax,enemy.enemy_HP))
             {bar.fill.fillAmount=enemy.enemy_HP>0?Mathf.Clamp01(enemy.enemy_current_HP/enemy.enemy_HP):0;bar.text.text=string.Format("{0:0.#} / {1:0.#}",Mathf.Max(0,enemy.enemy_current_HP),enemy.enemy_HP);bar.lastHP=enemy.enemy_current_HP;bar.lastMax=enemy.enemy_HP;}

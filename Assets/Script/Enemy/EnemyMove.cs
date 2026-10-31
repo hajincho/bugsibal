@@ -23,6 +23,8 @@ public class EnemyMove : MonoBehaviour
     //???? ???? ??? ??????? ?¿????? ??? ???? ??
     float origin_x;
     Animator animator;
+    DevilMage rangedMage;
+    bool retreating;
 
     void Start()
     {
@@ -33,6 +35,7 @@ public class EnemyMove : MonoBehaviour
         target = playerTarget;
         animator = GetComponent<Animator>();
         origin_x = transform.localScale.x;
+        rangedMage = GetComponent<DevilMage>();
 
         if (!animator)
         {
@@ -46,7 +49,15 @@ public class EnemyMove : MonoBehaviour
         target = LunarClone.ResolveTarget(transform.position,playerTarget);
         if(target == null)return;
         float distance = Vector2.Distance(transform.position, target.position + offset);
-        if(moveable && enemy_recognition_range > distance && (enemy_attack_range-1) < distance)
+        bool shouldMove = enemy_recognition_range > distance && (enemy_attack_range-1) < distance;
+        if(rangedMage!=null)
+        {
+            float start=Mathf.Max(0f,rangedMage.retreatStartDistance);
+            float stop=Mathf.Max(start+.1f,rangedMage.retreatStopDistance);
+            retreating=moveable && (retreating ? distance<stop : distance<start);
+            shouldMove=enemy_recognition_range>distance && (retreating || distance>Mathf.Max(stop,enemy_attack_range-1));
+        }
+        if(moveable && shouldMove)
         {
             //???????
             animator.SetBool("Run", true);
@@ -69,13 +80,25 @@ public class EnemyMove : MonoBehaviour
             //????????
             animator.SetBool("Run", false);
             move = false;
+            if(rangedMage!=null && rigid!=null)rigid.velocity=Vector2.zero;
         }
     }
 
     void FixedUpdate()
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        if(move)
-            rigid.MovePosition(Vector2.MoveTowards(transform.position, target.position + offset, enemy_speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.deltaTime));
+        if(move && target!=null)
+        {
+            float step=enemy_speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.fixedDeltaTime;
+            if(rangedMage!=null && retreating)
+            {
+                Vector2 away=(Vector2)(transform.position-target.position-offset);
+                float stop=Mathf.Max(rangedMage.retreatStartDistance+.1f,rangedMage.retreatStopDistance);
+                float remaining=Mathf.Max(0f,stop-away.magnitude);
+                if(away.sqrMagnitude<.0001f)away=Vector2.right;
+                rigid.MovePosition(rigid.position+away.normalized*Mathf.Min(Mathf.Max(0f,step),remaining));
+            }
+            else rigid.MovePosition(Vector2.MoveTowards(transform.position, target.position + offset, step));
+        }
     }
 }

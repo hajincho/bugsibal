@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5362164310800281334}
   - component: {fileID: 1320886677606647298}
   - component: {fileID: 1022558349880950919}
+  - component: {fileID: 733515493199218959}
   m_Layer: 0
   m_Name: ghost
   m_TagString: Enemy
@@ -102,9 +103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48883b2912ec8c49bcb8c50ffebc6bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy_HP: 50
-  enemy_current_HP: 50
-  enemy_power: 10
+  enemy_HP: 35
+  enemy_current_HP: 35
+  enemy_power: 5
 --- !u!114 &7658099122485432396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +113,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6926167496750331034}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08720120f2a27824085c48cae91faf9e, type: 3}
   m_Name: 
@@ -172,7 +173,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -187,16 +188,35 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.037602253, y: -0.017189693}
-      - {x: -0.086744055, y: -0.0503769}
-      - {x: -0.11760225, y: -0.08471018}
-      - {x: -0.11647518, y: -0.13}
-      - {x: -0.10549173, y: -0.16603336}
-      - {x: 0.06534815, y: -0.16710772}
-      - {x: 0.08647522, y: -0.1657026}
-      - {x: 0.088729344, y: -0.11785128}
-      - {x: 0.075664304, y: -0.06726231}
-      - {x: 0.045060992, y: -0.018264052}
+    - - {x: 0.5, y: -0.81}
+      - {x: 0.56, y: -0.51}
+      - {x: 0.56, y: -0.049999997}
+      - {x: 0.61, y: -0.07}
+      - {x: 0.75, y: 0.08}
+      - {x: 0.78, y: 0.17}
+      - {x: 0.78, y: 0.53}
+      - {x: 0.74, y: 0.53}
+      - {x: 0.75, y: 0.76}
+      - {x: 0.69, y: 0.78}
+      - {x: 0.69, y: 1}
+      - {x: 0.62, y: 1.11}
+      - {x: 0.16, y: 1.11}
+      - {x: 0.099999994, y: 1.02}
+      - {x: -0.01, y: 0.96}
+      - {x: -0.04, y: 0.90999997}
+      - {x: -0.16, y: 0.88}
+      - {x: -0.32, y: 0.66999996}
+      - {x: -0.38, y: 0.57}
+      - {x: -0.38, y: 0.14999999}
+      - {x: -0.48999998, y: 0}
+      - {x: -0.68, y: -0.39}
+      - {x: -0.78, y: -0.77}
+      - {x: -0.78, y: -1.0699999}
+      - {x: -0.74, y: -1.11}
+      - {x: 0.16, y: -1.11}
+      - {x: 0.25, y: -1.0799999}
+      - {x: 0.32, y: -1.03}
+      - {x: 0.42999998, y: -0.9}
   m_UseDelaunayMesh: 0
 --- !u!50 &1320886677606647298
 Rigidbody2D:
@@ -206,7 +226,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6926167496750331034}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -237,20 +257,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0494fa7678b34f94e860c0018a52aa7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackAble: 1
-  attackCooltime: 1
-  attackRange: 1.5
-  stealthAble: 1
-  isStealthed: 0
-  stealthCooldown: 3.1
-  stealthDuration: 3
-  teleportDistance: 4
-  invisibilityDuration: 0
-  stealthAlpha: 0.2
-  teleportBehindChance: 0.3
-  attackDelayAfterTeleport: 0
-  stealthSound: {fileID: 0}
-  teleportSound: {fileID: 0}
-  attackSound: {fileID: 0}
-  teleportEffect: {fileID: 0}
-  attackEffect: {fileID: 0}
+  visibleSeconds: 0.5
+  halfVisibleSeconds: 0.3
+  halfVisibleAlpha: 0.5
+  hiddenSeconds: 1.1
+  requiredPlayerOverlap: 0.3
+  damageInterval: 0.5
+  contactDamage: 5
+--- !u!114 &733515493199218959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6926167496750331034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e8296b9d9577b843ac8f9443745f2b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damaged_skill1: 0
+  damaged_skill2: 0
+  damaged_skill3: 0
+  damaged_skill4: 0
+  damaged_skill5: 0
+  damaged_normal: 0
+  ult1: 0
+  ult2: 0
+  ult3: 0

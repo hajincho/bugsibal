@@ -1,363 +1,125 @@
-using System.Collections;
 using UnityEngine;
 
+// Phasing changes visibility only: the trigger hurtbox remains vulnerable throughout.
 public class Ghost : MonoBehaviour
 {
-    [Header("Components")]
-    EnemyMove enemyMove;    
-    Animator animator;
-    EnemyData enemyData;
-    SpriteRenderer sr;
-
-    [Header("Player References")]
-    GameObject player;
-    Transform playerTransform;
-    PlayerMove playerMove;
-    Player playerScript;
-
-    [Header("Attack Settings")]
-    [SerializeField] bool attackAble = true;
-    [SerializeField] float attackCooltime = 1.0f;
-    [SerializeField] float attackRange = 1.5f; 
-
-    [Header("Stealth Settings")]
-    [SerializeField] bool stealthAble = true;
-    [SerializeField] bool isStealthed = false;
-    [SerializeField] float stealthCooldown = 8f;
-    [SerializeField] float stealthDuration = 3f;
-    [SerializeField] float teleportDistance = 3f;
-    [SerializeField] float invisibilityDuration = 1f;
-    [SerializeField] float stealthAlpha = 0.3f;
-    [SerializeField] float teleportBehindChance = 0.3f;
-    [SerializeField] float attackDelayAfterTeleport = 0.5f;
-
-    [Header("Audio Settings")]
-    [SerializeField] AudioClip stealthSound;
-    [SerializeField] AudioClip teleportSound;
-    [SerializeField] AudioClip attackSound;
-    
-    [Header("Visual Effects")]
-    [SerializeField] GameObject teleportEffect;
-    [SerializeField] GameObject attackEffect;
-
-    Coroutine stealthCoroutine;
-    AudioSource audioSource;
-    bool isDead = false;
-    bool justTeleported = false;
-
-    void Start()
+    [Min(.01f)] public float visibleSeconds = .5f;
+    [Min(.01f)] public float halfVisibleSeconds = .3f;
+    [Range(0f, 1f)] public float halfVisibleAlpha = .5f;
+    [Min(.01f)] public float hiddenSeconds = 1.1f;
+    [Range(0f, 1f)] public float requiredPlayerOverlap = .3f;
+    [Min(.01f)] public float damageInterval = .5f;
+    [Min(0f)] public float contactDamage = 5f;
+    EnemyMove movement;
+    EnemyData data;
+    Rigidbody2D body;
+    SpriteRenderer[] visuals;
+    Collider2D[] hitboxes;
+    Player player;
+    Collider2D playerBody;
+    float phase, nextDamageAt;
+    bool dead;
+    public float VisibilityAlpha
     {
-        InitializeComponents();
-        SetupGhostProperties();
-        StartStealthBehavior();
-    }
-
-    void InitializeComponents()
-    {
-        enemyMove = GetComponent<EnemyMove>();
-        animator = GetComponentInChildren<Animator>();
-        enemyData = GetComponent<EnemyData>();
-        sr = GetComponentInChildren<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>();
-
-        if (audioSource == null)
+        get
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.volume = 0.5f;
-        }
-
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerTransform = player.transform;
-            playerMove = player.GetComponent<PlayerMove>();
-            playerScript = player.GetComponent<Player>();
-        }
-        else
-        {
-            Debug.LogError("Player not found! Make sure Player GameObject has 'Player' tag.");
+            float half = Mathf.Max(.01f, halfVisibleSeconds);
+            float fullEnd = half + Mathf.Max(.01f, visibleSeconds);
+            if (phase < half) return halfVisibleAlpha;
+            if (phase < fullEnd) return 1f;
+            return phase < fullEnd + half ? halfVisibleAlpha : 0f;
         }
     }
+    public bool IsRevealed => !dead && VisibilityAlpha > 0f;
 
-    void SetupGhostProperties()
+    void Awake()
     {
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null) 
+        movement = GetComponent<EnemyMove>();
+        if (movement != null) movement.enabled = false;
+        data = GetComponent<EnemyData>();
+        body = GetComponent<Rigidbody2D>();
+        visuals = GetComponentsInChildren<SpriteRenderer>(true);
+        hitboxes = GetComponentsInChildren<Collider2D>(true);
+        foreach (var hitbox in hitboxes) hitbox.isTrigger = true;
+        if (body != null)
         {
-            col.isTrigger = true;
+            body.bodyType = RigidbodyType2D.Kinematic;
+            body.gravityScale = 0f;
+            body.velocity = Vector2.zero;
         }
+        SetOpacity(VisibilityAlpha);
     }
 
-    void StartStealthBehavior()
+    void Start() { FindPlayer(); }
+    void FindPlayer()
     {
-        if (stealthCoroutine == null && !isDead)
-        {
-            stealthCoroutine = StartCoroutine(StealthRoutine());
-        }
+        var go = GameObject.FindGameObjectWithTag("Player");
+        player = go != null ? go.GetComponent<Player>() : null;
+        playerBody = player != null ? player.GetComponent<Collider2D>() : null;
     }
-
     void Update()
     {
-        if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        HandleDeath();
-    }
-
-    void HandleDeath()
-    {
-        if (enemyData.enemy_current_HP <= 0 && !isDead)
+        if (dead) return;
+        if (data != null && data.enemy_current_HP <= 0f)
         {
-            isDead = true;
-            justTeleported = false;
-            
-            if (stealthCoroutine != null)
-            {
-                StopCoroutine(stealthCoroutine);
-                stealthCoroutine = null;
-            }
-            
-            animator.SetTrigger("Death");
-            enemyMove.moveable = false;
-            
-            if (isStealthed)
-            {
-                RevealGhost();
-            }
-            
-            Destroy(gameObject, 1f);
+            dead = true;
+            foreach (var hitbox in hitboxes) hitbox.enabled = false;
+            if (body != null) { body.velocity = Vector2.zero; body.simulated = false; }
+            SetOpacity(1f);
+            Destroy(gameObject, .35f);
+            return;
+        }
+        if (StageRewardController.InputBlocked || EnemyFrostStatus.IsFrozenOn(this)) return;
+        phase = Mathf.Repeat(phase + Time.deltaTime, 2f * Mathf.Max(.01f, halfVisibleSeconds) + Mathf.Max(.01f, visibleSeconds) + Mathf.Max(.01f, hiddenSeconds));
+    }
+    void LateUpdate() { SetOpacity(dead ? 1f : VisibilityAlpha); }
+    void SetOpacity(float alpha)
+    {
+        foreach (var visual in visuals) if (visual != null)
+        {
+            visual.enabled = alpha > 0f;
+            var color = visual.color; color.a = alpha; visual.color = color;
         }
     }
-
+    void FixedUpdate()
+    {
+        if (dead || data == null || data.enemy_current_HP <= 0f || StageRewardController.InputBlocked ||
+            EnemyFrostStatus.IsFrozenOn(this) || GameManager.player_current_HP <= 0f) return;
+        if (player == null || playerBody == null) FindPlayer();
+        if (playerBody == null || body == null || hitboxes.Length == 0) return;
+        Vector2 direction = (Vector2)playerBody.bounds.center - (Vector2)hitboxes[0].bounds.center;
+        float speed = movement != null ? Mathf.Max(0f, movement.enemy_speed) : 5f;
+        body.MovePosition(body.position + Vector2.ClampMagnitude(direction, speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.fixedDeltaTime));
+        if (Mathf.Abs(direction.x) > .01f)
+            foreach (var visual in visuals) if (visual != null) visual.flipX = direction.x < 0f;
+    }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        if (ShouldAttackPlayer(other))
+        if (dead || data == null || data.enemy_current_HP <= 0f || Time.time < nextDamageAt ||
+            StageRewardController.InputBlocked || EnemyFrostStatus.IsFrozenOn(this) || GameManager.player_current_HP <= 0f) return;
+        if (player == null) FindPlayer();
+        if (player == null || other.GetComponentInParent<Player>() != player) return;
+        if (PlayerOverlapFraction(playerBody) + .0001f < requiredPlayerOverlap) return;
+        nextDamageAt = Time.time + Mathf.Max(.01f, damageInterval);
+        GameManager.DamagePlayer(contactDamage);
+    }
+
+    // Sample inside the actual player shape, rather than counting empty capsule corners.
+    public float PlayerOverlapFraction(Collider2D target)
+    {
+        if (target == null || !target.enabled || hitboxes == null) return 0f;
+        var bounds = target.bounds;
+        int inside = 0, overlap = 0;
+        const int samples = 12;
+        for (int y = 0; y < samples; y++) for (int x = 0; x < samples; x++)
         {
-            PerformNormalAttack();
+            var point = new Vector2(bounds.min.x + (x + .5f) * bounds.size.x / samples,
+                bounds.min.y + (y + .5f) * bounds.size.y / samples);
+            if (!target.OverlapPoint(point)) continue;
+            inside++;
+            foreach (var hitbox in hitboxes)
+                if (hitbox != null && hitbox.enabled && hitbox.OverlapPoint(point)) { overlap++; break; }
         }
-    }
-
-    bool ShouldAttackPlayer(Collider2D other)
-    {
-        if (!other.CompareTag("Player") || !attackAble || isStealthed || 
-            playerScript == null || enemyData.enemy_current_HP <= 0 || justTeleported)
-            return false;
-
-        float distance = Vector2.Distance(transform.position, other.transform.position);
-        return distance <= attackRange;
-    }
-
-    void PerformNormalAttack()
-    {
-        animator.SetInteger("Attack", 0);
-        PlaySound(attackSound);
-        ShowEffect(attackEffect);
-
-        DamagePlayer(enemyData.enemy_power);
-        CameraShake(); // ✅ 공격 시 카메라 흔들림
-
-        attackAble = false;
-        Invoke(nameof(ResetAttack), attackCooltime);
-    }
-
-    void DamagePlayer(float damage)
-    {
-        if (playerScript != null)
-        {
-            GameManager.DamagePlayer(damage);
-            playerScript.Hited();
-        }
-    }
-
-    void ResetAttack()
-    {
-        attackAble = true;
-        animator.SetInteger("Attack", -1);
-    }
-
-    IEnumerator StealthRoutine()
-    {
-        while (enemyData.enemy_current_HP > 0 && !isDead)
-        {
-            yield return new WaitForSeconds(stealthCooldown);
-
-            if (stealthAble && playerTransform != null && !isDead)
-            {
-                yield return StartCoroutine(ExecuteStealthSequence());
-            }
-
-            yield return null;
-        }
-    }
-
-    IEnumerator ExecuteStealthSequence()
-    {
-        EnterStealth();
-        yield return new WaitForSeconds(stealthDuration);
-        
-        BecomeInvisible();
-        yield return new WaitForSeconds(invisibilityDuration);
-        
-        justTeleported = true;
-        
-        TeleportNearPlayer();
-        RevealGhost();
-        
-        yield return new WaitForSeconds(attackDelayAfterTeleport);
-        
-        justTeleported = false;
-    }
-
-    void EnterStealth()
-    {
-        stealthAble = false;
-        isStealthed = true;
-        
-        PlaySound(stealthSound);
-        
-        if (sr != null) 
-        {
-            Color currentColor = sr.color;
-            sr.color = new Color(currentColor.r, currentColor.g, currentColor.b, stealthAlpha);
-        }
-        
-        animator.SetBool("Stealth", true);
-    }
-
-    void RevealGhost()
-    {
-        isStealthed = false;
-        
-        PlaySound(teleportSound);
-        ShowEffect(teleportEffect);
-        
-        if (sr != null) 
-        {
-            Color currentColor = sr.color;
-            sr.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
-        }
-        
-        animator.SetBool("Stealth", false);
-        stealthAble = true;
-    }
-
-    void BecomeInvisible()
-    {
-        if (sr != null) 
-        {
-            Color currentColor = sr.color;
-            sr.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0f);
-        }
-    }
-
-    void TeleportNearPlayer()
-    {
-        if (playerTransform == null || playerMove == null) return;
-
-        Vector3 targetPosition;
-        bool teleportBehind = Random.value < teleportBehindChance;
-        
-        if (teleportBehind)
-        {
-            Vector3 offset = playerMove.player_direction == 0 ? 
-                Vector3.right * teleportDistance : Vector3.left * teleportDistance;
-            targetPosition = LunarClone.TargetPosition(this,playerTransform) + offset;
-        }
-        else
-        {
-            Vector3 offset = playerMove.player_direction == 0 ? 
-                Vector3.left * teleportDistance : Vector3.right * teleportDistance;
-            targetPosition = LunarClone.TargetPosition(this,playerTransform) + offset;
-        }
-
-        targetPosition = ValidateTeleportPosition(targetPosition);
-        transform.position = targetPosition;
-    }
-
-    Vector3 ValidateTeleportPosition(Vector3 targetPos)
-    {
-        return targetPos;
-    }
-
-    void PlaySound(AudioClip clip)
-    {
-        if (audioSource != null && clip != null)
-        {
-            audioSource.PlayOneShot(clip);
-        }
-    }
-
-    void ShowEffect(GameObject effect)
-    {
-        if (effect != null)
-        {
-            GameObject fx = Instantiate(effect, transform.position, Quaternion.identity);
-            Destroy(fx, 2f);
-        }
-    }
-
-    void CameraShake()
-    {
-        Camera mainCamera = Camera.main;
-        if (mainCamera != null)
-        {
-            StartCoroutine(Shake(mainCamera.transform, 0.15f, 0.3f));
-        }
-    }
-
-    IEnumerator Shake(Transform cameraTransform, float duration, float magnitude)
-    {
-        Vector3 originalPos = cameraTransform.localPosition;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
-
-            cameraTransform.localPosition = new Vector3(x, y, originalPos.z);
-            elapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-        cameraTransform.localPosition = originalPos;
-    }
-
-    void OnDestroy()
-    {
-        if (stealthCoroutine != null)
-        {
-            StopCoroutine(stealthCoroutine);
-        }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        
-        if (playerTransform != null && playerMove != null)
-        {
-            Gizmos.color = Color.cyan;
-            Vector3 frontPos, backPos;
-            
-            if (playerMove.player_direction == 0) 
-            {
-                frontPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.left * teleportDistance;
-                backPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.right * teleportDistance;
-            }
-            else 
-            {
-                frontPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.right * teleportDistance;
-                backPos = LunarClone.TargetPosition(this,playerTransform) + Vector3.left * teleportDistance;
-            }
-            
-            Gizmos.DrawWireSphere(frontPos, 0.5f);
-            Gizmos.DrawLine(LunarClone.TargetPosition(this,playerTransform), frontPos);
-            
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(backPos, 0.5f);
-            Gizmos.DrawLine(LunarClone.TargetPosition(this,playerTransform), backPos);
-        }
+        return inside > 0 ? overlap / (float)inside : 0f;
     }
 }

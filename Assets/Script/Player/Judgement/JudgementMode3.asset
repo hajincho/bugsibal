@@ -32,7 +32,7 @@ MonoBehaviour:
   usePinkEffects: 1
   projectileCount: 3
   fullChargeProjectileCount: 0
-  fullChargeDamageMultiplier: 1
+  fullChargeDamageMultiplier: 0.7
   minimumProjectileSpacingDegrees: 8
   projectileSpacingDegrees: 40
   fullChargeProjectileSpacingDegrees: 12.5

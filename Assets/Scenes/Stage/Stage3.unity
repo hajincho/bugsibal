@@ -324447,7 +324447,7 @@ MonoBehaviour:
   - {fileID: 424870646}
   summoned_enemies:
   - {fileID: 0}
-  next_scene: {fileID: 7855975257183592281, guid: ef516fafbb40f8d40be6a56a7d0cd6e2, type: 3}
+  next_scene: {fileID: 7855975257183592281, guid: ca50fb6c74f8195459e185309a4e4fb7, type: 3}
   portal_position: {fileID: 47438677}
   phase: 0
   progress: 1

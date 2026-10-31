@@ -17,14 +17,14 @@ MonoBehaviour:
   drawSprites: []
   arrowPrefab: {fileID: 3157866486384649509, guid: 6bf061c94f0e45a4e9e92fd70821a853, type: 3}
   automaticMagazine: 1
-  shotsPerSecond: 5
-  magazineCapacity: 70
-  reloadSeconds: 2
+  shotsPerSecond: 11.666667
+  magazineCapacity: 30
+  reloadSeconds: 1.5
   maxChargeSeconds: 1
-  baseDamage: 15
+  baseDamage: 12
   maxChargeBonusPercent: 0
-  maxSpreadDegrees: 0
-  fullChargeSpreadDegrees: 0
+  maxSpreadDegrees: 6
+  fullChargeSpreadDegrees: 6
   pierceEnemiesAtFullCharge: 0
   alwaysPierceEnemies: 0
   fullChargeRicochets: 0

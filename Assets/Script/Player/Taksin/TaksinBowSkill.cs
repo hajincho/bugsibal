@@ -21,7 +21,7 @@ public sealed class TaksinBowSkill : MonoBehaviour
     Vector3 restingScale;
     public BowChargeSettings Profile => owner != null && owner.chargeBow != null ? owner.chargeBow.settings : null;
     public bool IsActiveBow => owner != null && owner.weapon_mode == 0 && Profile != null && Profile.automaticMagazine;
-    public int Capacity => Profile != null ? Mathf.Max(1, Profile.magazineCapacity) : 70;
+    public int Capacity => Profile != null ? Mathf.Max(1, Profile.magazineCapacity) : 30;
     public int Ammo
     {
         get
@@ -36,7 +36,7 @@ public sealed class TaksinBowSkill : MonoBehaviour
     public bool IsReloading => reloadingProfile != null;
     public bool UnlimitedAmmo => IsActiveBow && owner.BowXSkill != null && owner.BowXSkill.IsActive;
     public float ReloadRemaining => IsReloading ? reloadRemaining : 0f;
-    public float ShotInterval => 1f / (Mathf.Max(.1f, Profile != null ? Profile.shotsPerSecond : 5f) * (UnlimitedAmmo ? 1.4f : 1f));
+    public float ShotInterval => 1f / Mathf.Max(.1f, Profile != null ? Profile.shotsPerSecond : 700f / 60f);
 
     void Awake() { owner = GetComponent<Player>(); }
     void Update()
@@ -87,11 +87,13 @@ public sealed class TaksinBowSkill : MonoBehaviour
         if (projectile == null) { Destroy(shot); return false; }
         // Reuse the swept Arrow collision and bow-Q hit handling with a straight bullet prefab.
         float damage = UnlimitedAmmo ? 25f : profile.DamageAt(0f);
+        direction = profile.ShotDirection(direction, 0f);
         bool piercesEnemies = Random.value < .2f;
         projectile.Fire(origin + (Vector3)direction.normalized, damage, profile.arrowSpeed,
             profile.arrowLifetime, owner.transform, piercesEnemies);
         if (!UnlimitedAmmo) magazines[profile] = Ammo - 1;
-        nextShotAt = Time.time + ShotInterval;
+        // Retain fractional-frame timing so 700 RPM does not round down at common frame rates.
+        nextShotAt = Time.time - nextShotAt > ShotInterval ? Time.time + ShotInterval : nextShotAt + ShotInterval;
         RefreshHUD();
         return true;
     }
@@ -140,7 +142,7 @@ public sealed class TaksinBowSkill : MonoBehaviour
             restingRotation = weapon.localRotation;
             restingScale = weapon.localScale;
         }
-        weapon.localScale = Vector3.Scale(restingScale, new Vector3(.8f, -.8f, 1f));
+        weapon.localScale = Vector3.Scale(restingScale, new Vector3(.4f, -.4f, 1f));
         Vector3 direction = target - weapon.position;
         direction.z = 0f;
         if (direction.sqrMagnitude < .0001f) return;

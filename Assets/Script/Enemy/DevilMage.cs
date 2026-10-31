@@ -27,6 +27,8 @@ public class DevilMage : MonoBehaviour
     float skill3_cooltime = 15.0f;
     public int dropchance = 90;
     public float healRange = 6f;
+    [Min(0f)] public float retreatStartDistance = 4f;
+    [Min(0f)] public float retreatStopDistance = 7f;
 
     bool skill_able = true;
     

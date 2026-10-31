@@ -17812,6 +17812,9 @@ MonoBehaviour:
   able2: 1
   able3: 1
   able4: 1
+  ghostPrefab: {fileID: 6926167496750331034, guid: 02b166d39a2dbce409e791384e4c16db, type: 3}
+  ghostSummonIdleSeconds: 5
+  ghostSummonPauseSeconds: 1
 --- !u!50 &1316668632
 Rigidbody2D:
   serializedVersion: 4

@@ -50,6 +50,12 @@ public class SwordMan : MonoBehaviour
 
     GameObject wall;
     Collider2D wallCollider;
+    [Header("Idle ghost summon")]
+    public GameObject ghostPrefab;
+    [Min(.1f)] public float ghostSummonIdleSeconds = 5f;
+    [Min(.1f)] public float ghostSummonPauseSeconds = 1f;
+    float idleWithoutAttack;
+    bool summoningGhosts;
 
     void Start()
     {
@@ -65,7 +71,7 @@ public class SwordMan : MonoBehaviour
         wall = GameObject.Find("wall");
         if (wall != null)
             wallCollider = wall.GetComponent<Collider2D>();
-        Invoke("Able4()", 5f);
+        Invoke(nameof(Able4), 5f);
 
         lastHP = enemy_data.enemy_current_HP;
     }
@@ -73,6 +79,28 @@ public class SwordMan : MonoBehaviour
     void Update()
     {
         if (dead || player == null || player_script == null) return;
+
+        if (enemy_data.enemy_current_HP <= 0)
+        {
+            dead = true;
+            StopAllCoroutines();
+            animator.SetTrigger("Neutralize");
+            rigid.velocity = Vector3.zero;
+            attack_able = false;
+            enemy_move.moveable = false;
+            Destroy(gameObject, 2f);
+            return;
+        }
+        if (StageRewardController.InputBlocked || EnemyFrostStatus.IsFrozenOn(this)) return;
+        if (attack_able && attack_mode == AttackMode.None && !ischarging && !summoningGhosts)
+            idleWithoutAttack += Time.deltaTime;
+        else idleWithoutAttack = 0f;
+        if (ghostPrefab != null && idleWithoutAttack >= ghostSummonIdleSeconds)
+        {
+            StartCoroutine(SummonGhosts());
+            return;
+        }
+        if (summoningGhosts) return;
 
         float distance = Vector2.Distance(LunarClone.TargetPosition(this,player.transform), transform.position);
 
@@ -100,16 +128,6 @@ public class SwordMan : MonoBehaviour
 
         DetectAndHandleStuck();
 
-        if (enemy_data.enemy_current_HP <= 0 && !dead)
-        {
-            dead = true;
-            animator.SetTrigger("Neutralize");
-            rigid.velocity = Vector3.zero;
-            attack_able = false;
-            enemy_move.moveable = false;
-            Destroy(gameObject, 2f);
-        }
-
         if (ischarging)
         {
             float currentHP = enemy_data.enemy_current_HP;
@@ -132,6 +150,34 @@ public class SwordMan : MonoBehaviour
         }
     }
 
+    IEnumerator SummonGhosts()
+    {
+        summoningGhosts = true;
+        idleWithoutAttack = 0f;
+        attack_able = false;
+        enemy_move.moveable = false;
+        rigid.velocity = Vector2.zero;
+        animator.SetTrigger("Neutralize");
+        float halfPause = Mathf.Max(.1f, ghostSummonPauseSeconds) * .5f;
+        yield return new WaitForSeconds(halfPause);
+        if (dead || enemy_data.enemy_current_HP <= 0f) yield break;
+        SpawnGhostWave();
+        yield return new WaitForSeconds(halfPause);
+        if (dead || enemy_data.enemy_current_HP <= 0f) yield break;
+        summoningGhosts = false;
+        attack_able = true;
+        enemy_move.moveable = true;
+    }
+    void SpawnGhostWave()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            float angle = (45f + i * 90f) * Mathf.Deg2Rad;
+            Vector3 position = transform.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * 3f;
+            var ghost = Instantiate(ghostPrefab, position, Quaternion.identity);
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(ghost, gameObject.scene);
+        }
+    }
     bool PlayerBelow()
     {
         bool yInRange = LunarClone.TargetPosition(this,player.transform).y < transform.position.y - 3.5f && LunarClone.TargetPosition(this,player.transform).y >= transform.position.y - 6.0f;

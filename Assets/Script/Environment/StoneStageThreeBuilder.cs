@@ -151,7 +151,7 @@ public static class StoneStageThreeBuilder
             var go=new GameObject("CompletedBuildingPerimeter",typeof(Tilemap),typeof(TilemapCollider2D));go.transform.SetParent(theme,false);var tm=go.GetComponent<Tilemap>();foreach(var p in missing)tm.SetTile(p,tile);
         }
     }
-    static int TrimPassageWalls(Transform theme,Tilemap ground,HashSet<Vector3Int> cells)
+    public static int TrimPassageWalls(Transform theme,Tilemap ground,HashSet<Vector3Int> cells,string outputName="TrimmedWalls")
     {
         // Subtract the walkable floor from decorative masonry, preserving texture scale.
         var floor=new List<Rect>();
@@ -160,7 +160,7 @@ public static class StoneStageThreeBuilder
             int length=1;while(cells.Contains(p+Vector3Int.right*length))length++;
             var center=ground.GetCellCenterWorld(p);floor.Add(new Rect(center.x-.5f,center.y-.5f,length,1));
         }
-        string folder=Folder+"/TrimmedWalls";Directory.CreateDirectory(folder);AssetDatabase.Refresh();
+        string folder=Folder+"/"+outputName;Directory.CreateDirectory(folder);AssetDatabase.Refresh();
         int index=0,trimmed=0;
         foreach(var sr in theme.GetComponentsInChildren<SpriteRenderer>())
         {

@@ -90,6 +90,7 @@ public sealed class LunarArrowImpact : MonoBehaviour
                 {
                     target.TakeDamage(7.5f,CombatDamageKind.Normal);
                     target.Hitted();
+                    if(target.enemy_current_HP<=0f)skill.OnQualifiedEnemyDefeated(target,target.transform.position);
                 }
         }
     }

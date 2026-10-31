@@ -23,7 +23,7 @@ public sealed class BowExplosiveArrowSkill : MonoBehaviour
     public bool Arm()
     {
         // Arming is allowed during a bow draw and rat stun; it does not cast an animation.
-        if (owner == null || owner.weapon_mode != 0 || owner.on_dash || owner.skill_using ||
+        if (owner == null || owner.weapon_mode != 0 || (owner.ownedBow != null && owner.ownedBow.automaticMagazine) || owner.on_dash || owner.skill_using ||
             StageRewardController.InputBlocked || Time.timeScale <= 0f || GameManager.player_current_HP <= 0f ||
             IsArmed || cooldown == null || IsCoolingDown) return false;
         IsArmed = true;
@@ -33,7 +33,7 @@ public sealed class BowExplosiveArrowSkill : MonoBehaviour
 
     public bool OnArrowFired(Arrow arrow)
     {
-        if (!IsArmed || arrow == null) return false;
+        if (!IsArmed || arrow == null || (owner != null && owner.ownedBow != null && owner.ownedBow.automaticMagazine)) return false;
         var impact = arrow.gameObject.AddComponent<BowExplosiveArrowImpact>();
         impact.explosionPrefab = explosionPrefab;
         impact.visualScale = explosionScale;

@@ -18,6 +18,12 @@ public sealed class BowChargeSettings : ScriptableObject
     public Sprite[] drawSprites;
     public GameObject arrowPrefab;
 
+    [Header("탄창 연사 무기")]
+    public bool automaticMagazine;
+    [InspectorName("초당 발사 수"), Min(.1f)] public float shotsPerSecond = 5f;
+    [InspectorName("탄창 용량"), Min(1)] public int magazineCapacity = 70;
+    [InspectorName("장전 시간 (초)"), Min(.01f)] public float reloadSeconds = 2f;
+
     [Header("활 종류별 차징 시간")]
     [InspectorName("최대 차징 시간 (초)")]
     [Tooltip("이 활이 최대로 차징되기까지 걸리는 시간입니다. 활 종류마다 별도의 Bow Charge Settings 에셋을 연결하여 다르게 지정하세요.")]

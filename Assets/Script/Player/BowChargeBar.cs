@@ -22,7 +22,7 @@ public sealed class BowChargeBar : MonoBehaviour
 
     public void Show(float seconds, BowChargeSettings settings)
     {
-        if (settings == null) { Hide(); return; }
+        if (settings == null || settings.automaticMagazine) { Hide(); return; }
         if (visibility != null) visibility.alpha = 1f;
         float fraction = settings.ChargeFraction(seconds);
         if (fill != null)

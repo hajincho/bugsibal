@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
+  m_Name: TaksinSettings
+  m_EditorClassIdentifier: 
+  queenGatherWaveSprite: {fileID: 0}
+  idleSprite: {fileID: 21300000, guid: 586fae6b0d0a7284eb2c2e4d45ffed43, type: 3}
+  drawSprites: []
+  arrowPrefab: {fileID: 3157866486384649509, guid: 6bf061c94f0e45a4e9e92fd70821a853, type: 3}
+  automaticMagazine: 1
+  shotsPerSecond: 5
+  magazineCapacity: 70
+  reloadSeconds: 2
+  maxChargeSeconds: 1
+  baseDamage: 15
+  maxChargeBonusPercent: 0
+  maxSpreadDegrees: 0
+  fullChargeSpreadDegrees: 0
+  pierceEnemiesAtFullCharge: 0
+  alwaysPierceEnemies: 0
+  fullChargeRicochets: 0
+  impactExplosion: 0
+  crystalBow: 0
+  explodeOnAnyContact: 0
+  ricochetWithoutFullCharge: 0
+  ricochetDamageBonus: 0.2
+  explodeOnRicochetEnemyHit: 1
+  usePinkEffects: 0
+  projectileCount: 1
+  fullChargeProjectileCount: 0
+  fullChargeDamageMultiplier: 1
+  minimumProjectileSpacingDegrees: 8
+  projectileSpacingDegrees: 0
+  fullChargeProjectileSpacingDegrees: -1
+  scaleTrailWithCharge: 1
+  useGoldenEffects: 0
+  goldSpriteMaterial: {fileID: 0}
+  goldGlowMaterial: {fileID: 0}
+  maxArrowTrailSeconds: 0
+  proceduralDrawMotion: 0
+  rigidStringDraw: 0
+  heldVisualScale: 1
+  dotDamagePerSecond: 0
+  dotDuration: 2
+  pullOnFullCharge: 0
+  pullRadius: 2.5
+  pullForwardOffset: 3
+  pullDuration: 0.3
+  pullSpeed: 12
+  arrowSpeed: 55
+  arrowLifetime: 3

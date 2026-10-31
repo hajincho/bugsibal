@@ -77,7 +77,7 @@ public sealed class BowIcicleSkill : MonoBehaviour
     {
         if (RemainingCooldown > 0f || icicleSprite == null || !WeaponSkillLoadout.CanUse(this)) return false;
         var player = GetComponent<Player>();
-        if (player == null) return false;
+        if (player == null || (player.ownedBow != null && player.ownedBow.automaticMagazine)) return false;
         readyAt = Time.time + cooldownSeconds;
         if (cooldown != null) { cooldown.skillcooltime = cooldownSeconds; cooldown.UseSkill(); }
         var root = new GameObject("BowE_IcicleOrbit");

@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
     void Awake()
     {
         animator = GetComponent<Animator>();
+        if (GetComponent<TaksinBowSkill>() == null) gameObject.AddComponent<TaksinBowSkill>();
         BowXSkill = GetComponent<BowFullChargeSkill>();
         if (BowXSkill == null) BowXSkill = gameObject.AddComponent<BowFullChargeSkill>();
         if (chargeBow == null && bow_animator != null) chargeBow = bow_animator.GetComponent<Bow>();

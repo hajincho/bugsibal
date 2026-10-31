@@ -47,6 +47,7 @@ public class Bow : MonoBehaviour
 
     public bool BeginCharge()
     {
+        if (settings != null && settings.automaticMagazine) return false;
         if (IsCharging || settings == null || arrow == null || arrow_location == null || owner == null ||
             owner.weapon_mode != 0 || owner.on_dash || owner.skill_using || StageRewardController.InputBlocked ||
             Time.timeScale <= 0f || GameManager.player_current_HP <= 0f ||

@@ -75,7 +75,23 @@ public sealed class LunarArrowImpact : MonoBehaviour
         }
         float radius=skill.GetComponent<BowExplosiveArrowSkill>()!=null ? skill.GetComponent<BowExplosiveArrowSkill>().explosionRadius : 3.25f;
         if(GetComponent<BowExplosiveArrowImpact>()==null)BurstSparkles(skill.sparkleMaterial,p,radius,FullChargeSparkles);
-        // Contact keeps the radial sparkle effect; only the arrow's direct hit deals damage.
+        // Full charge adds a fixed 7.5 damage burst, independent of charge/skill multipliers.
+        if(FullChargeSparkles)
+        {
+            var damaged=new System.Collections.Generic.HashSet<EnemyData>();
+            if(primary!=null && primary.CompareTag("Enemy"))damaged.Add(primary);
+            foreach(var collider in Physics2D.OverlapCircleAll(p,radius))
+            {
+                var target=collider.GetComponentInParent<EnemyData>();
+                if(target!=null && target.CompareTag("Enemy"))damaged.Add(target);
+            }
+            foreach(var target in damaged)
+                if(target!=null && target.enemy_current_HP>0f)
+                {
+                    target.TakeDamage(7.5f,CombatDamageKind.Normal);
+                    target.Hitted();
+                }
+        }
     }
 
     public void OnQualifiedEnemyDefeated(EnemyData enemy,Vector3 position){if(skill!=null)skill.OnQualifiedEnemyDefeated(enemy,position);}

@@ -2420,7 +2420,7 @@ MonoBehaviour:
     health: 0
     attackSpeed: 0
     duration: 0
-    weight: 5000000
+    weight: 10
     bowSettings: {fileID: 11400000, guid: ccaa8388619eff94f97838d93ef61299, type: 2}
     itemType: 0
   legacyItems: []

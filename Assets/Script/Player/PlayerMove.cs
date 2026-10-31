@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,8 @@ public class PlayerMove : MonoBehaviour
     Player owner;
     public static bool moveable;
     public int player_direction = 1;
-    public float CurrentMoveSpeed => RunUpgradeState.MoveSpeed *
+    LunarBowSkill lunar;
+    public float CurrentMoveSpeed => RunUpgradeState.MoveSpeed * (lunar != null ? lunar.MoveMultiplier : 1f) *
         (owner != null && owner.BowXSkill != null ? owner.BowXSkill.MoveSpeedMultiplier : 1f);
 
     void Awake()
@@ -21,6 +22,7 @@ public class PlayerMove : MonoBehaviour
         animator = GetComponent<Animator>();
         player_transform = GetComponent<Transform>();
         owner = GetComponent<Player>();
+        lunar = GetComponent<LunarBowSkill>();
         moveable = true;
     }
 

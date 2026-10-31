@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -22,7 +22,7 @@ public class FireBallDev : MonoBehaviour
 
         rigid = GetComponent<Rigidbody2D>();
         Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        direction = (player.transform.position - transform.position).normalized;
+        direction = (LunarClone.TargetPosition(this,player) - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -36,6 +36,8 @@ public class FireBallDev : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        var echo = other.GetComponentInParent<LunarClone>();
+        if(echo != null && damageable){damageable=false;echo.Hurt(15);Destroy(gameObject);return;}
         if (other.tag == "Player")
         {
             Destroy(gameObject, 0.1f);

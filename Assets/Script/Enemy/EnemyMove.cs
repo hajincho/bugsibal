@@ -7,6 +7,7 @@ public class EnemyMove : MonoBehaviour
 {
     Rigidbody2D rigid;
     private Transform target;
+    private Transform playerTarget;
     private Vector3 offset = new Vector3(0, 1, 0);
     //?? ???, ???? ????, ???? ????
     public float enemy_speed = 3;
@@ -28,7 +29,8 @@ public class EnemyMove : MonoBehaviour
 
         rigid = GetComponent<Rigidbody2D>();
         // ??????? ???
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        playerTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        target = playerTarget;
         animator = GetComponent<Animator>();
         origin_x = transform.localScale.x;
 
@@ -41,6 +43,8 @@ public class EnemyMove : MonoBehaviour
     void Update()
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
+        target = LunarClone.ResolveTarget(transform.position,playerTarget);
+        if(target == null)return;
         float distance = Vector2.Distance(transform.position, target.position + offset);
         if(moveable && enemy_recognition_range > distance && (enemy_attack_range-1) < distance)
         {

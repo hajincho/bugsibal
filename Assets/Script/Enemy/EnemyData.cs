@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class EnemyData : MonoBehaviour
 {
+    public static event System.Action<EnemyData> Died;
     public float enemy_HP;
     public float enemy_current_HP;
     public float enemy_power;
@@ -10,6 +11,7 @@ public class EnemyData : MonoBehaviour
     bool initialized;
     Collider2D[] deathColliders;
     Rigidbody2D[] deathBodies;
+    public static float LastHitTime=-999f;// 마지막으로 적이 피해를 입은 시각, EnemyDirectionArrow가 사용
     public bool IsBoss => GetComponent<Golem>()!=null || GetComponent<SwordMan>()!=null || name=="FinalBoss";
     void Start()
     {
@@ -51,6 +53,8 @@ public class EnemyData : MonoBehaviour
     public float TakeDamage(float amount,CombatDamageKind kind=CombatDamageKind.Normal)
     {
         if(float.IsNaN(amount)||float.IsInfinity(amount)||amount<=0 || enemy_current_HP<=0)return 0;
+        var dummy=GetComponent<TrainingDummy>();
+        if(dummy!=null && dummy.isActiveAndEnabled)return dummy.TakeHit(amount,kind);
         float before=enemy_current_HP;
         enemy_current_HP=Mathf.Clamp(enemy_current_HP-amount,0,Mathf.Max(0,enemy_HP));
         if (enemy_current_HP <= 0f)
@@ -58,8 +62,10 @@ public class EnemyData : MonoBehaviour
             var frost = GetComponent<EnemyFrostStatus>();
             if (frost != null) frost.CancelStatus();
             DisableDeathHitboxes();
+            if(Died!=null)Died(this);
         }
         float applied=before-enemy_current_HP;
+        if(applied>0f)LastHitTime=Time.time;
         CombatPresentation.ShowDamage(CombatPresentation.HeadPosition(transform),applied,kind);
         if(enemy_current_HP<=0 && IsBoss && SceneManager.GetActiveScene().name=="MidBoss" && FindObjectOfType<StageManager>()==null)
         {var controller=StageRewardController.Ensure();if(controller!=null)controller.MarkCleared();}

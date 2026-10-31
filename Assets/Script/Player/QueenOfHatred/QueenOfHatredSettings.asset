@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bba5afad39c504aa0bc5caf6c79b84, type: 3}
   m_Name: QueenOfHatredSettings
   m_EditorClassIdentifier: 
+  queenGatherWaveSprite: {fileID: 21300000, guid: e9f8ecbfaaa5dc544b0ec95bd3a56e26, type: 3}
   idleSprite: {fileID: 21300000, guid: 11f31b78020280342a33183d043fb756, type: 3}
   drawSprites: []
   arrowPrefab: {fileID: 7577450810577956104, guid: e65bfe31581759548857d1f795b69545, type: 3}
@@ -42,6 +43,8 @@ MonoBehaviour:
   goldGlowMaterial: {fileID: 0}
   maxArrowTrailSeconds: 0
   proceduralDrawMotion: 1
+  rigidStringDraw: 0
+  heldVisualScale: 1
   dotDamagePerSecond: 3
   dotDuration: 2
   pullOnFullCharge: 1

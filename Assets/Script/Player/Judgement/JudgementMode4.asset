@@ -42,6 +42,7 @@ MonoBehaviour:
   goldGlowMaterial: {fileID: 2100000, guid: 14bc608d38e850c4a98c003b82796182, type: 2}
   maxArrowTrailSeconds: 0.5
   proceduralDrawMotion: 1
+  heldVisualScale: 0.72
   dotDamagePerSecond: 0
   dotDuration: 2
   pullOnFullCharge: 0

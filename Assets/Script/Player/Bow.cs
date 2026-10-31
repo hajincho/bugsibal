@@ -94,11 +94,13 @@ public class Bow : MonoBehaviour
         if (StageRewardController.InputBlocked || Time.timeScale <= 0f || owner == null || owner.on_dash ||
             owner.skill_using || owner.weapon_mode != 0 || GameManager.player_current_HP <= 0f)
         { CancelCharge(); return; }
+        float shotChargeSeconds = EffectiveChargeSeconds;
+        if (chargingSettings == null || !chargingSettings.CanFireAt(shotChargeSeconds))
+        { CancelCharge(); return; }
         Camera camera = Camera.main;
         if (camera == null || arrow == null || arrow_location == null) { CancelCharge(); return; }
         Vector3 target = camera.ScreenToWorldPoint(Input.mousePosition);
         target.z = arrow_location.position.z;
-        float shotChargeSeconds = EffectiveChargeSeconds;
         Vector2[] directions = chargingSettings.ShotDirections(target - arrow_location.position, shotChargeSeconds);
         foreach (var direction in directions)
         {
@@ -118,6 +120,8 @@ public class Bow : MonoBehaviour
             if (explosiveSkill != null) explosiveSkill.OnArrowFired(projectile);
             if (chargingSettings.useGoldenEffects)
                 shot.AddComponent<BowArrowVisuals>().Initialize(chargingSettings, shotChargeSeconds);
+            var lunar = owner.GetComponent<LunarBowSkill>();
+            if(lunar != null)lunar.OnArrowFired(projectile,shotChargeSeconds);
             if (chargingSettings.crystalBow)
             {
                 var crystal = owner.GetComponent<CrystalBowSkill>();

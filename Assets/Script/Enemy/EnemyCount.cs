@@ -25,7 +25,7 @@ public class EnemyCounter : MonoBehaviour
         foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
             EnemyData data = enemy.GetComponent<EnemyData>();
-            if (data != null && data.enemy_current_HP > 0) enemyCount++;
+            if (data != null && data.GetComponent<TrainingDummy>() == null && data.enemy_current_HP > 0) enemyCount++;
         }
 
         // 적의 수를 UI 텍스트에 표시합니다.

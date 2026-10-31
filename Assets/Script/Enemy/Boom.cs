@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +17,8 @@ public class Boom : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //�÷��̾�� ���˽� ����
+        var echo=other.GetComponentInParent<LunarClone>();
+        if(echo!=null){echo.Hurt(boom_damage);return;}
         if (other.gameObject.tag == "Player")
         {
             GameManager.DamagePlayer(boom_damage);

@@ -11,6 +11,7 @@ public sealed class CrystalIcicleProjectile : MonoBehaviour
     Material material;
     SpriteRenderer sprite;
     CrystalTracer tracer;
+    Sprite explosionSprite;
     readonly RaycastHit2D[] hits=new RaycastHit2D[64];
     public bool IsStraight => straight;
     public EnemyData AssignedTarget => target;
@@ -19,6 +20,7 @@ public sealed class CrystalIcicleProjectile : MonoBehaviour
         EnemyData assigned,Vector2 tangent,Vector2 outward,float rotationSign)
     {
         target=assigned;hadTarget=assigned!=null;color=tint;material=skill.glowMaterials[color];
+        explosionSprite=skill.explosionSprites!=null && color<skill.explosionSprites.Length ? skill.explosionSprites[color] : null;
         position=transform.position;began=Time.time;expires=began+3f;
         gravityCenter=(Vector2)(skill.transform.position+original.centerOffset);
         Vector2 radial=position-gravityCenter;
@@ -78,7 +80,7 @@ public sealed class CrystalIcicleProjectile : MonoBehaviour
             if(enemy!=null && enemy.enemy_current_HP>0f)
                 enemy.TakeDamage(Mathf.Max(minimumDamage,enemy.enemy_HP*healthFraction)*skillMultiplier,CombatDamageKind.Skill);
             Vector2 impact=hit.distance>0f ? hit.point : position;
-            CrystalEffects.Burst(color,impact,radius,material,enemy,.25f,true);
+            CrystalEffects.Burst(color,impact,radius,material,enemy,.25f,true,explosionSprite);
             Finish(impact);return;
         }
         position=next;transform.position=next;

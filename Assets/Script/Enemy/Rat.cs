@@ -39,7 +39,7 @@ public class Rat : MonoBehaviour
     void Update()
     {
         if (EnemyFrostStatus.IsFrozenOn(this)) return;
-        distance = Vector2.Distance(transform.position, player_transform.position);
+        distance = Vector2.Distance(transform.position, LunarClone.TargetPosition(this,player_transform));
         if(distance < 4 && attack_able)
         {
             animator.SetTrigger("Attack");
@@ -59,14 +59,14 @@ public class Rat : MonoBehaviour
 
             //플레이어가 쥐를 보고있으면 스턴걸림
             //징그러워서 스턴걸린다는 설정
-            if(player_transform.position.x > transform.position.x)
+            if(LunarClone.TargetPosition(this,player_transform).x > transform.position.x)
             {
                 if(player_transform.localScale.x > 0)
                 {
                     player_script.Attacked(1);
                 }
             }
-            else if(player_transform.position.x < transform.position.x)
+            else if(LunarClone.TargetPosition(this,player_transform).x < transform.position.x)
             {
                 if(player_transform.localScale.x < 0)
                 {

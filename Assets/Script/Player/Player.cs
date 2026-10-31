@@ -43,6 +43,9 @@ public class Player : MonoBehaviour
     public GameObject sword_effect;
     public bool weakeningable = true;
     public bool midboss_cleared = false;
+    float damageFlashUntil;
+    public bool IsDamageFlashing => Time.time < damageFlashUntil;
+    public void NotifyDamageTaken(){damageFlashUntil=Time.time+.3f;}
     public int medicine;
 
     //스킬 관련 변수
@@ -313,6 +316,8 @@ public class Player : MonoBehaviour
         if (judgement != null) judgement.ResetForEquip(item);
         var crystal = GetComponent<CrystalBowSkill>();
         if (crystal != null) crystal.ResetForEquip(item);
+        var lunar = GetComponent<LunarBowSkill>();
+        if(lunar != null)lunar.ResetForEquip(item);
         equippedBowItem = item;
         ownedBow = item.bowSettings;
         bow_num = item.value;

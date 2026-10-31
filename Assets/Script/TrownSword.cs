@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class ThrownSword : MonoBehaviour
@@ -54,6 +54,8 @@ public class ThrownSword : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        var echo=other.GetComponentInParent<LunarClone>();
+        if(echo!=null && damageable){damageable=false;echo.Hurt(15);return;}
         if (other.tag == "Player")
         {
             if (damageable)

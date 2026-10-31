@@ -104,7 +104,7 @@ public class Arrow : MonoBehaviour
     {
         if (HasHit || !launched || other == null || StageRewardController.InputBlocked) return false;
         if (other.transform.IsChildOf(transform) || (owner != null && other.transform.IsChildOf(owner)) ||
-            other.GetComponentInParent<Player>() != null || other.GetComponentInParent<Arrow>() != null) return false;
+            other.GetComponentInParent<Player>() != null || other.GetComponentInParent<LunarClone>() != null || other.GetComponentInParent<Arrow>() != null) return false;
         EnemyData enemy = other.GetComponentInParent<EnemyData>();
         // Ignore queued contacts with an enemy that died earlier in this physics step.
         if (enemy != null && enemy.enemy_current_HP <= 0f) return false;
@@ -115,6 +115,8 @@ public class Arrow : MonoBehaviour
 
         if (enemy != null && !hitEnemies.Add(enemy)) return false;
         var special = GetComponent<BowRicochetImpact>();
+        var lunarBounce=GetComponent<LunarArrowImpact>();
+        if(enemy==null && lunarBounce!=null && lunarBounce.TryBounce(other,normal,contactPosition,surfacePoint))return true;
         if (enemy == null && special != null && special.TryBounce(other, normal, contactPosition, rigid)) return true;
         bool continues = enemy != null && PiercesEnemies && (special == null || !special.ExplodesOnContact);
         // Mark terminal hits before callbacks; piercing shots retain their velocity and colliders.
@@ -140,6 +142,8 @@ public class Arrow : MonoBehaviour
                 enemy.Hitted();
             }
         }
+        var lunarImpact = GetComponent<LunarArrowImpact>();
+        if(lunarImpact != null)lunarImpact.OnImpact(enemy,contactPosition,surfacePoint);
         var crystalImpact = GetComponent<CrystalArrowImpact>();
         if (crystalImpact != null) crystalImpact.OnImpact(enemy, contactPosition, surfacePoint);
         var queenImpact = GetComponent<BowQueenImpact>();

@@ -21,6 +21,8 @@ public class Portal : MonoBehaviour
         entering=true;
         // The persistent controller owns this callback while a reward is being selected.
         string destination=next_stage;int stageNumber=nextstage;Vector3 position=new Vector3(x,y,z);
+        if(destination=="Stage2")position=new Vector3(-25f,8.5f,z);
+        if(destination=="Stage3")position=new Vector3(-23f,0f,z);
         GameObject root=player,character=real_player;
         Action transition=()=>Transition(destination,stageNumber,position,root,character);
         if(controller!=null){if(!controller.RequestTransition(destination,transition))entering=false;}

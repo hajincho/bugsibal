@@ -61,7 +61,7 @@ public static class CrystalEffects
             {
                 var frost=enemy.GetComponent<EnemyFrostStatus>();
                 if(frost==null) frost=enemy.gameObject.AddComponent<EnemyFrostStatus>();
-                frost.Freeze(.4f);
+                frost.Freeze(icicleBurst ? .4f : 1.2f);
                 var dot=enemy.GetComponent<CrystalFrostDot>();
                 if(dot==null) dot=enemy.gameObject.AddComponent<CrystalFrostDot>();
                 dot.Apply();

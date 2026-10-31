@@ -12,6 +12,7 @@ public sealed class LunarClone : MonoBehaviour
     LunarEchoRig rig;
     float born,decayedSeconds,resolveAttackAt;
     bool pendingAttack;
+    bool dying;
     EnemyData attackTarget;
     Vector2 attackPoint;
     public Vector2 ProjectileOrigin => rig!=null?(Vector2)rig.Muzzle:AimPoint;
@@ -27,6 +28,10 @@ public sealed class LunarClone : MonoBehaviour
     readonly RaycastHit2D[] walls=new RaycastHit2D[24];
     public static LunarClone Create(LunarBowSkill skill,Vector3 position,bool archer)
     {
+        int living=0;
+        foreach(var echo in all)
+            if(echo!=null && echo.Health>0f && !echo.dying)living++;
+        if(living>=2)return null;
         var go=new GameObject(archer?"LunarArcherEcho":"LunarSwordEcho");
         UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go,skill.gameObject.scene);
         go.transform.position=position;
@@ -162,7 +167,25 @@ public sealed class LunarClone : MonoBehaviour
         CombatPresentation.ShowDamage(transform.position+Vector3.up*2f,amount,CombatDamageKind.Normal);
         if(Health<=0)Die();
     }
-    void Die(){hitbox.enabled=false;body.simulated=false;Destroy(gameObject);}
+    void Die()
+    {
+        if(dying)return;dying=true;Health=0;pendingAttack=false;
+        hitbox.enabled=false;body.simulated=false;
+        if(Source!=null)
+        {
+            Vector3 center=AimPoint;
+            for(int i=0;i<24;i++)
+            {
+                float angle=(i+Random.value)*Mathf.PI*2/24;
+                var drift=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*Random.Range(1.4f,3.5f);
+                var spark=CrystalSparkle.Create(center,Source.sparkleMaterial,drift,Random.Range(.55f,1.1f),Random.Range(.45f,.8f),LunarArrowImpact.BurstColor(i));
+                spark.name="LunarEchoDeathSparkle";
+            }
+            foreach(var enemy in CrystalEffects.Targets(center,1.75f))
+                if(enemy!=null && enemy.enemy_current_HP>0)DamageEnemy(enemy,5f);
+        }
+        Destroy(gameObject);
+    }
     void Contact(Collider2D collider)
     {
         var e=collider.GetComponentInParent<EnemyData>();

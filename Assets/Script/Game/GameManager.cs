@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if(SceneManager.GetActiveScene().name=="DontDestroyObject")ItemDrop.ResetWeaponDropStreak();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         itemmanager = GameObject.FindGameObjectWithTag("ItemManager").GetComponent<ItemManager>();
     }

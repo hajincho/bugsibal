@@ -30,7 +30,12 @@ public sealed class LunarBowSkill : MonoBehaviour
     bool hadEquipped;
     readonly HashSet<int> qualifiedDeaths=new HashSet<int>();
     static readonly string[] Stages={"I","II","III"};
-    void Awake(){owner=GetComponent<Player>();}
+    void Awake()
+    {
+        owner=GetComponent<Player>();
+        var sway=gameObject.AddComponent<LunarRunArmSway>();
+        sway.Initialize(GetComponent<Animator>(),transform.Find("Root"),this);
+    }
     void OnEnable(){EnemyData.Died+=OnEnemyDied;SceneManager.activeSceneChanged+=SceneChanged;}
     void OnDisable(){EnemyData.Died-=OnEnemyDied;SceneManager.activeSceneChanged-=SceneChanged;Cleanup();if(halo!=null)halo.enabled=false;if(hud!=null)hud.SetActive(false);}
     void OnDestroy(){if(halo!=null)Destroy(halo.gameObject);}
@@ -83,16 +88,26 @@ public sealed class LunarBowSkill : MonoBehaviour
         }
     }
     void OnEnemyDied(EnemyData enemy){}
+    static bool IsRewardEnemy(EnemyData enemy)
+    {
+        if(enemy==null || !enemy.CompareTag("Enemy"))return false;
+        if(enemy.GetComponentInParent<drum>()!=null || enemy.GetComponentInChildren<drum>(true)!=null)return false;
+        if(enemy.GetComponentInParent<TrainingDummy>()!=null || enemy.GetComponentInChildren<TrainingDummy>(true)!=null)return false;
+        // Props also use EnemyData for damage, but must never grant lunar C rewards.
+        for(var parent=enemy.transform;parent!=null;parent=parent.parent)
+            if(parent.CompareTag("drumtong"))return false;
+        return true;
+    }
     // Only projectile and Bow Q paths call this; Bow E never qualifies for clone modes.
     public void OnQualifiedEnemyDefeated(EnemyData enemy,Vector3 position)
     {
-        if(!IsEquipped || SuppressKillRewards || Mode==1 || enemy==null || enemy.GetComponent<TrainingDummy>()!=null || GameManager.player_current_HP<=0)return;
+        if(!IsEquipped || SuppressKillRewards || Mode==1 || !IsRewardEnemy(enemy) || GameManager.player_current_HP<=0)return;
         if(!qualifiedDeaths.Add(enemy.GetInstanceID()))return;
         LunarClone.Create(this,position,Mode==2);
     }
     public void OnEnemyHit(EnemyData enemy,Vector3 position)
     {
-        if(!IsEquipped || SuppressKillRewards || Mode!=1 || enemy==null || !enemy.CompareTag("Enemy") || enemy.GetComponent<drum>()!=null || enemy.GetComponent<TrainingDummy>()!=null || GameManager.player_current_HP<=0)return;
+        if(!IsEquipped || SuppressKillRewards || Mode!=1 || !IsRewardEnemy(enemy) || GameManager.player_current_HP<=0)return;
         if(Random.value<.25f)SpawnOrb(position);
     }
     public LunarSoulOrb SpawnOrb(Vector3 position)
@@ -104,8 +119,12 @@ public sealed class LunarBowSkill : MonoBehaviour
     {
         if(!IsEquipped || GameManager.player_current_HP<=0f)return;
         if(GameManager.player_current_HP>=GameManager.player_HP)
+            RunUpgradeState.GrantShield(RunUpgradeState.Shield+10f);
+        else
+        {
+            GameManager.HealPlayer(10);
             RunUpgradeState.GrantShield(RunUpgradeState.Shield+5f);
-        else GameManager.HealPlayer(10);
+        }
         hasteUntil=Time.time+2f;
     }
     public void OnArrowFired(Arrow arrow,float chargeSeconds=0f)
@@ -118,7 +137,7 @@ public sealed class LunarSoulOrb : MonoBehaviour
 {
     public LunarBowSkill Source { get; private set; }
     SpriteRenderer visual;
-    const float Diameter=1.74f;
+    const float Diameter=1.70085f;
     float born,phase,nextSpark;
     int sparkIndex;
     public void Initialize(LunarBowSkill skill)
@@ -127,6 +146,7 @@ public sealed class LunarSoulOrb : MonoBehaviour
         born=Time.time;phase=Random.value*6.28f;
         transform.localScale=Vector3.one*(Diameter/Mathf.Max(.01f,visual.sprite.bounds.size.y));
         visual.color=new Color(1,1,1,.65f);
+        LunarSoulAeroAura.Attach(transform,visual.sprite,skill.silverMaterial);
     }
     void Update()
     {
@@ -141,13 +161,13 @@ public sealed class LunarSoulOrb : MonoBehaviour
             for(int i=0;i<2;i++)
             {
                 var spark=CrystalSparkle.Create(Vector3.Lerp(previous,transform.position,(i+.5f)/2f)+(Vector3)(Random.insideUnitCircle*.05f),
-                    Source.sparkleMaterial,Random.insideUnitCircle*.2f,Random.Range(.5f,.95f),Random.Range(.75f,1.25f),LunarArrowImpact.BurstColor(sparkIndex++));
+                    Source.sparkleMaterial,Random.insideUnitCircle*.2f,Random.Range(.65f,1.235f),Random.Range(.75f,1.25f),LunarArrowImpact.BurstColor(sparkIndex++));
                 spark.name="LunarSoulSparkle";
             }
         }
-        float pulse=1+.09f*Mathf.Sin((Time.time-born)*7+phase);
+        float pulse=1+.045f*Mathf.Sin((Time.time-born)*7+phase);
         transform.localScale=Vector3.one*(Diameter/Mathf.Max(.01f,visual.sprite.bounds.size.y)*pulse);
         visual.color=new Color(1,1,1,.5f+.2f*Mathf.Sin(Time.time*9+phase));
-        if(Vector2.Distance(transform.position,target)<.3f){Source.AbsorbSoul();Destroy(gameObject);}
+        if(Vector2.Distance(transform.position,target)<.6f){Source.AbsorbSoul();Destroy(gameObject);}
     }
 }

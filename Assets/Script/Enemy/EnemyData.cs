@@ -9,6 +9,7 @@ public class EnemyData : MonoBehaviour
     public float enemy_power;
     SpriteRenderer sprite;
     bool initialized;
+    [System.NonSerialized] public bool WeaponDropResolved;
     Collider2D[] deathColliders;
     Rigidbody2D[] deathBodies;
     public static float LastHitTime=-999f;// 마지막으로 적이 피해를 입은 시각, EnemyDirectionArrow가 사용
@@ -24,7 +25,7 @@ public class EnemyData : MonoBehaviour
     void Update()
     {
         enemy_current_HP = Mathf.Clamp(enemy_current_HP, 0, Mathf.Max(0, enemy_HP));
-        if (initialized && enemy_current_HP <= 0f) DisableDeathHitboxes();
+        if (initialized && enemy_current_HP <= 0f){ItemDrop.ResolveEnemyDeath(this);DisableDeathHitboxes();}
     }
 
     void LateUpdate()
@@ -62,6 +63,7 @@ public class EnemyData : MonoBehaviour
             var frost = GetComponent<EnemyFrostStatus>();
             if (frost != null) frost.CancelStatus();
             DisableDeathHitboxes();
+            ItemDrop.ResolveEnemyDeath(this);
             if(Died!=null)Died(this);
         }
         float applied=before-enemy_current_HP;

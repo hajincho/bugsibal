@@ -31,6 +31,7 @@ public sealed class LunarEchoRig : MonoBehaviour
         animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;animator.applyRootMotion=false;
         animator.Rebind();animator.Update(0);
         animator.SetInteger("Attack",-1);animator.SetInteger("Attacked",-1);animator.SetBool("Run",false);
+        var sway=rig.gameObject.AddComponent<LunarRunArmSway>();sway.Initialize(animator,skeleton,clone.Source);
         foreach(var part in skin.parts)
         {
             var sprite=Sprite.Create(skin.partsTexture,part.rectangle,part.pivot,100,0,SpriteMeshType.FullRect);sprites.Add(sprite);

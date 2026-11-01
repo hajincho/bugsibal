@@ -21,6 +21,7 @@ public class Ghost : MonoBehaviour
     Collider2D[] hitboxes;
     Player player;
     Collider2D playerBody;
+    Transform target;
     float phase, nextDamageAt;
     bool dead;
     public float VisibilityAlpha
@@ -95,7 +96,10 @@ public class Ghost : MonoBehaviour
             EnemyFrostStatus.IsFrozenOn(this) || GameManager.player_current_HP <= 0f) return;
         if (player == null || playerBody == null) FindPlayer();
         if (playerBody == null || body == null || hitboxes.Length == 0) return;
-        Vector2 direction = (Vector2)playerBody.bounds.center - (Vector2)hitboxes[0].bounds.center;
+        target = LunarClone.ResolveTarget(hitboxes[0].bounds.center, player.transform);
+        var echo = target != null ? target.GetComponent<LunarClone>() : null;
+        Vector2 targetPoint = echo != null ? echo.AimPoint : (Vector2)playerBody.bounds.center;
+        Vector2 direction = targetPoint - (Vector2)hitboxes[0].bounds.center;
         float speed = movement != null ? Mathf.Max(0f, movement.enemy_speed) : 5f;
         Vector2 next = body.position + Vector2.ClampMagnitude(direction, speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.fixedDeltaTime);
         body.MovePosition(next + SeparationOffset(next));
@@ -121,6 +125,15 @@ public class Ghost : MonoBehaviour
     {
         if (dead || data == null || data.enemy_current_HP <= 0f || Time.time < nextDamageAt ||
             StageRewardController.InputBlocked || EnemyFrostStatus.IsFrozenOn(this) || GameManager.player_current_HP <= 0f) return;
+        var echo = other.GetComponentInParent<LunarClone>();
+        if (echo != null)
+        {
+            if (echo.Health <= 0f || !echo.isActiveAndEnabled ||
+                PlayerOverlapFraction(other) + .0001f < requiredPlayerOverlap) return;
+            nextDamageAt = Time.time + Mathf.Max(.01f, damageInterval);
+            echo.Hurt(contactDamage);
+            return;
+        }
         if (player == null) FindPlayer();
         if (player == null || other.GetComponentInParent<Player>() != player) return;
         if (PlayerOverlapFraction(playerBody) + .0001f < requiredPlayerOverlap) return;
@@ -128,7 +141,7 @@ public class Ghost : MonoBehaviour
         GameManager.DamagePlayer(contactDamage);
     }
 
-    // Sample inside the actual player shape, rather than counting empty capsule corners.
+    // Sample the actual player/clone shape, rather than counting empty capsule corners.
     public float PlayerOverlapFraction(Collider2D target)
     {
         if (target == null || !target.enabled || hitboxes == null) return 0f;

@@ -1,15 +1,15 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosionFb : MonoBehaviour
 {
-    Skill1 skill1;
+    FireballSkill skill1;
     public bool damageable_exp = false;
     void OnEnable()
     {
         damageable_exp = true;
-        skill1 = GameObject.FindWithTag("Player").GetComponent<Skill1>();
+        skill1 = GameObject.FindWithTag("Player").GetComponent<FireballSkill>();
         Destroy(gameObject, 0.55f);
     }
 

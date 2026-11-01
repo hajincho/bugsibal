@@ -22,7 +22,7 @@ public class ItemDrop : MonoBehaviour
 
     public static void ResolveEnemyDeath(EnemyData enemy)
     {
-        if(enemy==null || !enemy.CompareTag("Enemy") || enemy.GetComponent<drum>()!=null || enemy.GetComponent<TrainingDummy>()!=null)return;
+        if(enemy==null || !enemy.CompareTag("Enemy") || enemy.GetComponent<ExplosiveBarrel>()!=null || enemy.GetComponent<TrainingDummy>()!=null)return;
         if(enemy.WeaponDropResolved)return;
         enemy.WeaponDropResolved=true;
         var local=enemy.GetComponent<ItemDrop>();
@@ -77,7 +77,9 @@ public class ItemDrop : MonoBehaviour
         }
         foreach (Item item in itemManager.itemList)
         {
-            if (!UniqueItemweights.ContainsKey(item) && item.weight > 0 && item.weight <= 50)
+            if (!UniqueItemweights.ContainsKey(item) && item.itemType == ItemType.Weapon &&
+                item.weight > 0 && item.weight <= 50 &&
+                item.itemName != "아르테미시아" && item.itemName != "사랑의 이름으로" && item.itemName != "정의의 이름으로")
             {
                 UniqueItemweights.Add(item, item.weight);
             }

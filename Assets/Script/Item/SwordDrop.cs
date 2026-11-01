@@ -90,7 +90,8 @@ public class SwordDrop : MonoBehaviour
             bowVisual = new GameObject("BowVisual", typeof(SpriteRenderer));
             bowVisual.transform.SetParent(transform, false);
         }
-        bowVisual.transform.localScale = new Vector3(2f, 2f, 1f);
+        float dropScale = 2f * (item.bowSettings != null ? item.bowSettings.droppedVisualScale : 1f);
+        bowVisual.transform.localScale = new Vector3(dropScale, dropScale, 1f);
         SpriteRenderer renderer = bowVisual.GetComponent<SpriteRenderer>();
         renderer.sprite = item.bowSettings != null && item.bowSettings.droppedSprite != null
             ? item.bowSettings.droppedSprite : item.icon;

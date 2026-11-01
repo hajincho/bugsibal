@@ -1,18 +1,18 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordEffect : MonoBehaviour
 {
     Transform playertransform;
-    Skill5 skill5;
+    SwordSlashSkill skill5;
     PlayerMove playermove;
     bool damageable = true;
     float lifesteal;
     void OnEnable()
     {
         playertransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        skill5 = GameObject.FindWithTag("Player").GetComponent<Skill5>();
+        skill5 = GameObject.FindWithTag("Player").GetComponent<SwordSlashSkill>();
         damageable = true;
         Destroy(gameObject, 0.55f);
         playermove = GameObject.FindWithTag("Player").GetComponent<PlayerMove>();

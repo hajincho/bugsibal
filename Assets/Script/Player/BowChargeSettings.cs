@@ -17,6 +17,8 @@ public sealed class BowChargeSettings : ScriptableObject
     public Sprite idleSprite;
     [Tooltip("바닥 드롭 전용 이미지. 비워두면 아이템 아이콘을 사용합니다.")]
     public Sprite droppedSprite;
+    [Tooltip("기본 바닥 드롭 크기에 곱하는 배율입니다.")]
+    [Min(.01f)] public float droppedVisualScale = 1f;
     public Sprite[] drawSprites;
     public GameObject arrowPrefab;
 

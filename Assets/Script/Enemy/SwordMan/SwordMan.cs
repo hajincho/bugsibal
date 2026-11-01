@@ -52,7 +52,7 @@ public class SwordMan : MonoBehaviour
     Collider2D wallCollider;
     [Header("Idle ghost summon")]
     public GameObject ghostPrefab;
-    [Min(.1f)] public float ghostSummonIdleSeconds = 5f;
+    [Min(.1f)] public float ghostSummonIdleSeconds = 10f;
     [Min(.1f)] public float ghostSummonPauseSeconds = 1f;
     float idleWithoutAttack;
     bool summoningGhosts;

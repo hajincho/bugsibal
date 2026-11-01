@@ -287325,7 +287325,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uB0A8\uC740 \uC801\uC758 \uC218: 0\n\uD074\uB9AC\uC5B4\uAE4C\uC9C0 \uB0A8\uC740
-    \uC801: 30"
+    \uC801: 26"
 --- !u!222 &669756699
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -330288,7 +330288,7 @@ GameObject:
   - component: {fileID: 935404745}
   - component: {fileID: 935404744}
   m_Layer: 0
-  m_Name: Stage7Encounters
+  m_Name: Stage5Encounters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -330310,16 +330310,8 @@ MonoBehaviour:
   - title: Entry
     center: {x: 0, y: -40}
     radius: 8
-    enemies:
-    - {fileID: 1011926200503692051, guid: da1028f5eb37619409b53790640361dd, type: 3}
-    - {fileID: 1011926200503692051, guid: da1028f5eb37619409b53790640361dd, type: 3}
-    - {fileID: 6926167496750331034, guid: 5c266b174eb8add45b53d121f19ec3e5, type: 3}
-    - {fileID: 6926167496750331034, guid: 5c266b174eb8add45b53d121f19ec3e5, type: 3}
-    spawnPoints:
-    - {x: 2.6870058, y: -37.312996, z: 0}
-    - {x: -3.6062446, y: -36.393757, z: 0}
-    - {x: -2.6870053, y: -42.687008, z: 0}
-    - {x: 3.6062458, y: -43.606243, z: 0}
+    enemies: []
+    spawnPoints: []
     activated: 0
     cleared: 0
     spawned: 0

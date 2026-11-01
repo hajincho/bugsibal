@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   queenGatherWaveSprite: {fileID: 0}
   idleSprite: {fileID: 21300000, guid: 586fae6b0d0a7284eb2c2e4d45ffed43, type: 3}
+  droppedSprite: {fileID: 0}
+  droppedVisualScale: 0.37
   drawSprites: []
   arrowPrefab: {fileID: 3157866486384649509, guid: 6bf061c94f0e45a4e9e92fd70821a853, type: 3}
   automaticMagazine: 1

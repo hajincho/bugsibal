@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wall300Part0
+  m_Name: StraightIWall_PassageTrim
   m_Rect:
     serializedVersion: 2
     x: 46.583668
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    00000000000000000000000000000000: 0
+    0634fb5ddb0bc9a49b6f4177fc8f8389: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:

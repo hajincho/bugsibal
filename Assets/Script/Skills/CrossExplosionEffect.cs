@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CrossExplosionEffect : MonoBehaviour
+{
+    SwordExplosionSkill skill2;
+    public bool damageable = true;
+    public int damage = 50;
+
+    void OnEnable()
+    {
+        skill2 = GameObject.FindWithTag("Player").GetComponent<SwordExplosionSkill>();
+    }
+    void Start()
+    {
+        Destroy(gameObject, 0.4f);
+    }
+    
+    
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.tag == "Enemy" || other.tag == "drumtong")
+            {
+                EnemyData enemy_data = other.GetComponent<EnemyData>();
+                IsSkillDamaged skilldamaged = other.GetComponent<IsSkillDamaged>();
+                if (enemy_data == null)
+                {
+                    enemy_data = other.GetComponentInParent<EnemyData>();
+                }
+
+                if (skilldamaged == null)
+                {
+                    skilldamaged = other.GetComponentInParent<IsSkillDamaged>();
+                }
+
+                if (!skilldamaged.damaged_skill2)
+                {
+                    enemy_data.TakeDamage(RunUpgradeState.SkillPower * 4 + 10, CombatDamageKind.Skill);
+                    enemy_data.Hitted();
+                    skilldamaged.damaged_skill2 = true;
+                    skill2.SkillDamageEnable(skilldamaged);
+                }
+            }
+        }
+    
+}

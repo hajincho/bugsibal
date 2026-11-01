@@ -91,7 +91,7 @@ public sealed class LunarBowSkill : MonoBehaviour
     static bool IsRewardEnemy(EnemyData enemy)
     {
         if(enemy==null || !enemy.CompareTag("Enemy"))return false;
-        if(enemy.GetComponentInParent<drum>()!=null || enemy.GetComponentInChildren<drum>(true)!=null)return false;
+        if(enemy.GetComponentInParent<ExplosiveBarrel>()!=null || enemy.GetComponentInChildren<ExplosiveBarrel>(true)!=null)return false;
         if(enemy.GetComponentInParent<TrainingDummy>()!=null || enemy.GetComponentInChildren<TrainingDummy>(true)!=null)return false;
         // Props also use EnemyData for damage, but must never grant lunar C rewards.
         for(var parent=enemy.transform;parent!=null;parent=parent.parent)

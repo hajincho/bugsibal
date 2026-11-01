@@ -29,6 +29,9 @@ public static class SkyStoneStagesBuilder
         if(stage<4||stage>6)throw new ArgumentOutOfRangeException("stage");
         string path="Assets/Scenes/Stage/Stage"+stage+".unity";File.Copy(path,@"C:\Users\fromj\Documents\Codex\2026-10-27\su\output\forest-backups\Stage"+stage+"-before-sky-"+DateTime.Now.ToString("yyyyMMdd-HHmmss")+".unity");
         var scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);Tilemap ground=null;var walls=new HashSet<Vector3Int>();var maps=new List<Tilemap>();
+        // Remove the previous theme before looking for the actual playable floor.
+        foreach(var root in scene.GetRootGameObjects())
+            if(root.name=="ForestTheme")UnityEngine.Object.DestroyImmediate(root);
         foreach(var root in scene.GetRootGameObjects())if(root.name!="SkyStoneStageTheme")foreach(var tm in root.GetComponentsInChildren<Tilemap>())
         {
             if(tm.GetComponent<Collider2D>()!=null){maps.Add(tm);foreach(var p in tm.cellBounds.allPositionsWithin)if(tm.HasTile(p))walls.Add(p);}

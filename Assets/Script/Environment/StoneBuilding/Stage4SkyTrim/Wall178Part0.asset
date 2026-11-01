@@ -6,10 +6,10 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wall178Part0
+  m_Name: StraightIWall_PassageTrim
   m_Rect:
     serializedVersion: 2
-    x: 46.322433
+    x: 46.583668
     y: 22.656143
     width: 35.093876
     height: 210.83203
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    00000000000000000000000000000000: 0
+    7ec656fbb655d3e41ad712d806756752: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
@@ -107,14 +107,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 46.322433
+      x: 46.583668
       y: 22.656143
       width: 35.093876
       height: 210.83203
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 0
-    uvTransform: {x: 14.430664, y: 63.86937, z: 14.430664, w: 128.07216}
+    uvTransform: {x: 14.430664, y: 64.13061, z: 14.430664, w: 128.07216}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
@@ -198,14 +198,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 46.322433
+      x: 46.583668
       y: 22.656143
       width: 35.093876
       height: 210.83203
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 0
-    uvTransform: {x: 14.430664, y: 63.86937, z: 14.430664, w: 128.07216}
+    uvTransform: {x: 14.430664, y: 64.13061, z: 14.430664, w: 128.07216}
     downscaleMultiplier: 1
   m_PhysicsShape: []
   m_Bones: []

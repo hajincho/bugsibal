@@ -1,0 +1,294 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!213 &-2666206950004326254
+Sprite:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ClippedHellFloor
+  m_Rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 32
+    height: 32
+  m_Offset: {x: 0, y: 0}
+  m_Border: {x: 0, y: 0, z: 0, w: 0}
+  m_PixelsToUnits: 32
+  m_Pivot: {x: 0.5, y: 0.5}
+  m_Extrude: 0
+  m_IsPolygon: 0
+  m_AtlasName: 
+  m_PackingTag: 
+  m_RenderDataKey:
+    00000000000000000000000000000000: 0
+  m_AtlasTags: []
+  m_SpriteAtlas: {fileID: 0}
+  m_RD:
+    serializedVersion: 3
+    texture: {fileID: -1177215805491654900}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 32
+      height: 32
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 0
+    uvTransform: {x: 32, y: 16, z: 32, w: 16}
+    downscaleMultiplier: 1
+  m_AtlasRD:
+    serializedVersion: 3
+    texture: {fileID: -1177215805491654900}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 32
+      height: 32
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 0
+    uvTransform: {x: 32, y: 16, z: 32, w: 16}
+    downscaleMultiplier: 1
+  m_PhysicsShape: []
+  m_Bones: []
+  m_SpriteID: 
+--- !u!28 &-1177215805491654900
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ClippedHellFloor
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 2
+  m_Width: 32
+  m_Height: 32
+  m_CompleteImageSize: 4096
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 4096
+  _typelessdata: 6d1e19ff6d1f1aff71201bff611e19ff5f1d19ff601d19ff5f1e19ff601e1aff5b1b19ff501714ff671e1aff661e19ff6a1f1aff5f1915ff461412ff391210ff280f0dff140e0dff502312ff963e1cff954021ff9b401fff421b0fff3c1911ff81391dff732f13ff441e0fff191110ff29201fff3a2f2cff2b221fff241714ff711e18ff7d211bff5e1d18ff73211bff7d221cff5f1d1aff5f1e19ff621e19ff691f19ff5e1c19ff702019ff661d19ff7a1f19ff621c17ff751e19ff601c18ff441512ff2e100eff281f1cff1c1412ff180b09ff150907ff140807ff1f1312ff5a200bff3d150bff221a18ff2d2421ff4c403cff3e322fff483c39ff3b302eff731f1aff7b211aff6d1e19ff7b211cff661f1bff76201bff601d19ff601d19ff5f1d1aff5e1c19ff631c19ff611d19ff5f1c18ff601c18ff611d18ff6c1d18ff72201aff421412ff180d0bff1e0a09ff511b17ff451614ff651f1bff351110ff220a07ff1b1211ff463b38ff403532ff3f3430ff392f2cff3a302dff403632ff651b18ff75201aff761f1aff70201cff77201cff6c1d19ff611d19ff5f1d19ff601d19ff601d19ff5d1d19ff591b18ff631d19ff6f201bff631c18ff701e18ff771e19ff4b1613ff2a0e0dff4b1915ff74251dff611c18ff601b17ff69201bff270e0bff2d221fff483c39ff423834ff362c28ff2d2421ff352b27ff463a37ff7a1f19ff6f1f19ff661c18ff631e19ff621d19ff641e19ff611d19ff601d19ff5f1d19ff641e1aff591b17ff5c1c18ff74201aff79211bff73201aff781f19ff7c1f1aff802823ff250e0cff3a1a16ff5c1f1aff581c18ff581b18ff5e1e19ff2c110eff3c302bff433733ff3e3330ff2e2522ff403632ff352a27ff3d322fff7c211aff77201aff701e19ff7d211bff5f1d1aff601d19ff601d19ff5e1c18ff3a1110ff651e19ff601c19ff5b1c19ff601d19ff691e19ff75201aff7a1f19ff681c18ff771e18ff2b0c0aff1b110eff54221bff66251eff591c18ff51201bff46170aff9c390aff423935ff453a37ff483c39ff3d332fff3a2f2cff3a2f2c007c201aff7c201bff601d18ff681d19ff792019ff631d19ff5d1c18ff531815ff601d19ff5c1b18ff5a1b18ff5b1c18ff651d19ff7a1f19ff76211bff7b1f19ff741e18ff71211bff2a0e0cff5e1911ff1b100eff49231dff4f251eff2e0d07ff611c0fff1f0b07ff4b120bff362b28ff3f3431ff403532ff3f3431003d332f00681d18ff691e1aff641e19ff531915ff5f1c18ff631d1aff621e1aff451411ff6b1f1aff4c1916ff5b1c19ff5f1d19ff6a1e19ff621c18ff681e19ff781e18ff6d1d18ff2d0e0dff421512ff32110fff351110ff1e1310ff392f2cff220f0eff3d1513ff7b2b25ff3d1210ff2f0e0dff1b0f0dff362823004c403c004c403c006c1f1aff71201bff681e19ff651e1aff5a1b18ff611d19ff531a16ff581b16ff37100eff671d18ff5c1d1aff701f19ff651d19ff5e1d19ff611d18ff69201bff511914ff601b17ff6a1f19ff681f1aff4c1815ff341110ff241916ff3f1411ff72211bff6a1c16ff771f19ff651b17ff38120e004f1a12002f110d00150e0c005f1c19ff631d19ff5f1d18ff601d19ff6a1f1aff621e19ff571b18ff721f1aff621b16ff78211bff6a1e19ff611d19ff5e1d19ff611e19ff60201bff361310ff511915ff75201aff661f19ff601e19ff76221bff3c1412ff1d100dff72271fff601d18ff631b17ff6c221dff7e261f0033120e002b17140028120e00261d1b00601d19ff601d19ff5e1d19ff5e1c19ff641d19ff6e1e19ff7d221cff7a211bff7b201aff711f1aff751f1aff611d19ff5d1c18ff5e1c19ff260e0aff641c17ff5e1b18ff5c1b18ff5f1d19ff601f1aff701e19ff6e241eff310f0dff3e1a14ff703128ff773128ff1d0d0900170c08001c13100020181500271e1b001e161300601d19ff5e1c19ff5e1d19ff5e1d19ff5c1c19ff681d19ff71201aff671d17ff7d211aff7b201aff7b1f19ff6f211bff721f1aff250b08ff5d1d18ff5d1c18ff591c17ff591b17ff571b17ff7a231dff621c17ff702722ff270e0bff531e13ff26110fff1b0d0a0021181500251c1a00251b1900231a1700362c29003b302d00461512ff4e1815ff5e1c18ff521916ff5b1d19ff671e19ff771f1aff7a201aff75201aff7a201aff6e1e19ff6e201bff601d17ff611c18ff5d1b17ff5f1c18ff5a1c18ff561916ff6a1f1bff5a1c17ff78211cff5e2921ff982e07ff190d0cff1b1210002119160031282500362c2a004b3f3b003f3430003d322f003d322f00611c19ff5e1d19ff631e19ff651d19ff591d19ff6d2924ff702b23ff74201aff78211aff77211bff74201aff7a332bff41120fff74241eff5d1c18ff5f1c19ff751f19ff5a1b18ff68221cff6e211cff702d25ff622109ff982b09ff3b161400281f1c00493d3900463b38004c413d00504541003e3430003d322f003d322f00672720ff682822ff5d1f1bff66221cff2f110eff200a09ff3e1c16ff431f16ff5a2313ff331814ff3e1b16ff130c0aff3f1914ff742d25ff6d2a24ff62201bff5a1c18ff702922ff723027ff5e251fff8a210affdc6208ff34130d00352926004b3f3c0044393600473c3800453b3700493e3a00483c39003d322f003d322f008c2e1cff4d1e15ff1e100dff26130fff551f0fff85380bff3c100aff741c0aff251c1cff302624ff291f1dff1b1312ff211310ff130c0aff361914ff55261fff51251eff501d14ff48160dff651b09ff1c100eff591b0800261c1a003d332f003e332f004a3e3b00453a3600423734003e333000392e2b00382d2a003f333000321915ff270c08ff8b2e07ffc8500cffd34708ff2c1a17ff20100cff452f2aff3e322eff3f3430ff372d2bff4e423eff221816ff302421ff2c201eff1c110eff1c0f0cff340e0aff441410ff170c09ff33221f00221210003a2c27004a3f3c003e3430002f2521003c312e003e3430003c312e00271d1a00382e2a00382d2a00352624ff372725ff3c1109ff340f0aff180b0aff591d0eff221411ff50423eff433734ff3a302cff493e3bff3d332fff302420ff1e1311ff260e0cff2b0f0dff431513ff571a16ff601c19ff3d14120032110f0033120d00551a0d0040353200473c38003a2f2c003a2f2c00493e3b003c322e003e3330002e252200332925003a2c26ff1b110dff270f0aff251d1bff281f1dff261c1aff1c0b09ff29130eff3f3531ff403532ff1c1210ff170d0bff29100eff3b1311ff4e1915ff6b1c17ff702822ff6a1e18ff76211b0075221b00391210002e100e0021120f00291e1b0051454100433835003d33300031272300433734004b3f3b00392f2b00382e2a0021100eff1d1411ff1e1615ff3c322fff453a36ff443834ff261d1aff261b18ff1b120fff561b10ff571b11ff421511ff70211dff711f1aff73201aff601d19ff551a17ff611e18007c211b005c1c1800671e190051161300381110001d0a0900261c1900433834003f353200463b37003e332f00493d3900433835003f343000201816ff29211fff473c39ff463b37ff423734ff433734ff453935ff3a302cff261d1aff1c0f0dff1d0e0cff6a2b25ff6e1e19ff751d19ff631b17ff611d1aff49171400551a1700671d18005f1e1900681e1800701f19005c1a15004a141200260f0c0022181500504541004c403d004c403c00493d3a004337330043373400281f1dff4b3f3bff463b37ff453a36ff3e332fff3d322eff423733ff423633ff382e2aff281f1dff150e0cff391a15ff66201aff601b17ff451411ff601d1900631d19005f1d19005d1c18005c1d1900791f1a00671d1800781f18007b1e1700611a16001b0b0a00271e1b004c403d004c413d003d332f003f353100473c38004b3f3bff403431ff3e3430ff3e3330ff3c322eff3d322eff3e3330ff3d332fff3c302dff372d2aff231b19ff1a1210ff4c1d18ff641f1aff761e19006c1f19005e1c1900531916003e1311005c1c19006c1e1900751f19006f1d17007c1f19007b1f1900220d0a002118160018100e00261b18002219170034292600251c1a00433834ff3f3431ff362c28ff3a2f2cff3d322fff362c29ff3a2f2cff3d322fff433834ff453936ff2f2624ff1d1513ff1b1311ff6c2a240071201a007e211a005f1d1a00691f1b0043161300511816005c1d1900681e1a00671d1800751f190066221d001e1614003e343100251c1a00361d17001b0d0a0021120e00241412003d322fff3f3531ff3b302cff312723ff3c322fff3c312dff3e3430ff443936ff3e3330ff4e433fff493e3aff271f1cff160e0b0025141000742e2600671e1900441412005f1e1a006c211c0076201a005e1c190075201a00441512006d221d00160907003128250033292500170c0a00401813004d1c16004d1b15004e1a16002e2421ff312724ff372d2aff3d322fff211815ff3f3431ff463a36ff4b403cff4c403cff473c38ff443936ff3d333000160f0c00352926003417130047141100661c1800651e1900721f1a006e1e1900631d19006c1e1900501a17002e100e002b2321001c14120033120e0045191500702c19007c3017007f3018006c2a1700403531ff302622ff201715ff241b17ff493e3aff3f3431ff423733ff4a3f3aff493e3aff483d39ff3b312d00453b370019100d001e151300150d0b002c110e0068231c00671e1900691e19007f221c00691e1900731f1a006b221d001c0f0d00261b19003f181200551f14008d371700903b1a008b3a1b0077321c00a03f18003f3430ff3d322fff3f3531ff3f3330ff3d322fff3f3431ff433935ff4a3f3bff4d423eff4a3f3b002c221f003a2f2c001a110f001d151300261c1a0018100e003816110078221c00741e18007a201b00741e18006e1c18003d1714001f1614002e120e0055201800963d180076331b00a341190075321c0076331d0087371a00473c38ff463a37ff3d332fff3d322fff413632ff443935ff483d39ff3e3431ff4d423e003d322e00473c38002f2623003f353100483c3800392e2b00231b18001a100d00451d180075302800762821007a271e00662e2600472017002e140c00511e1800913d1b007c351b0078351c0086361a00933c190079341d0077321c003e3430ff3e3430ff3e332fff3e332fff463a37ff483c37ff362c28ff483b3700423633003e322f003f343000443935003d332f003d332f003e343100392f2c00251c1a0018110e001d110e0025100c001b0d0a00180d0900431e0f001e0d0b008a3819009c3e16007a351c00943e1c006c2d1b006c2e1b0078341c0077321a00382e2bff413633ff3e3330ff3f3430ff3f3430ff483c38ff392f2c00261d1a00241a17004b403c004a3f3b003f3431003d3330003d3330003e343000342a26003a302d00281e1c003b1810002b110c00381e1a004e2a2600200f0d00411916006a2a150084381b00893a1c007d351c0072301b007a351d0078341c007b321a003a302cff392e2aff3e3330ff3f3430ff362b27ff372c28003a2f2b00392e2b00392e2c003c322f0042373300433834003d332f003f343100372d2a00302521003c322f003b312e002219160027141000562c2600522a26001c0d0b00551f160069261400522114008f3a1a0087371a009239160085371b0083361a006d2e1a00
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: Floor_19_21
+  m_EditorClassIdentifier: 
+  m_Sprite: {fileID: -2666206950004326254}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 0
+  m_ColliderType: 0

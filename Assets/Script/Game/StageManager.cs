@@ -17,6 +17,8 @@ public class StageManager : MonoBehaviour
     // Optional route checkpoints; empty preserves the existing stage behavior.
     public List<Vector2> encounterCenters = new List<Vector2>();
     public float encounterActivationRadius = 12f;
+    public bool autoStartThirdWave;
+    [Min(0f)] public float thirdWaveDelay = 1f;
     //소환된 적의 개수를 세서 다음 phase로 넘어가는 용도
     public List<GameObject> summoned_enemies = new List<GameObject>();
     public GameObject next_scene;
@@ -36,9 +38,15 @@ public class StageManager : MonoBehaviour
     void Update()
     {
         summoned_enemies.RemoveAll(item => item == null);
+        if (autoStartThirdWave && phase == 2)
+            summoned_enemies.RemoveAll(item =>
+            {
+                var enemy = item.GetComponent<EnemyData>();
+                return enemy != null && enemy.enemy_current_HP <= 0f;
+            });
         if(summoned_enemies.Count == 0 && progress)
         {
-            if (phase < encounterCenters.Count)
+            if (phase < encounterCenters.Count && !(autoStartThirdWave && phase == 2))
             {
                 var player = FindObjectOfType<Player>();
                 if (player == null || Vector2.Distance(player.transform.position, encounterCenters[phase]) > encounterActivationRadius) return;
@@ -65,9 +73,10 @@ public class StageManager : MonoBehaviour
                     progress = false;
                     for (int i = 0; i < enemies_phase3.Count; i++)//각 페이즈의 적 수만큼 반복
                     {
-                        Instantiate(denger, phase3_location[i].position, transform.rotation);
+                        var warning = Instantiate(denger, phase3_location[i].position, transform.rotation);
+                        if (autoStartThirdWave) Destroy(warning, Mathf.Max(0f, thirdWaveDelay));
                     }
-                    Invoke("phase3", 3f);
+                    Invoke("phase3", autoStartThirdWave ? Mathf.Max(0f, thirdWaveDelay) : 3f);
                     return;
                 case 3:
                     if (enemies_phase4.Count > 0)

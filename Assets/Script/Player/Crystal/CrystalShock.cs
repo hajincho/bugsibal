@@ -50,7 +50,7 @@ public sealed class CrystalShock : MonoBehaviour
             var player=GameObject.FindGameObjectWithTag("Player");
             var loadout=player!=null ? player.GetComponent<WeaponSkillLoadout>() : null;
             var slot=loadout!=null && loadout.swordSkills.Length>0 ? loadout.swordSkills[0] : null;
-            var skill=slot!=null ? slot.skill as Skill5 : null;
+            var skill=slot!=null ? slot.skill as SwordSlashSkill : null;
             var box=skill!=null && skill.swordeffect!=null ? skill.swordeffect.GetComponentInChildren<BoxCollider2D>(true) : null;
             if(box==null)return new Vector2(8.64f,5.76f);
             Vector3 scale=box.transform.lossyScale;

@@ -28,7 +28,7 @@ public class SpawnPoint : MonoBehaviour
             else if (GameManager.current_stage == 3)
                 newPosition = new Vector2(-23, 0);
             else if (GameManager.current_stage == 4)
-                newPosition = new Vector2(-30, -15);
+                newPosition = StageFourEntry.StartPosition;
 
             spwn.transform.position = newPosition;
         }

@@ -103,7 +103,7 @@ public class DevilMage : MonoBehaviour
                     animator.SetInteger("Attack", 2);
                     for (int i = 0; i<2; i++)
                     {
-                        var testStage=FindObjectOfType<StageSevenEncounters>();
+                        var testStage=FindObjectOfType<StageFiveEncounters>();
                         if(testStage!=null && testStage.AliveCount>=testStage.maximumAlive)break;
                         GameObject bat = Instantiate(batpref, transform.position, Quaternion.identity);
                     } 

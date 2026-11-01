@@ -291540,8 +291540,14 @@ MonoBehaviour:
   - {fileID: 717118801}
   - {fileID: 233741993}
   - {fileID: 22885509}
+  enemies_phase4: []
+  phase4_location: []
+  encounterCenters: []
+  encounterActivationRadius: 12
+  autoStartThirdWave: 0
+  thirdWaveDelay: 1
   summoned_enemies: []
-  next_scene: {fileID: 7855975257183592281, guid: 7ef39b8bec2bb4959a3d8507e65efa4d, type: 3}
+  next_scene: {fileID: 7855975257183592281, guid: e71035896ef2cf14fa94911a9c0b71b0, type: 3}
   portal_position: {fileID: 1280521856}
   phase: 0
   progress: 1

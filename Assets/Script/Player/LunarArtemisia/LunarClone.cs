@@ -7,7 +7,7 @@ public sealed class LunarClone : MonoBehaviour
     public LunarBowSkill Source { get; private set; }
     public float Health { get; private set; }
     public bool Archer { get; private set; }
-    public float MaxHealth => Archer?10f:20f;
+    public float MaxHealth => Archer?10f:15f;
     public Vector2 AimPoint => (Vector2)transform.position+Vector2.up*.75f;
     LunarEchoRig rig;
     float born,decayedSeconds,resolveAttackAt;
@@ -31,14 +31,27 @@ public sealed class LunarClone : MonoBehaviour
         int living=0;
         foreach(var echo in all)
             if(echo!=null && echo.Health>0f && !echo.dying)living++;
-        if(living>=2)return null;
+        if(living>=2)
+        {
+            // List order is the summon order; healing resets 'born', so it cannot identify the oldest.
+            var replacement=FindReplacement(skill,archer);
+            foreach(var echo in all)
+                if(echo!=null && echo.Source==skill && echo.Health>0f && !echo.dying)
+                {
+                    echo.Health=Mathf.Min(echo.MaxHealth,echo.Health+5f);
+                    echo.born=Time.time;
+                    echo.decayedSeconds=0f;
+                }
+            if(replacement==null)return null;
+            replacement.Die();
+        }
         var go=new GameObject(archer?"LunarArcherEcho":"LunarSwordEcho");
         UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go,skill.gameObject.scene);
         go.transform.position=position;
         var sorting=go.AddComponent<UnityEngine.Rendering.SortingGroup>();
         var sourceSorting=skill.Owner.GetComponentInParent<UnityEngine.Rendering.SortingGroup>();
         if(sourceSorting!=null){sorting.sortingLayerID=sourceSorting.sortingLayerID;sorting.sortingOrder=sourceSorting.sortingOrder;}
-        var c=go.AddComponent<LunarClone>();c.Source=skill;c.Archer=archer;c.Health=archer?10:20;c.born=Time.time;
+        var c=go.AddComponent<LunarClone>();c.Source=skill;c.Archer=archer;c.Health=c.MaxHealth;c.born=Time.time;
         c.body=go.AddComponent<Rigidbody2D>();c.body.gravityScale=0;c.body.freezeRotation=true;
         c.body.collisionDetectionMode=CollisionDetectionMode2D.Continuous;
         c.hitbox=go.AddComponent<CapsuleCollider2D>();c.hitbox.size=new Vector2(.7f,1.6f);c.hitbox.offset=new Vector2(0,.8f);
@@ -46,6 +59,17 @@ public sealed class LunarClone : MonoBehaviour
         foreach(var other in all)if(other!=null)Physics2D.IgnoreCollision(c.hitbox,other.hitbox);
         foreach(var col in skill.Owner.GetComponentsInChildren<Collider2D>())Physics2D.IgnoreCollision(c.hitbox,col);
         all.Add(c);if(CombatPresentation.Instance!=null)CombatPresentation.Instance.RegisterClone(c);return c;
+    }
+    static LunarClone FindReplacement(LunarBowSkill skill,bool archer)
+    {
+        LunarClone oldest=null;bool differentType=false;
+        foreach(var echo in all)
+        {
+            if(echo==null || echo.Source!=skill || echo.Health<=0f || echo.dying)continue;
+            if(oldest==null)oldest=echo;
+            if(echo.Archer!=archer)differentType=true;
+        }
+        return differentType?oldest:null;
     }
     public static void Clear(LunarBowSkill owner)
     {

@@ -1,8 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // Phasing changes visibility only: the trigger hurtbox remains vulnerable throughout.
 public class Ghost : MonoBehaviour
 {
+    static readonly HashSet<Ghost> activeGhosts = new HashSet<Ghost>();
+    [Min(.1f)] public float separationDistance = 1.8f;
+    [Min(.1f)] public float separationSpeed = 8f;
     [Min(.01f)] public float visibleSeconds = .5f;
     [Min(.01f)] public float halfVisibleSeconds = .3f;
     [Range(0f, 1f)] public float halfVisibleAlpha = .5f;
@@ -31,6 +35,10 @@ public class Ghost : MonoBehaviour
         }
     }
     public bool IsRevealed => !dead && VisibilityAlpha > 0f;
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetGhosts() { activeGhosts.Clear(); }
+    void OnEnable() { activeGhosts.Add(this); }
+    void OnDisable() { activeGhosts.Remove(this); }
 
     void Awake()
     {
@@ -89,9 +97,25 @@ public class Ghost : MonoBehaviour
         if (playerBody == null || body == null || hitboxes.Length == 0) return;
         Vector2 direction = (Vector2)playerBody.bounds.center - (Vector2)hitboxes[0].bounds.center;
         float speed = movement != null ? Mathf.Max(0f, movement.enemy_speed) : 5f;
-        body.MovePosition(body.position + Vector2.ClampMagnitude(direction, speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.fixedDeltaTime));
+        Vector2 next = body.position + Vector2.ClampMagnitude(direction, speed * EnemyFrostStatus.SpeedMultiplier(this) * Time.fixedDeltaTime);
+        body.MovePosition(next + SeparationOffset(next));
         if (Mathf.Abs(direction.x) > .01f)
             foreach (var visual in visuals) if (visual != null) visual.flipX = direction.x < 0f;
+    }
+    public Vector2 SeparationOffset(Vector2 position)
+    {
+        Vector2 offset=Vector2.zero;
+        foreach(var other in activeGhosts)
+        {
+            if(other==null || other==this || other.dead || other.data==null || other.data.enemy_current_HP<=0f || other.gameObject.scene!=gameObject.scene)continue;
+            Vector2 otherPosition=other.body!=null?other.body.position:(Vector2)other.transform.position;
+            Vector2 delta=position-otherPosition;float distance=delta.magnitude;
+            float spacing=Mathf.Max(separationDistance,other.separationDistance);
+            if(distance>=spacing)continue;
+            Vector2 away=distance>.001f?delta/distance:GetInstanceID()<other.GetInstanceID()?Vector2.left:Vector2.right;
+            offset+=away*(spacing-distance)*.5f;
+        }
+        return Vector2.ClampMagnitude(offset,separationSpeed*Time.fixedDeltaTime);
     }
     void OnTriggerStay2D(Collider2D other)
     {

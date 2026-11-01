@@ -18,16 +18,23 @@ public sealed class LunarRigidBowDraw : MonoBehaviour
         Clear();profile=settings;source=sprite;owner=GetComponentInParent<Player>();
         uniformScale=Mathf.Abs(source.transform.lossyScale.x)*profile.heldVisualScale;
         visual=new GameObject("LunarRigidBowVisual",typeof(SpriteRenderer));
+        visual.layer=source.gameObject.layer;
         if(owner!=null)visual.transform.SetParent(owner.transform,false);
         else UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(visual,gameObject.scene);
         body=visual.GetComponent<SpriteRenderer>();body.sprite=profile.idleSprite;body.sharedMaterial=source.sharedMaterial;
         body.sortingLayerID=source.sortingLayerID;body.sortingOrder=source.sortingOrder;
-        stringMaterial=new Material(Shader.Find("Sprites/Default"));strings=new LineRenderer[2];
+        stringMaterial=new Material(Shader.Find("Sprites/Default"));
+        stringMaterial.mainTexture=Texture2D.whiteTexture;
+        strings=new LineRenderer[2];
         for(int i=0;i<strings.Length;i++)
         {
             var go=new GameObject("LunarBowString"+i,typeof(LineRenderer));go.transform.SetParent(visual.transform,false);
+            go.layer=visual.layer;
             var line=go.GetComponent<LineRenderer>();line.useWorldSpace=false;line.positionCount=3;line.sharedMaterial=stringMaterial;
-            line.startWidth=line.endWidth=.0035f;line.startColor=line.endColor=new Color(.81f,.87f,.94f,.9f);
+            // Keep the silver string visible at the gameplay camera's scale.
+            line.startWidth=line.endWidth=body.sprite.bounds.size.x*.012f;
+            line.startColor=line.endColor=new Color(.9f,.95f,1f,1f);
+            line.alignment=LineAlignment.View;
             line.numCapVertices=1;line.numCornerVertices=1;line.sortingLayerID=body.sortingLayerID;line.sortingOrder=body.sortingOrder+1;strings[i]=line;
         }
         source.enabled=false;SetDraw(0);LateUpdate();
@@ -48,7 +55,7 @@ public sealed class LunarRigidBowDraw : MonoBehaviour
         Vector3 along=(upper-lower).normalized;Vector3 pull=new Vector3(along.y,-along.x,0);
         for(int i=0;i<strings.Length;i++)
         {
-            Vector3 offset=pull*((i-.5f)*.005f);
+            Vector3 offset=pull*((i-.5f)*body.sprite.bounds.size.x*.018f);
             strings[i].SetPosition(0,lower+offset);
             strings[i].SetPosition(1,(lower+upper)*.5f+offset+pull*(body.sprite.bounds.size.x*.13f*draw));
             strings[i].SetPosition(2,upper+offset);

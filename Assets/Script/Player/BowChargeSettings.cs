@@ -15,6 +15,8 @@ public sealed class BowChargeSettings : ScriptableObject
     }
 
     public Sprite idleSprite;
+    [Tooltip("바닥 드롭 전용 이미지. 비워두면 아이템 아이콘을 사용합니다.")]
+    public Sprite droppedSprite;
     public Sprite[] drawSprites;
     public GameObject arrowPrefab;
 

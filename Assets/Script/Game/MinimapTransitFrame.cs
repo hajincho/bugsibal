@@ -30,9 +30,8 @@ public sealed class MinimapTransitFrame : MonoBehaviour
     public void Build(RawImage map,TMP_FontAsset font)
     {
         stages.Clear();lamps.Clear();halos.Clear();labels.Clear();tracks.Clear();
-        for(int i=0;i<SceneManager.sceneCountInBuildSettings;i++)
+        foreach(string scene in RouteScenes())
         {
-            string scene=Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
             if(Regex.IsMatch(scene,@"^Stage\d+$")||scene.Contains("Boss"))stages.Add(scene);
         }
         var outer=GetComponent<RectTransform>();outer.anchorMin=outer.anchorMax=Vector2.one;outer.pivot=Vector2.one;outer.sizeDelta=new Vector2(344,344);outer.anchoredPosition=new Vector2(-20,-20);
@@ -67,6 +66,14 @@ public sealed class MinimapTransitFrame : MonoBehaviour
             label.rectTransform.sizeDelta=new Vector2(36,23);label.rectTransform.anchoredPosition=points[i]+Vector2.down*20;labels.Add(label);
         }
         Refresh(SceneManager.GetActiveScene().name);
+    }
+    static IEnumerable<string> RouteScenes()
+    {
+#if UNITY_EDITOR
+        foreach(var scene in UnityEditor.EditorBuildSettings.scenes)if(scene.enabled)yield return Path.GetFileNameWithoutExtension(scene.path);
+#else
+        for(int i=0;i<SceneManager.sceneCountInBuildSettings;i++)yield return Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+#endif
     }
     static Image Box(string name,Transform parent,Vector2 pos,Vector2 size,Color color)
     {

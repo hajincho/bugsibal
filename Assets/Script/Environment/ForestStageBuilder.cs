@@ -17,24 +17,28 @@ public static class ForestStageBuilder
     static Sprite[] stoneSprites;
     static Tile dirt,grass,sand,water;
     public static string Build()
+    {return BuildStages(new[]{1,2});}
+    public static string BuildStages(int[] stages)
     {
         if(Application.isPlaying)throw new Exception("Exit Play mode first.");
         Prepare();var report=new System.Text.StringBuilder();
         var previous=SceneManager.GetActiveScene();
-        for(int stage=1;stage<=2;stage++)
+        foreach(int stage in stages)
         {
             string path="Assets/Scenes/Stage/Stage"+stage+".unity";
             string backup=@"C:\Users\fromj\Documents\Codex\2026-10-27\su\output\forest-backups";
             Directory.CreateDirectory(backup);File.Copy(path,Path.Combine(backup,"Stage"+stage+"-"+DateTime.Now.ToString("yyyyMMdd-HHmmss")+".unity"));
             var scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
+            foreach(var root in scene.GetRootGameObjects())if(root.name=="SkyStoneStageTheme")UnityEngine.Object.DestroyImmediate(root);
             Tilemap ground=null,wall=null;
             foreach(var root in scene.GetRootGameObjects())foreach(var map in root.GetComponentsInChildren<Tilemap>(true))
-            {if(map.name=="Ground")ground=map;if(map.name=="Wall")wall=map;}
+            {if(map.name=="Ground"||map.name=="Graound")ground=map;if(map.name=="Wall")wall=map;}
             if(ground==null||wall==null)throw new Exception("Missing stage tilemaps.");
             foreach(var root in scene.GetRootGameObjects())if(root.name=="ForestTheme")UnityEngine.Object.DestroyImmediate(root);
             var theme=new GameObject("ForestTheme",typeof(Grid));SceneManager.MoveGameObjectToScene(theme,scene);
             var cells=new HashSet<Vector3Int>();foreach(var p in ground.cellBounds.allPositionsWithin)if(ground.HasTile(p))cells.Add(p);
             ground.color=new Color(.66f,.72f,.73f);
+            ground.GetComponent<TilemapRenderer>().sortingOrder=-10;
             foreach(var p in cells)
             {
                 float n=Mathf.PerlinNoise((p.x+stage*41)*.11f,(p.y+32)*.13f);
@@ -58,7 +62,7 @@ public static class ForestStageBuilder
                 covered.Add(p);if(doubleCell)covered.Add(p+along);
                 var go=new GameObject("StoneWall_"+(kind+1)+"_"+(doubleCell?"2Cells":"1Cell"));go.transform.SetParent(theme.transform,false);
                 float stagger=((Hash(p.x,p.y,83)%100)/100f-.5f)*.22f;
-                go.transform.position=wall.GetCellCenterWorld(p)+(Vector3)(doubleCell?along:Vector3Int.zero)*.5f+new Vector3(vertical?stagger:0,.2f+(vertical?0:stagger),0);
+                go.transform.position=wall.GetCellCenterWorld(p)+(Vector3)(doubleCell?along:Vector3Int.zero)*.5f+new Vector3(vertical?stagger:0,.2f+(vertical?0:stagger),rocks*.001f);
                 var sr=go.AddComponent<SpriteRenderer>();sr.sprite=stoneSprites[kind];sr.sortingOrder=-8;sr.color=new Color(.73f,.76f,.69f);
                 float span=doubleCell?2.5f:1.65f;
                 float axis=vertical?sr.sprite.bounds.size.y:sr.sprite.bounds.size.x;
@@ -92,7 +96,8 @@ public static class ForestStageBuilder
                 }
             }
             // Small low border plants break up the silhouette without hiding playable ground.
-            foreach(var p in wall.cellBounds.allPositionsWithin)if(wall.HasTile(p)&&Hash(p.x,p.y,45)%7==0)
+            foreach(var p in wall.cellBounds.allPositionsWithin)if(wall.HasTile(p)&&Hash(p.x,p.y,45)%7==0&&
+                (!cells.Contains(p+Vector3Int.up)||!cells.Contains(p+Vector3Int.down)||!cells.Contains(p+Vector3Int.left)||!cells.Contains(p+Vector3Int.right)))
                 Prop(theme.transform,4,wall.GetCellCenterWorld(p)+Vector3.down*.18f,.85f,-7,new Color(.65f,.68f,.52f));
             outsideGO.transform.SetParent(theme.transform,true);
             // Two purely decorative logs outside the walkable corners, never part of the wall.
@@ -101,12 +106,14 @@ public static class ForestStageBuilder
             // Northern trees sit just behind the wall, with low branches in the 6.5-unit player view.
             foreach(var p in cells)if(!cells.Contains(p+Vector3Int.up)&&wall.HasTile(p+Vector3Int.up)&&Hash(p.x,0,stage)%3==0)
             {
-                var pos=ground.GetCellCenterWorld(p)+new Vector3(.15f,.05f,0);
+                var pos=ground.GetCellCenterWorld(p)+new Vector3(.15f,2.5f,0);
                 int kind=(Hash(p.x,p.y,53)/17)%2;
                 var canopy=Prop(theme.transform,kind,pos,3.8f,-7,new Color(.43f,.48f,.39f));
-                canopy.sprite=crowns[kind];canopy.transform.localScale=Vector3.one*(4.1f/canopy.sprite.bounds.size.x);
             }
             SeparateFoliage(theme.transform,ground,cells);
+            ClearPlayableFoliage(theme.transform,ground,wall);
+            StabilizeFoliage(theme.transform);
+            AddSparseOutsideLogs(scene,stage);
             EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
             Capture(scene,ground,stage);
             report.AppendLine("Stage"+stage+": ground="+cells.Count+", boundary props="+rocks+", outside trees/shrubs="+trees+", water tiles="+waters);
@@ -140,6 +147,97 @@ public static class ForestStageBuilder
         }
     }
     static bool OverlapXY(Bounds a,Bounds b){return a.min.x<b.max.x&&a.max.x>b.min.x&&a.min.y<b.max.y&&a.max.y>b.min.y;}
+    public static int ClearPlayableFoliage(Transform theme,Tilemap ground,Tilemap wall)
+    {
+        int removed=0;
+        foreach(var sr in theme.GetComponentsInChildren<SpriteRenderer>())
+        {
+            if(sr.name.StartsWith("StoneWall_")||sr.name.StartsWith("CornerLog_"))continue;
+            var min=ground.WorldToCell(sr.bounds.min+new Vector3(.01f,.01f,0));
+            var max=ground.WorldToCell(sr.bounds.max-new Vector3(.01f,.01f,0));bool overlaps=false;
+            for(int y=min.y;y<=max.y&&!overlaps;y++)for(int x=min.x;x<=max.x;x++)
+            {var p=new Vector3Int(x,y,0);if(ground.HasTile(p)&&!wall.HasTile(p)){overlaps=true;break;}}
+            if(overlaps){UnityEngine.Object.DestroyImmediate(sr.gameObject);removed++;}
+        }
+        return removed;
+    }
+    static void StabilizeFoliage(Transform theme)
+    {
+        var plants=new List<SpriteRenderer>();var trees=new List<SpriteRenderer>();
+        foreach(var sr in theme.GetComponentsInChildren<SpriteRenderer>())if(!sr.name.StartsWith("StoneWall_")&&!sr.name.StartsWith("CornerLog_"))plants.Add(sr);
+        plants.Sort((a,b)=>{int y=b.bounds.min.y.CompareTo(a.bounds.min.y);return y!=0?y:a.transform.position.x.CompareTo(b.transform.position.x);});
+        int depth=0;
+        foreach(var plant in plants)
+        {
+            if(plant.name=="Oak"||plant.name=="Pine")
+            {
+                bool duplicate=false;foreach(var tree in trees)if(((Vector2)(plant.transform.position-tree.transform.position)).sqrMagnitude<1.44f){duplicate=true;break;}
+                if(duplicate){UnityEngine.Object.DestroyImmediate(plant.gameObject);continue;}trees.Add(plant);
+            }
+            var p=plant.transform.position;p.z=5f-depth++*.001f;plant.transform.position=p;
+        }
+    }
+    public static int AddSparseOutsideLogs(Scene scene,int stage)
+    {
+        Transform theme=null;Tilemap ground=null,wall=null,outside=null;
+        foreach(var root in scene.GetRootGameObjects())
+        {
+            if(root.name=="ForestTheme")theme=root.transform;
+            foreach(var map in root.GetComponentsInChildren<Tilemap>())
+            {if(map.name=="Ground"||map.name=="Graound")ground=map;if(map.name=="Wall")wall=map;if(map.name=="ForestOutside")outside=map;}
+        }
+        if(theme==null||ground==null||wall==null||outside==null)throw new Exception("Missing forest scene components");
+        foreach(var tr in theme.GetComponentsInChildren<Transform>())if(tr.name=="SparseOutsideLog"||tr.name.StartsWith("CornerLog_"))UnityEngine.Object.DestroyImmediate(tr.gameObject);
+        Sprite log=null;foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(Folder+"/ForestProps.png")){var sp=asset as Sprite;if(sp!=null&&sp.name=="Log")log=sp;}
+        if(log==null)throw new Exception("Missing log sprite");
+        var barriers=new List<Bounds>();var foliage=new List<Bounds>();
+        foreach(var sr in theme.GetComponentsInChildren<SpriteRenderer>())
+        {
+            if(sr.name.StartsWith("StoneWall_")||sr.name.StartsWith("CornerLog_"))barriers.Add(sr.bounds);
+            else foliage.Add(sr.bounds);
+        }
+        var bounds=ground.cellBounds;var candidates=new List<Vector3Int>();
+        for(int y=bounds.yMin-14;y<bounds.yMax+14;y+=2)for(int x=bounds.xMin-14;x<bounds.xMax+14;x+=2)
+        {
+            var p=new Vector3Int(x,y,0);var tile=outside.GetTile(p);if(tile==null||tile.name.Contains("Water"))continue;
+            bool clear=true,near=false;
+            if(ground.HasTile(p)||wall.HasTile(p))clear=false;
+            if(!clear)continue;
+            for(int dy=-10;dy<=10&&!near;dy++)for(int dx=-10;dx<=10;dx++)if(ground.HasTile(p+new Vector3Int(dx,dy,0))){near=true;break;}
+            if(near)candidates.Add(p);
+        }
+        candidates.Sort((a,b)=>Hash(a.x,a.y,stage+501).CompareTo(Hash(b.x,b.y,stage+501)));
+        int target=Mathf.Clamp((bounds.size.x+bounds.size.y)/14,6,16);var placed=new List<Vector2>();
+        foreach(var p in candidates)
+        {
+            var position=ground.GetCellCenterWorld(p);float width=2.3f+(Hash(p.x,p.y,64)%80)/100f;
+            var size=log.bounds.size*(width/log.bounds.size.x);var center=position+(Vector3)(log.bounds.center*(width/log.bounds.size.x));var area=new Bounds(center,size);
+            bool safe=true;foreach(var barrier in barriers)if(OverlapXY(area,barrier)){safe=false;break;}
+            if(!safe)continue;
+            var padded=area;padded.Expand(new Vector3(.2f,.2f,0));
+            foreach(var plant in foliage)if(OverlapXY(padded,plant)){safe=false;break;}
+            if(!safe)continue;
+            var min=ground.WorldToCell(area.min);var max=ground.WorldToCell(area.max);
+            for(int y=min.y;y<=max.y&&safe;y++)for(int x=min.x;x<=max.x;x++){var q=new Vector3Int(x,y,0);if(ground.HasTile(q)||wall.HasTile(q)){safe=false;break;}}
+            if(!safe)continue;
+            foreach(var other in placed)if(((Vector2)position-other).sqrMagnitude<196f){safe=false;break;}
+            if(!safe)continue;
+            var go=new GameObject("SparseOutsideLog",typeof(SpriteRenderer));go.transform.SetParent(theme,false);go.transform.position=new Vector3(position.x,position.y,1f+placed.Count*.001f);
+            go.transform.localScale=Vector3.one*(width/log.bounds.size.x);var sr=go.GetComponent<SpriteRenderer>();sr.sprite=log;sr.sortingOrder=-6;sr.color=new Color(.63f,.65f,.54f);sr.flipX=(Hash(p.x,p.y,stage)%2)==0;
+            placed.Add(position);if(placed.Count>=target)break;
+        }
+        return placed.Count;
+    }
+    public static string RepairForestDecor(Scene scene,int stage)
+    {
+        Transform theme=null;Tilemap ground=null,wall=null;foreach(var root in scene.GetRootGameObjects()){if(root.name=="ForestTheme")theme=root.transform;foreach(var tm in root.GetComponentsInChildren<Tilemap>()){if(tm.name=="Ground"||tm.name=="Graound")ground=tm;if(tm.name=="Wall")wall=tm;}}
+        if(theme==null)return "No forest theme";
+        Sprite oak=null,pine=null;foreach(var a in AssetDatabase.LoadAllAssetsAtPath(Folder+"/ForestProps.png")){var sp=a as Sprite;if(sp!=null&&sp.name=="Oak")oak=sp;if(sp!=null&&sp.name=="Pine")pine=sp;}
+        int repaired=0;foreach(var sr in theme.GetComponentsInChildren<SpriteRenderer>())if(sr.sprite!=null&&sr.sprite.name.EndsWith("Crown")){float width=sr.bounds.size.x;sr.sprite=sr.sprite.name.StartsWith("Oak")?oak:pine;sr.transform.localScale=Vector3.one*(width/sr.sprite.bounds.size.x);repaired++;}
+        var cells=new HashSet<Vector3Int>();foreach(var p in ground.cellBounds.allPositionsWithin)if(ground.HasTile(p))cells.Add(p);
+        SeparateFoliage(theme,ground,cells);ClearPlayableFoliage(theme,ground,wall);StabilizeFoliage(theme);
+        int logs=AddSparseOutsideLogs(scene,stage);return "Full-tree replacements="+repaired+", isolated logs="+logs;
+    }
     static SpriteRenderer Prop(Transform parent,int index,Vector3 position,float width,int order,Color color)
     {
         var go=new GameObject(Names[index]);go.transform.SetParent(parent,false);go.transform.position=position;
@@ -154,7 +252,7 @@ public static class ForestStageBuilder
         File.Copy(source,Folder+"/ForestProps.png",true);AssetDatabase.ImportAsset(Folder+"/ForestProps.png");
         var importer=(TextureImporter)AssetImporter.GetAtPath(Folder+"/ForestProps.png");importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Multiple;
         importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.alphaIsTransparency=true;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=512;
-        var rects=new[]{new Rect(0,408,545,616),new Rect(550,410,465,614),new Rect(1030,407,506,330),new Rect(5,50,530,320),new Rect(550,45,465,325),new Rect(1040,45,496,320)};
+        var rects=new[]{new Rect(0,400,550,624),new Rect(550,400,475,624),new Rect(1030,407,506,330),new Rect(5,50,530,320),new Rect(550,45,465,325),new Rect(1040,45,496,320)};
         var metadata=new SpriteMetaData[6];for(int i=0;i<6;i++)metadata[i]=new SpriteMetaData{name=Names[i],rect=rects[i],alignment=(int)SpriteAlignment.BottomCenter,pivot=new Vector2(.5f,0)};
         importer.spritesheet=metadata;importer.spritePixelsPerUnit=100;importer.SaveAndReimport();
         File.Copy(@"C:\Users\fromj\.codex\generated_images\01a17d8d-cd5b-77a3-a41b-b09f9e144b73\exec-7fcde920-0312-4b12-81ff-734e3f13d09e.png",Folder+"/InactiveStoneGate.png",true);

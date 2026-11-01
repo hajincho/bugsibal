@@ -12,6 +12,11 @@ public class StageManager : MonoBehaviour
     public List<Transform> phase2_location = new List<Transform>();
     public List<GameObject> enemies_phase3 = new List<GameObject>();
     public List<Transform> phase3_location = new List<Transform>();
+    public List<GameObject> enemies_phase4 = new List<GameObject>();
+    public List<Transform> phase4_location = new List<Transform>();
+    // Optional route checkpoints; empty preserves the existing stage behavior.
+    public List<Vector2> encounterCenters = new List<Vector2>();
+    public float encounterActivationRadius = 12f;
     //소환된 적의 개수를 세서 다음 phase로 넘어가는 용도
     public List<GameObject> summoned_enemies = new List<GameObject>();
     public GameObject next_scene;
@@ -33,6 +38,11 @@ public class StageManager : MonoBehaviour
         summoned_enemies.RemoveAll(item => item == null);
         if(summoned_enemies.Count == 0 && progress)
         {
+            if (phase < encounterCenters.Count)
+            {
+                var player = FindObjectOfType<Player>();
+                if (player == null || Vector2.Distance(player.transform.position, encounterCenters[phase]) > encounterActivationRadius) return;
+            }
             switch(phase)
             {
                 case 0:
@@ -60,12 +70,35 @@ public class StageManager : MonoBehaviour
                     Invoke("phase3", 3f);
                     return;
                 case 3:
-                    if (StageRewardController.Ensure() != null) StageRewardController.Instance.MarkCleared();
-                    Instantiate(next_scene, portal_position.position, transform.rotation);
-                    phase++;
+                    if (enemies_phase4.Count > 0)
+                    {
+                        progress = false;
+                        for (int i = 0; i < enemies_phase4.Count; i++)
+                            Instantiate(denger, phase4_location[i].position, transform.rotation);
+                        Invoke("phase4", 3f);
+                        return;
+                    }
+                    FinishStage();
+                    return;
+                case 4:
+                    FinishStage();
                     return;
             }
         }
+    }
+    void FinishStage()
+    {
+        progress = false;
+        if (StageRewardController.Ensure() != null) StageRewardController.Instance.MarkCleared();
+        Instantiate(next_scene, portal_position.position, transform.rotation);
+        phase++;
+    }
+    void phase4()
+    {
+        for (int i = 0; i < enemies_phase4.Count; i++)
+            summoned_enemies.Add(Instantiate(enemies_phase4[i], phase4_location[i].position, transform.rotation));
+        phase++;
+        progress = true;
     }
     void phase1()
     {

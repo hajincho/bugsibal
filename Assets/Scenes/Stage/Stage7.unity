@@ -415094,6 +415094,7 @@ MonoBehaviour:
   - {fileID: 173253422}
   - {fileID: 479903167}
   enemies_phase2:
+  - {fileID: 1011926200503692051, guid: 6a81b42dc329b074980ea03237af671b, type: 3}
   - {fileID: 6926167496750331034, guid: 5c266b174eb8add45b53d121f19ec3e5, type: 3}
   - {fileID: 6926167496750331034, guid: 5c266b174eb8add45b53d121f19ec3e5, type: 3}
   - {fileID: 6926167496750331034, guid: 5c266b174eb8add45b53d121f19ec3e5, type: 3}
@@ -415115,6 +415116,7 @@ MonoBehaviour:
   - {fileID: 237567536429048964, guid: 068ce3e19c83c4b9cb33d9973952d622, type: 3}
   - {fileID: 237567536429048964, guid: 068ce3e19c83c4b9cb33d9973952d622, type: 3}
   phase2_location:
+  - {fileID: 890000000000001002}
   - {fileID: 1803493147}
   - {fileID: 772402230}
   - {fileID: 952133333}
@@ -415136,6 +415138,7 @@ MonoBehaviour:
   - {fileID: 1503668325}
   - {fileID: 515155965}
   enemies_phase3:
+  - {fileID: 1011926200503692051, guid: 6a81b42dc329b074980ea03237af671b, type: 3}
   - {fileID: 7154700476304014582, guid: 25c5c0dfe589a4611951bbaaeee802a6, type: 3}
   - {fileID: 7154700476304014582, guid: 25c5c0dfe589a4611951bbaaeee802a6, type: 3}
   - {fileID: 3671022009787552655, guid: 989ee924982594a748b41d56bdc61473, type: 3}
@@ -415157,6 +415160,7 @@ MonoBehaviour:
   - {fileID: 1011926200503692051, guid: da1028f5eb37619409b53790640361dd, type: 3}
   - {fileID: 1011926200503692051, guid: da1028f5eb37619409b53790640361dd, type: 3}
   phase3_location:
+  - {fileID: 890000000000001004}
   - {fileID: 1111700419}
   - {fileID: 1211823156}
   - {fileID: 946363088}
@@ -421754,10 +421758,74 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &890000000000001001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 890000000000001002}
+  m_Layer: 0
+  m_Name: Stage7DragonSpawn1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &890000000000001002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890000000000001001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.5, y: 29.5, z: 0.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &890000000000001003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 890000000000001004}
+  m_Layer: 0
+  m_Name: Stage7DragonSpawn2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &890000000000001004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890000000000001003}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.5, y: -30.5, z: 0.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 890000000000001002}
+  - {fileID: 890000000000001004}
   - {fileID: 867447171}
   - {fileID: 1741376658}
   - {fileID: 1703855509}
